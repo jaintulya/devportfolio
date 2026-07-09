@@ -12,9 +12,9 @@
   --mid: #6B6B6B;
   --light: #D9D5D1;
   --black: #1A1A1A;
-  --font-display: var(--font-cormorant), Georgia, serif;
-  --font-body: var(--font-jost), system-ui, sans-serif;
-  --font-mono: var(--font-mono), monospace;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Jost', system-ui, sans-serif;
+  --font-mono: 'Space Mono', monospace;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,7 +48,7 @@ body {
   background: transparent;
   border: 1px solid var(--gold);
 }
-@media (hover: none) { #cursor-dot { display: none; } body { cursor: auto; } }
+/* Cursor remains enabled per user request */
 
 /* ── ANIMATIONS ── */
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -121,7 +121,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 @media (max-width: 640px) {
   .reel-grid { grid-template-columns: 1fr !important; }
-  .reel-card-wrap { aspect-ratio: 16/9 !important; }
+  .reel-card-wrap { aspect-ratio: 9/16 !important; }
   .services-grid { grid-template-columns: 1fr !important; }
-  section { padding-left: 20px !important; padding-right: 20px !important; }
+  section { padding-left: 16px !important; padding-right: 16px !important; }
 }
