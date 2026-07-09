@@ -32,15 +32,29 @@ export default function SmoothScroll({ children }) {
 
     document.addEventListener('click', handleDocumentClick);
 
-    // Refresh ScrollTrigger once everything mounts and settles
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 1000);
+    // Watch for document height changes to refresh ScrollTrigger dynamically
+    let resizeObserver;
+    if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
+      resizeObserver = new ResizeObserver(() => {
+        ScrollTrigger.refresh();
+      });
+      resizeObserver.observe(document.body);
+    }
+
+    // Refresh ScrollTrigger periodically for the first few seconds to account for slow-loading media
+    const intervals = [100, 300, 600, 1000, 1500, 2000, 3000].map(delay => 
+      setTimeout(() => ScrollTrigger.refresh(), delay)
+    );
+
+    const handleLoad = () => ScrollTrigger.refresh();
+    window.addEventListener('load', handleLoad);
 
     return () => {
-      clearTimeout(timer);
       lenis.destroy();
       document.removeEventListener('click', handleDocumentClick);
+      window.removeEventListener('load', handleLoad);
+      if (resizeObserver) resizeObserver.disconnect();
+      intervals.forEach(clearTimeout);
     };
   }, []);
   return <>{children}</>;

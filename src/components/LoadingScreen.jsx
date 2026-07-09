@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 
+const WEDDING_VIDEO = "https://assets.mixkit.co/videos/preview/mixkit-newlyweds-slow-dancing-at-their-wedding-reception-41148-large.mp4";
+
 export default function LoadingScreen({ onComplete }) {
   const [mounted, setMounted] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -64,6 +66,36 @@ export default function LoadingScreen({ onComplete }) {
         transition: "opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1)",
       }}
     >
+      {/* Background cinematic video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 1,
+          opacity: 0.2, // Subtle background projection
+        }}
+      >
+        <source src={WEDDING_VIDEO} type="video/mp4" />
+      </video>
+
+      {/* Dark overlay for progress visibility */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse at center, transparent 30%, #080706 90%)",
+          zIndex: 1,
+          pointerEvents: "none"
+        }}
+      />
+
       {/* Subtle Grain Overlay */}
       <div
         style={{
@@ -73,9 +105,9 @@ export default function LoadingScreen({ onComplete }) {
           height: "200%",
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
           backgroundSize: "128px 128px",
-          opacity: 0.03,
+          opacity: 0.02,
           pointerEvents: "none",
-          zIndex: 1,
+          zIndex: 2,
         }}
       />
 
@@ -85,7 +117,7 @@ export default function LoadingScreen({ onComplete }) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          zIndex: 2,
+          zIndex: 3,
           gap: 40,
         }}
       >
