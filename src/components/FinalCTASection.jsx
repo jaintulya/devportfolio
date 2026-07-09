@@ -79,7 +79,7 @@ export default function FinalCTASection() {
               fontStyle: "italic",
             }}
           >
-            Let\'s Create Magic Together
+            Let's Create Magic Together
           </h2>
           <p
             style={{
@@ -90,8 +90,8 @@ export default function FinalCTASection() {
               lineHeight: 1.7,
             }}
           >
-            Your love story deserves to be told beautifully. Let\'s work
-            together to create cinematic memories you\'ll cherish forever.
+            Your love story deserves to be told beautifully. Let's work
+            together to create cinematic memories you'll cherish forever.
           </p>
           <button
             onClick={() =>
@@ -123,7 +123,7 @@ export default function FinalCTASection() {
               e.currentTarget.style.boxShadow = "0 10px 40px rgba(0,0,0,0.2)";
             }}
           >
-            Let\'s Begin Your Journey
+            Let's Begin Your Journey
           </button>
         </div>
       </div>
