@@ -85,12 +85,42 @@ export default function HeroSection() {
         minHeight: "100vh",
         position: "relative",
         overflow: "hidden",
-        background:
-          "linear-gradient(135deg,#F8F5F2 0%,#F3EDE6 55%,#EDE4D8 100%)",
+        background: "#080706", // Premium dark base
       }}
     >
       <div id="home" className="absolute top-0 left-0 w-0 h-0" style={{ pointerEvents: 'none' }} />
-      {/* Ambient blobs */}
+      
+      {/* Background cinematic video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 1,
+          opacity: 0.45,
+        }}
+      >
+        <source src={WEDDING_VIDEO} type="video/mp4" />
+      </video>
+
+      {/* Dark overlay for typography contrast */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to bottom, rgba(8,7,6,0.85) 0%, rgba(8,7,6,0.65) 50%, rgba(8,7,6,0.9) 100%)",
+          zIndex: 1,
+          pointerEvents: "none"
+        }}
+      />
+
+      {/* Ambient blobs - kept but dimmed for background depth */}
       <div
         style={{
           position: "absolute",
@@ -100,9 +130,10 @@ export default function HeroSection() {
           height: 500,
           borderRadius: "50%",
           background:
-            "radial-gradient(ellipse,rgba(201,162,126,0.18) 0%,transparent 70%)",
+            "radial-gradient(ellipse,rgba(201,162,126,0.1) 0%,transparent 70%)",
           filter: "blur(70px)",
           pointerEvents: "none",
+          zIndex: 1
         }}
       />
       <div
@@ -114,32 +145,23 @@ export default function HeroSection() {
           height: 300,
           borderRadius: "50%",
           background:
-            "radial-gradient(ellipse,rgba(201,162,126,0.1) 0%,transparent 70%)",
+            "radial-gradient(ellipse,rgba(201,162,126,0.05) 0%,transparent 70%)",
           filter: "blur(60px)",
           pointerEvents: "none",
+          zIndex: 1
         }}
       />
-      {/* Grid */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.025,
-          backgroundImage:
-            "linear-gradient(#2E2E2E 1px,transparent 1px),linear-gradient(90deg,#2E2E2E 1px,transparent 1px)",
-          backgroundSize: "80px 80px",
-          pointerEvents: "none",
-        }}
-      />
+
       {/* Floating dust */}
       <DustParticles />
 
-      <div className="max-w-[1280px] mx-auto px-6 md:px-12 py-[100px] md:py-[130px] grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen">
+      {/* Centered layout container */}
+      <div className="max-w-[900px] mx-auto px-6 md:px-12 py-[120px] md:py-[150px] flex flex-col items-center justify-center text-center min-h-screen relative z-[2]">
         {/* Text */}
-        <div ref={textRef} className="relative z-[2] text-center lg:text-left">
+        <div ref={textRef} className="relative z-[2] text-center flex flex-col items-center">
           <div
             ref={badgeRef}
-            className="flex items-center justify-center lg:justify-start gap-2.5 mb-7"
+            className="flex items-center justify-center gap-2.5 mb-7"
           >
             <span className="rec-dot w-1.5 h-1.5 rounded-full bg-red-500 shrink-0 inline-block" />
             <span className="font-mono text-[9px] md:text-[11px] tracking-[0.3em] uppercase text-[#C9A27E]">
@@ -148,9 +170,9 @@ export default function HeroSection() {
           </div>
 
           <div ref={h1Ref} className="overflow-hidden mb-6">
-            <h1 className="font-display text-[2.8rem] sm:text-[4rem] md:text-[5rem] lg:text-[5.8rem] leading-[0.95] lg:leading-[0.92] font-light text-[#2E2E2E]">
+            <h1 className="font-display text-[2.8rem] sm:text-[4rem] md:text-[5rem] lg:text-[5.8rem] leading-[0.95] lg:leading-[0.92] font-light text-[#F8F5F2]">
               <span className="hl block">Turning</span>
-              <span className="hl gold-shimmer-text block italic font-semibold scale-[1.08] origin-center lg:origin-left">
+              <span className="hl gold-shimmer-text block italic font-semibold scale-[1.08] origin-center">
                 Moments
               </span>
               <span className="hl block">Into</span>
@@ -161,14 +183,14 @@ export default function HeroSection() {
 
           <p
             ref={subRef}
-            className="font-mono text-[9px] md:text-[11px] tracking-[0.22em] uppercase text-[#6B6B6B] mb-10 leading-[1.8]"
+            className="font-mono text-[9px] md:text-[11px] tracking-[0.22em] uppercase text-[rgba(248,245,242,0.65)] mb-10 leading-[1.8]"
           >
             Wedding Reels · Couple Stories · Timeless Films
           </p>
 
           <div
             ref={btnsRef}
-            className="flex flex-wrap justify-center lg:justify-start gap-3.5 mb-12"
+            className="flex flex-wrap justify-center gap-3.5 mb-12"
           >
             <MagneticButton onClick={() => go("#reels")} variant="primary">
               Watch Showreel
@@ -180,7 +202,7 @@ export default function HeroSection() {
 
           <div
             ref={statsRef}
-            className="flex justify-center lg:justify-start gap-8 md:gap-10 border-t border-[#2E2E2E10] pt-8 flex-wrap"
+            className="flex justify-center gap-8 md:gap-12 border-t border-[rgba(248,245,242,0.1)] pt-8 flex-wrap"
           >
             {[
               { number: "120+", label: "Weddings Shot", animateTo: 120 },
@@ -190,13 +212,6 @@ export default function HeroSection() {
             ].map((stat) => (
               <AnimatedStat key={stat.label} stat={stat} />
             ))}
-          </div>
-        </div>
-
-        {/* Lens */}
-        <div className="flex items-center justify-center relative z-[2]">
-          <div className="w-full max-w-[520px]">
-            <CameraLens videoSrc={WEDDING_VIDEO} />
           </div>
         </div>
       </div>
@@ -222,7 +237,7 @@ export default function HeroSection() {
             fontSize: 9,
             letterSpacing: "0.3em",
             textTransform: "uppercase",
-            color: "#6B6B6B",
+            color: "rgba(248,245,242,0.4)",
           }}
         >
           Scroll to Discover
@@ -269,8 +284,8 @@ function AnimatedStat({ stat }) {
   }, [stat.animateTo, mounted]);
 
   return (
-    <div ref={ref} className="text-center lg:text-left">
-      <div className="font-display text-2xl md:text-3xl font-semibold">
+    <div ref={ref} className="text-center">
+      <div className="font-display text-2xl md:text-3xl font-semibold text-[#F8F5F2]">
         {count}
         {stat.label.includes("Weddings") || stat.label.includes("Cities")
           ? "+"
@@ -278,7 +293,7 @@ function AnimatedStat({ stat }) {
             ? "K+"
             : "+ Years"}
       </div>
-      <div className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#6B6B6B] mt-1">
+      <div className="font-mono text-[9px] tracking-[0.2em] uppercase text-[rgba(248,245,242,0.5)] mt-1">
         {stat.label}
       </div>
     </div>

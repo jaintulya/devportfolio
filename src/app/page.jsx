@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
@@ -17,9 +17,20 @@ import InstagramFeedSection from "@/components/InstagramFeedSection";
 import FinalCTASection from "@/components/FinalCTASection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (loaded) {
+      // Defer refresh to allow page height and opacity transition to settle
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [loaded]);
   return (
     <>
       {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
