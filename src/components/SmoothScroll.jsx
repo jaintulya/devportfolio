@@ -11,7 +11,37 @@ export default function SmoothScroll({ children }) {
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(time => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
-    return () => { lenis.destroy(); };
+
+    // Dynamic hash link scrolling
+    const handleDocumentClick = (e) => {
+      const anchor = e.target.closest('a[href^="#"]');
+      if (anchor) {
+        const targetId = anchor.getAttribute('href');
+        if (targetId === '#') {
+          e.preventDefault();
+          lenis.scrollTo(0);
+        } else {
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            lenis.scrollTo(targetEl);
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+
+    // Refresh ScrollTrigger once everything mounts and settles
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      lenis.destroy();
+      document.removeEventListener('click', handleDocumentClick);
+    };
   }, []);
   return <>{children}</>;
 }
