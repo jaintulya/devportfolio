@@ -28,12 +28,12 @@ export default function StorySection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(headRef.current, { y:50,opacity:0,duration:1,ease:'power3.out', scrollTrigger:{trigger:headRef.current,start:'top 80%'} });
+      gsap.from(headRef.current, { y:50,opacity:1,duration:1,ease:'power3.out', scrollTrigger:{trigger:headRef.current,start:'top 80%'} });
       
       if (!isMobile) {
         cardsRef.current.forEach((card, i) => {
           if (!card) return;
-          gsap.from(card, { x: i%2===0 ? -60 : 60, opacity:0, duration:1, ease:'power3.out', scrollTrigger:{trigger:card,start:'top 80%'} });
+          gsap.from(card, { x: i%2===0 ? -60 : 60, opacity:1, duration:1, ease:'power3.out', scrollTrigger:{trigger:card,start:'top 80%'} });
         });
       } else {
         Observer.create({

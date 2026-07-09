@@ -74,7 +74,7 @@ export default function AvailabilityCalendar() {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
         y: 50,
-        opacity: 0,
+        opacity: 1,
         duration: 1,
         ease: 'power3.out',
         scrollTrigger: {
@@ -85,7 +85,7 @@ export default function AvailabilityCalendar() {
 
       gsap.from('.calendar-cell', {
         y: 20,
-        opacity: 0,
+        opacity: 1,
         duration: 0.5,
         ease: 'power2.out',
         stagger: 0.02,

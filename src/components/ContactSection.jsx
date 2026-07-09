@@ -14,7 +14,7 @@ export default function ContactSection() {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
         y: 50,
-        opacity: 0,
+        opacity: 1,
         duration: 1.2,
         ease: 'power3.out',
         scrollTrigger: {
@@ -27,7 +27,7 @@ export default function ContactSection() {
         if (!card) return;
         gsap.from(card, {
           y: 40,
-          opacity: 0,
+          opacity: 1,
           duration: 0.8,
           ease: 'power3.out',
           delay: index * 0.15,

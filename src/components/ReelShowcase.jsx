@@ -88,7 +88,7 @@ function ReelCard({ reel, index }) {
   useEffect(() => {
     gsap.from(cardRef.current, {
       y: 80,
-      opacity: 0,
+      opacity: 1,
       duration: 1,
       ease: "power3.out",
       delay: index * 0.15,
@@ -429,7 +429,7 @@ export default function ReelShowcase() {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
         y: 60,
-        opacity: 0,
+        opacity: 1,
         duration: 1,
         ease: "power3.out",
         scrollTrigger: {

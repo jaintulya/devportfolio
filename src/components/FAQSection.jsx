@@ -41,7 +41,7 @@ function FAQItem({ faq, index }) {
   useEffect(() => {
     gsap.from(itemRef.current, {
       y: 30,
-      opacity: 0,
+      opacity: 1,
       duration: 0.7,
       ease: "power3.out",
       delay: index * 0.1,
@@ -141,7 +141,7 @@ export default function FAQSection() {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
         y: 50,
-        opacity: 0,
+        opacity: 1,
         duration: 1,
         ease: "power3.out",
         scrollTrigger: {

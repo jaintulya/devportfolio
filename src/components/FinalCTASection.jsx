@@ -13,7 +13,7 @@ export default function FinalCTASection() {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
         y: 50,
-        opacity: 0,
+        opacity: 1,
         duration: 1.2,
         ease: "power3.out",
         scrollTrigger: {

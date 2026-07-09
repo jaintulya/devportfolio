@@ -36,7 +36,7 @@ export default function BehindTheScenesSection() {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
         y: 50,
-        opacity: 0,
+        opacity: 1,
         duration: 1,
         ease: "power3.out",
         scrollTrigger: {
@@ -48,7 +48,7 @@ export default function BehindTheScenesSection() {
       gsap.utils.toArray(".bts-img").forEach((img, i) => {
         gsap.from(img, {
           y: 40,
-          opacity: 0,
+          opacity: 1,
           duration: 0.8,
           ease: "power3.out",
           delay: 0.1 * i,
