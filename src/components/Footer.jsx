@@ -1,209 +1,199 @@
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+
+const WHATSAPP_URL = "https://wa.me/919377150889";
+
 export default function Footer() {
   return (
     <footer
       style={{
-        background: '#080706',
-        padding: '80px 24px 40px',
-        color: '#F8F5F2'
+        background: "var(--brand-maroon-deep)",
+        padding: "clamp(64px, 8vw, 100px) clamp(16px, 4vw, 48px) 40px",
+        color: "var(--brand-cream)",
+        borderTop: "1px solid rgba(200, 155, 93, 0.12)",
+        position: "relative",
       }}
     >
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            gap: 40,
-            flexWrap: 'wrap',
-            marginBottom: 60,
-            borderBottom: '1px solid rgba(248,245,242,0.1)',
-            paddingBottom: 60
-          }}
-        >
+      {/* Dot texture */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: "radial-gradient(rgba(200, 155, 93, 0.04) 1px, transparent 1px)",
+        backgroundSize: "28px 28px",
+      }} />
+
+      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 2 }}>
+        {/* Main footer grid */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+          gap: 48,
+          marginBottom: 64,
+          paddingBottom: 56,
+          borderBottom: "1px solid rgba(200, 155, 93, 0.08)",
+        }}>
+          {/* Brand column */}
           <div style={{ maxWidth: 400 }}>
-            <h3
-              style={{
-                fontFamily: 'var(--font-cormorant,serif)',
-                fontSize: 28,
-                fontWeight: 600,
-                marginBottom: 12
-              }}
-            >
-              Devarsh Jain
-            </h3>
-            <p
-              style={{
-                fontFamily: 'var(--font-jost, sans-serif)',
-                fontSize: 15,
-                color: 'rgba(248,245,242,0.7)',
-                lineHeight: 1.7,
-                marginBottom: 24
-              }}
-            >
-              Crafting cinematic wedding films that tell your unique love story.
+            <div style={{ marginBottom: 18, display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ position: "relative", width: 38, height: 38, borderRadius: 8, overflow: "hidden" }}>
+                <Image src="/1.jpg" alt="Shaadi Pitara" fill sizes="38px" style={{ objectFit: "cover" }} />
+              </div>
+              <span style={{
+                fontFamily: "var(--font-display, serif)",
+                fontSize: 22, fontWeight: 600,
+                color: "var(--brand-cream)", letterSpacing: "0.03em",
+              }}>
+                Shaadi Pitara
+              </span>
+            </div>
+
+            <p style={{
+              fontFamily: "var(--font-body)", fontSize: 14,
+              color: "var(--brand-beige-muted)", lineHeight: 1.75,
+              marginBottom: 28, opacity: 0.8,
+            }}>
+              Crafting cinematic wedding reels, intimate candid moments, and social-first storytelling that preserves the grandeur and warmth of your celebration.
             </p>
-            <div style={{ display: 'flex', gap: 16 }}>
-              <a
-                href="https://instagram.com/contentkapitara"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="focus-sq"
-                style={{
-                  width: 44,
-                  height: 44,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid rgba(248,245,242,0.2)',
-                  borderRadius: '50%',
-                  transition: 'all 0.3s ease',
-                  color: '#F8F5F2'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#C9A27E';
-                  e.currentTarget.style.background = 'rgba(201,162,126,0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(248,245,242,0.2)';
-                  e.currentTarget.style.background = 'transparent';
-                }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <rect x="3" y="3" width="18" height="18" rx="5" />
-                  <circle cx="12" cy="12" r="4" />
-                  <circle cx="18" cy="6" r="1" />
-                </svg>
-              </a>
-              <a
-                href="mailto:hello@devarshjain.com"
-                className="focus-sq"
-                style={{
-                  width: 44,
-                  height: 44,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid rgba(248,245,242,0.2)',
-                  borderRadius: '50%',
-                  transition: 'all 0.3s ease',
-                  color: '#F8F5F2'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#C9A27E';
-                  e.currentTarget.style.background = 'rgba(201,162,126,0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(248,245,242,0.2)';
-                  e.currentTarget.style.background = 'transparent';
-                }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-              </a>
+
+            <div style={{ display: "flex", gap: 10 }}>
+              {[
+                { href: "https://www.instagram.com/shaadi.pitara", label: "Instagram", icon: <svg key="ig" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="18" cy="6" r="1" /></svg> },
+                { href: "https://youtube.com/@shaadi.pitara", label: "YouTube", icon: <svg key="yt" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg> },
+                { href: "https://pin.it/5GKckms5T", label: "Pinterest", icon: <svg key="pi" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4c0 2.5-2 4.5-4 6" /><line x1="12" y1="17" x2="10" y2="22" /></svg> },
+                { href: WHATSAPP_URL, label: "WhatsApp", icon: <svg key="wa" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg> },
+              ].map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={"Shaadi Pitara on " + social.label}
+                  className="focus-sq"
+                  style={{
+                    width: 42, height: 42,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    border: "1px solid rgba(200, 155, 93, 0.25)",
+                    borderRadius: "50%", transition: "all 0.3s ease",
+                    color: "var(--brand-cream)", textDecoration: "none",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--brand-gold)";
+                    e.currentTarget.style.background = "rgba(200, 155, 93, 0.15)";
+                    e.currentTarget.style.color = "var(--brand-gold-light)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(200, 155, 93, 0.25)";
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "var(--brand-cream)";
+                  }}
+                >
+                  {social.icon}
+                </a>
+              ))}
             </div>
           </div>
 
+          {/* Explore column */}
           <div>
-            <h4
-              style={{
-                fontFamily: 'monospace',
-                fontSize: 10,
-                letterSpacing: '0.3em',
-                textTransform: 'uppercase',
-                color: '#C9A27E',
-                marginBottom: 20
-              }}
-            >
-              Quick Links
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 12 }}>
-              {['Home', 'Work', 'Packages', 'About', 'Contact'].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase()}`}
+            <span style={{
+              fontFamily: "var(--font-mono)", fontSize: 10,
+              letterSpacing: "0.26em", textTransform: "uppercase",
+              color: "var(--brand-gold)", display: "block", marginBottom: 22,
+            }}>
+              Explore Studio
+            </span>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 14 }}>
+              {[
+                { label: "Home", href: "/" },
+                { label: "Full Work Showcase", href: "/work" },
+                { label: "Services & Offerings", href: "/#services" },
+                { label: "Our Story", href: "/#story" },
+                { label: "Client Love", href: "/#testimonials" },
+                { label: "Behind the Scenes", href: "/#behind-the-scenes" },
+                { label: "Frequently Asked", href: "/#faq" },
+                { label: "Get In Touch", href: "/#contact" },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <Link
+                    href={href}
                     style={{
-                      fontFamily: 'var(--font-jost, sans-serif)',
-                      fontSize: 14,
-                      color: 'rgba(248,245,242,0.7)',
-                      textDecoration: 'none',
-                      transition: 'color 0.3s ease'
+                      fontFamily: "var(--font-body)", fontSize: 14,
+                      color: "var(--brand-cream)", textDecoration: "none",
+                      opacity: 0.7, transition: "all 0.25s ease", display: "inline-block",
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#C9A27E';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = 'rgba(248,245,242,0.7)';
-                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.color = "var(--brand-gold)"; e.currentTarget.style.transform = "translateX(4px)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.opacity = "0.7"; e.currentTarget.style.color = "var(--brand-cream)"; e.currentTarget.style.transform = "translateX(0)"; }}
                   >
-                    {item}
-                  </a>
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
+
+          {/* Contact column */}
+          <div>
+            <span style={{
+              fontFamily: "var(--font-mono)", fontSize: 10,
+              letterSpacing: "0.26em", textTransform: "uppercase",
+              color: "var(--brand-gold)", display: "block", marginBottom: 22,
+            }}>
+              Reach Out
+            </span>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 16 }}>
+              <li>
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" style={{
+                  fontFamily: "var(--font-body)", fontSize: 14,
+                  color: "var(--brand-cream)", textDecoration: "none",
+                  opacity: 0.85, transition: "all 0.25s ease", display: "inline-flex", alignItems: "center", gap: 10,
+                }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--brand-gold)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--brand-cream)"; }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>
+                  +91 93771 50889
+                </a>
+              </li>
+              <li>
+                <a href="tel:+919377150889" style={{
+                  fontFamily: "var(--font-body)", fontSize: 14,
+                  color: "var(--brand-cream)", textDecoration: "none",
+                  opacity: 0.85, transition: "all 0.25s ease", display: "inline-flex", alignItems: "center", gap: 10,
+                }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--brand-gold)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--brand-cream)"; }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                  Call +91 93771 50889
+                </a>
+              </li>
+              <li style={{
+                fontFamily: "var(--font-body)", fontSize: 14,
+                color: "rgba(200,155,93,0.5)", display: "flex", alignItems: "center", gap: 10,
+              }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                Ahmedabad, Gujarat, India
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: 20,
-            flexWrap: 'wrap'
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'monospace',
-              fontSize: 11,
-              color: 'rgba(248,245,242,0.5)',
-              letterSpacing: '0.15em'
-            }}
-          >
-            © {new Date().getFullYear()} Devarsh Jain. All rights reserved.
+        {/* Bottom bar */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexWrap: "wrap", gap: 16,
+        }}>
+          <p style={{
+            fontFamily: "var(--font-body)", fontSize: 13,
+            color: "rgba(200,155,93,0.4)",
+          }}>
+            &copy; {new Date().getFullYear()} Shaadi Pitara by Devarsh Jain. All rights reserved.
           </p>
-          <div style={{ display: 'flex', gap: 24 }}>
-            <a
-              href="#"
-              style={{
-                fontFamily: 'monospace',
-                fontSize: 10,
-                color: 'rgba(248,245,242,0.4)',
-                textDecoration: 'none',
-                letterSpacing: '0.15em',
-                transition: 'color 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#C9A27E';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'rgba(248,245,242,0.4)';
-              }}
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="#"
-              style={{
-                fontFamily: 'monospace',
-                fontSize: 10,
-                color: 'rgba(248,245,242,0.4)',
-                textDecoration: 'none',
-                letterSpacing: '0.15em',
-                transition: 'color 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#C9A27E';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'rgba(248,245,242,0.4)';
-              }}
-            >
-              Terms of Service
-            </a>
-          </div>
+          <p style={{
+            fontFamily: "var(--font-mono)", fontSize: 9,
+            letterSpacing: "0.18em", textTransform: "uppercase",
+            color: "rgba(200,155,93,0.25)",
+          }}>
+            Crafted with love in Ahmedabad
+          </p>
         </div>
       </div>
     </footer>

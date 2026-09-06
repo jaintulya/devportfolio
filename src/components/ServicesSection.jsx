@@ -1,284 +1,68 @@
-'use client';
-import { useRef, useEffect, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+"use client";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const packages = [
+const services = [
   {
-    id: 'intimate',
-    name: 'Intimate Moments',
-    description: 'Perfect for small gatherings and elopements',
-    price: '₹45,000',
-    features: [
-      '4 hours coverage',
-      '1 cinematic wedding reel',
-      '20 highlight photos',
-      '2-day delivery',
-      'Online gallery'
-    ],
-    popular: false,
-    color: '#C9A27E'
+    id: "wedding-reels",
+    title: "Wedding Reels",
+    tagline: "Cinematic highlight films",
+    description: "Handcrafted cinematic reels with handpicked soundtracks, nuanced pacing, and organic color grading — turning fleeting moments into timeless heirlooms.",
   },
   {
-    id: 'premium',
-    name: 'Premium Day',
-    description: 'Our most popular package for complete wedding day coverage',
-    price: '₹85,000',
-    features: [
-      '8 hours coverage',
-      '2 cinematic wedding reels',
-      '1 couple story film',
-      '50 highlight photos',
-      '5-day delivery',
-      'Drone footage',
-      'Online gallery + digital album'
-    ],
-    popular: true,
-    color: '#A8825A'
+    id: "live-stories",
+    title: "Live Stories",
+    tagline: "Real-time, unscripted",
+    description: "Unfiltered, intimate Stories captured and uploaded live as your celebrations unfold — so friends and family experience every tear and cheer in real time.",
   },
   {
-    id: 'signature',
-    name: 'Signature Story',
-    description: 'Complete wedding weekend coverage with full cinematic storytelling',
-    price: '₹1,50,000',
-    features: [
-      '2 days full coverage',
-      '3 cinematic wedding reels',
-      '1 couple story film',
-      'Pre-wedding shoot',
-      '100 highlight photos',
-      '7-day delivery',
-      'Drone footage',
-      'Online gallery + digital album',
-      'Highlight trailer for social media'
-    ],
-    popular: false,
-    color: '#E8CBAA'
-  }
+    id: "live-reels",
+    title: "Live Reels",
+    tagline: "Same-night cinematic magic",
+    description: "Real-time reel creation during your wedding — same-night edits delivered within hours while the energy is still electric.",
+  },
+  {
+    id: "instant-reels",
+    title: "Instant Reels",
+    tagline: "Fast-turnaround, same emotion",
+    description: "Cinematic reels edited and delivered within hours of your event. Wake up the morning after and relive the rush while the emotions are still alive.",
+  },
+  {
+    id: "social-media",
+    title: "Wedding Social Media",
+    tagline: "Complete digital presence",
+    description: "Curated posts, reels, and stories that keep guests and family engaged before, during, and after the big day.",
+  },
+  {
+    id: "page-management",
+    title: "Wedding Page Management",
+    tagline: "Your page, perfectly curated",
+    description: "A dedicated couple page managed end-to-end — from countdown graphics and invitation posts to a perfectly curated feed and story highlights.",
+  },
 ];
-
-function PackageCard({ pkg, index }) {
-  const [expanded, setExpanded] = useState(false);
-  const cardRef = useRef(null);
-
-  useEffect(() => {
-    gsap.from(cardRef.current, {
-      y: 60,
-      opacity: 1,
-      duration: 0.9,
-      ease: 'power3.out',
-      delay: index * 0.15,
-      scrollTrigger: {
-        trigger: cardRef.current,
-        start: 'top 80%'
-      }
-    });
-  }, [index]);
-
-  return (
-    <div
-      ref={cardRef}
-      style={{
-        background: '#fff',
-        borderRadius: 16,
-        border: pkg.popular ? `2px solid ${pkg.color}` : '1px solid #D9D5D1',
-        padding: 32,
-        position: 'relative',
-        transition: 'all 0.4s ease',
-        boxShadow: pkg.popular ? '0 20px 60px rgba(201,162,126,0.15)' : 'none'
-      }}
-      onMouseEnter={(e) => {
-        if (!pkg.popular) {
-          e.currentTarget.style.borderColor = 'rgba(201,162,126,0.5)';
-          e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.05)';
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!pkg.popular) {
-          e.currentTarget.style.borderColor = '#D9D5D1';
-          e.currentTarget.style.boxShadow = 'none';
-        }
-      }}
-    >
-      {pkg.popular && (
-        <div
-          style={{
-            position: 'absolute',
-            top: -14,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: pkg.color,
-            color: '#fff',
-            padding: '6px 20px',
-            borderRadius: 20,
-            fontFamily: 'monospace',
-            fontSize: 10,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase'
-          }}
-        >
-          Most Popular
-        </div>
-      )}
-
-      <div style={{ marginBottom: 24 }}>
-        <div
-          style={{
-            fontFamily: 'monospace',
-            fontSize: 10,
-            letterSpacing: '0.25em',
-            textTransform: 'uppercase',
-            color: pkg.color,
-            marginBottom: 8
-          }}
-        >
-          Experience
-        </div>
-        <h3
-          style={{
-            fontFamily: 'var(--font-cormorant,serif)',
-            fontSize: 28,
-            fontWeight: 600,
-            color: '#2E2E2E',
-            marginBottom: 8
-          }}
-        >
-          {pkg.name}
-        </h3>
-        <p
-          style={{
-            fontFamily: 'var(--font-jost, sans-serif)',
-            fontSize: 14,
-            color: '#6B6B6B',
-            lineHeight: 1.6
-          }}
-        >
-          {pkg.description}
-        </p>
-      </div>
-
-      <div style={{ marginBottom: 28 }}>
-        <div
-          style={{
-            fontFamily: 'monospace',
-            fontSize: 10,
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            color: '#6B6B6B',
-            marginBottom: 4
-          }}
-        >
-          Investment
-        </div>
-        <div
-          style={{
-            fontFamily: 'var(--font-cormorant,serif)',
-            fontSize: 36,
-            fontWeight: 600,
-            color: '#2E2E2E'
-          }}
-        >
-          {pkg.price}
-        </div>
-      </div>
-
-      <div style={{ marginBottom: 28 }}>
-        <div
-          style={{
-            fontFamily: 'monospace',
-            fontSize: 10,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: '#6B6B6B',
-            marginBottom: 16
-          }}
-        >
-          What's Included
-        </div>
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {pkg.features.map((feature, idx) => (
-            <li
-              key={idx}
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: 12,
-                marginBottom: 10,
-                fontFamily: 'var(--font-jost, sans-serif)',
-                fontSize: 14,
-                color: '#2E2E2E'
-              }}
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke={pkg.color}
-                strokeWidth="1.5"
-                style={{ flexShrink: 0, marginTop: 2 }}
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
-              {feature}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <button
-        onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-        className="focus-sq"
-        style={{
-          width: '100%',
-          padding: '16px 28px',
-          border: pkg.popular ? 'none' : `1px solid ${pkg.color}`,
-          background: pkg.popular ? pkg.color : 'transparent',
-          color: pkg.popular ? '#fff' : pkg.color,
-          fontFamily: 'monospace',
-          fontSize: 10,
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase',
-          borderRadius: 8,
-          cursor: 'none',
-          transition: 'all 0.3s ease'
-        }}
-        onMouseEnter={(e) => {
-          if (!pkg.popular) {
-            e.currentTarget.style.background = pkg.color;
-            e.currentTarget.style.color = '#fff';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!pkg.popular) {
-            e.currentTarget.style.background = 'transparent';
-            e.currentTarget.style.color = pkg.color;
-          }
-        }}
-      >
-        Book This Experience
-      </button>
-    </div>
-  );
-}
 
 export default function ServicesSection() {
   const secRef = useRef(null);
   const headRef = useRef(null);
+  const cardRefs = useRef([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
-        y: 50,
-        opacity: 1,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: headRef.current,
-          start: 'top 80%'
-        }
+        y: 50, opacity: 0, duration: 1, ease: "power3.out",
+        scrollTrigger: { trigger: headRef.current, start: "top 80%" },
+      });
+
+      cardRefs.current.forEach((card, i) => {
+        if (!card) return;
+        gsap.from(card, {
+          y: 40, opacity: 0, duration: 0.8, ease: "power3.out",
+          delay: i * 0.06,
+          scrollTrigger: { trigger: card, start: "top 88%" },
+        });
       });
     }, secRef);
     return () => ctx.revert();
@@ -288,110 +72,109 @@ export default function ServicesSection() {
     <section
       id="services"
       ref={secRef}
+      aria-label="Services and offerings"
       style={{
-        padding: '120px 24px',
-        background: '#F8F5F2',
-        position: 'relative'
+        padding: "clamp(80px, 10vw, 140px) clamp(16px, 4vw, 48px)",
+        background: "var(--brand-ivory)",
+        position: "relative",
       }}
     >
-      <div id="packages" style={{ position: 'absolute', top: 0, left: 0, width: 0, height: 0, pointerEvents: 'none' }} />
-      <div
-        style={{
-          maxWidth: 1200,
-          margin: '0 auto'
-        }}
-      >
-        <div
-          ref={headRef}
-          style={{
-            textAlign: 'center',
-            marginBottom: 80
-          }}
-        >
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 12,
-              fontFamily: 'monospace',
-              fontSize: 10,
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: '#C9A27E',
-              marginBottom: 16
-            }}
-          >
-            <span style={{ width: 28, height: 1, background: '#C9A27E', display: 'block' }} />
-            Choose Your Experience
-            <span style={{ width: 28, height: 1, background: '#C9A27E', display: 'block' }} />
+      {/* Subtle dot texture */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: `radial-gradient(rgba(94, 24, 28, 0.04) 1px, transparent 1px)`,
+        backgroundSize: "28px 28px",
+      }} />
+
+      <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 2 }}>
+        {/* Section header */}
+        <div ref={headRef} style={{ textAlign: "center", marginBottom: "clamp(48px, 7vw, 80px)" }}>
+          <div className="eyebrow-label" style={{ justifyContent: "center", color: "var(--brand-maroon)" }}>
+            <span style={{ background: "var(--brand-maroon)", display: "block" }} />
+            What We Offer
+            <span style={{ background: "var(--brand-maroon)", display: "block" }} />
           </div>
-          <h2
-            style={{
-              fontFamily: 'var(--font-cormorant,serif)',
-              fontSize: 'clamp(36px, 6vw, 64px)',
-              fontWeight: 300,
-              lineHeight: 1.1,
-              color: '#2E2E2E',
-              marginBottom: 16
-            }}
-          >
-            Capture Your Perfect<br />
-            <span
-              className="gold-shimmer-text"
+          <h2 className="section-heading section-heading-light">
+            Services &amp; Offerings
+          </h2>
+          <p style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "clamp(15px, 1.5vw, 17px)",
+            color: "rgba(58,13,16,0.55)",
+            marginTop: 16,
+            maxWidth: 520,
+            margin: "16px auto 0",
+            lineHeight: 1.7,
+          }}>
+            Every wedding has its own rhythm. Choose the services that fit your vision — from live stories to full cinematic reels.
+          </p>
+        </div>
+
+        {/* Cards grid — 2-col on desktop, single on mobile */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+          gap: "clamp(16px, 2vw, 24px)",
+        }}>
+          {services.map((svc, i) => (
+            <article
+              key={svc.id}
+              ref={(el) => { cardRefs.current[i] = el; }}
+              className="card-light"
               style={{
-                fontStyle: 'italic',
-                fontWeight: 500
+                padding: "clamp(28px, 3vw, 36px) clamp(24px, 2.5vw, 32px)",
+                display: "flex", flexDirection: "column", gap: 14,
+                borderLeft: "3px solid transparent",
+                transition: "all 0.45s cubic-bezier(0.23,1,0.32,1)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderLeftColor = "var(--brand-gold)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderLeftColor = "transparent";
               }}
             >
-              Wedding Story
-            </span>
-          </h2>
-          <p
-            style={{
-              fontFamily: 'var(--font-jost, sans-serif)',
-              fontSize: 16,
-              color: '#6B6B6B',
-              maxWidth: 500,
-              margin: '0 auto',
-              lineHeight: 1.7
-            }}
-          >
-            Every love story is unique. Choose the experience that speaks to your heart.
-          </p>
-        </div>
+              {/* Service number */}
+              <span style={{
+                fontFamily: "var(--font-mono)", fontSize: 9,
+                letterSpacing: "0.2em", color: "rgba(94,24,28,0.3)",
+                textTransform: "uppercase",
+              }}>
+                {String(i + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")}
+              </span>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 32
-          }}
-          className="services-grid"
-        >
-          {packages.map((pkg, index) => (
-            <PackageCard key={pkg.id} pkg={pkg} index={index} />
+              <h3 style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(20px, 2.5vw, 26px)",
+                fontWeight: 600,
+                color: "var(--brand-maroon-dark)",
+                lineHeight: 1.2,
+                letterSpacing: "-0.01em",
+              }}>
+                {svc.title}
+              </h3>
+
+              <p style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(14px, 1.4vw, 16px)",
+                fontStyle: "italic",
+                color: "var(--brand-gold-dark)",
+                lineHeight: 1.5,
+              }}>
+                {svc.tagline}
+              </p>
+
+              <p style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 14,
+                color: "rgba(58,13,16,0.6)",
+                lineHeight: 1.75,
+                flex: 1,
+              }}>
+                {svc.description}
+              </p>
+            </article>
           ))}
-        </div>
-
-        <div
-          style={{
-            marginTop: 60,
-            textAlign: 'center',
-            paddingTop: 40,
-            borderTop: '1px solid rgba(46,46,46,0.08)'
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'monospace',
-              fontSize: 10,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              color: '#6B6B6B'
-            }}
-          >
-            Custom packages available upon request • All prices exclude travel
-          </p>
         </div>
       </div>
     </section>

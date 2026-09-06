@@ -2,6 +2,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,14 +13,8 @@ export default function FinalCTASection() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
-        y: 50,
-        opacity: 1,
-        duration: 1.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: headRef.current,
-          start: "top 80%",
-        },
+        y: 40, opacity: 0, duration: 1, ease: "power3.out",
+        scrollTrigger: { trigger: headRef.current, start: "top 80%" },
       });
     }, secRef);
     return () => ctx.revert();
@@ -30,101 +25,138 @@ export default function FinalCTASection() {
       id="cta"
       ref={secRef}
       style={{
-        padding: "160px 24px",
-        background:
-          "linear-gradient(135deg,#C9A27E 0%,#A8825A 55%,#6B4820 100%)",
+        padding: "clamp(100px, 14vw, 160px) clamp(20px, 4vw, 48px)",
+        background: "linear-gradient(160deg, var(--brand-maroon) 0%, var(--brand-maroon-dark) 60%, var(--brand-maroon-deep) 100%)",
         textAlign: "center",
         position: "relative",
         overflow: "hidden",
+        borderTop: "1px solid rgba(200, 155, 93, 0.2)",
+        borderBottom: "1px solid rgba(200, 155, 93, 0.2)",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          pointerEvents: "none",
-        }}
-      />
+      {/* Ambient dot pattern */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0,
+        backgroundImage: `radial-gradient(rgba(200, 155, 93, 0.08) 1px, transparent 1px)`,
+        backgroundSize: "32px 32px",
+        pointerEvents: "none",
+      }} />
+
+      {/* Warm glow */}
+      <div aria-hidden="true" style={{
+        position: "absolute",
+        top: "50%", left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 800, height: 800, borderRadius: "50%",
+        background: "radial-gradient(ellipse, rgba(200,155,93,0.05) 0%, transparent 70%)",
+        filter: "blur(80px)", pointerEvents: "none",
+      }} />
 
       <div
         style={{
-          position: "relative",
-          zIndex: 1,
-          maxWidth: 800,
-          margin: "0 auto",
+          position: "relative", zIndex: 2,
+          maxWidth: 780, margin: "0 auto",
         }}
       >
         <div ref={headRef}>
-          <div
-            style={{
-              fontFamily: "monospace",
-              fontSize: 10,
-              letterSpacing: "0.3em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.8)",
-              marginBottom: 24,
-            }}
-          >
-            Ready to Tell Your Story?
+          <div className="eyebrow-label" style={{ justifyContent: "center" }}>
+            <span style={{ background: "var(--brand-gold)", display: "block" }} />
+            Begin Your Story
+            <span style={{ background: "var(--brand-gold)", display: "block" }} />
           </div>
+
           <h2
             style={{
-              fontFamily: "var(--font-cormorant,serif)",
-              fontSize: "clamp(40px, 8vw, 72px)",
+              fontFamily: "var(--font-display, serif)",
+              fontSize: "clamp(38px, 7vw, 68px)",
               fontWeight: 300,
               lineHeight: 1.1,
-              color: "#fff",
+              color: "var(--brand-cream)",
+              marginTop: 20,
               marginBottom: 24,
               fontStyle: "italic",
+              letterSpacing: "-0.01em",
             }}
           >
-            Let's Create Magic Together
+            Let&apos;s craft something<br />timeless together
           </h2>
+
           <p
             style={{
-              fontFamily: "var(--font-jost, sans-serif)",
-              fontSize: 18,
-              color: "rgba(255,255,255,0.9)",
-              marginBottom: 40,
-              lineHeight: 1.7,
+              fontFamily: "var(--font-body)",
+              fontSize: "clamp(15px, 1.5vw, 18px)",
+              color: "var(--brand-beige-muted)",
+              lineHeight: 1.75,
+              maxWidth: 560,
+              margin: "0 auto 44px",
             }}
           >
-            Your love story deserves to be told beautifully. Let's work
-            together to create cinematic memories you'll cherish forever.
+            Every love story deserves to be told with reverence and cinematic finesse. Reach out and let&apos;s begin.
           </p>
-          <button
-            onClick={() =>
-              document
-                .querySelector("#contact")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="focus-sq"
-            style={{
-              padding: "18px 48px",
-              background: "#fff",
-              color: "#6B4820",
-              fontFamily: "monospace",
-              fontSize: 10,
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-              border: "none",
-              borderRadius: 40,
-              cursor: "none",
-              transition: "all 0.3s ease",
-              boxShadow: "0 10px 40px rgba(0,0,0,0.2)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-3px)";
-              e.currentTarget.style.boxShadow = "0 15px 50px rgba(0,0,0,0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 10px 40px rgba(0,0,0,0.2)";
-            }}
-          >
-            Let's Begin Your Journey
-          </button>
+
+          <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
+            <a
+              href="#contact"
+              className="btn-primary"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                padding: "16px 42px",
+                background: "var(--brand-cream)",
+                color: "var(--brand-maroon-dark)",
+                fontFamily: "var(--font-mono)",
+                fontSize: 11, letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                borderRadius: 4,
+                boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+                transition: "all 0.35s ease",
+                fontWeight: 600,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-3px)";
+                e.currentTarget.style.background = "#ffffff";
+                e.currentTarget.style.boxShadow = "0 16px 40px rgba(200, 155, 93, 0.3)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background = "var(--brand-cream)";
+                e.currentTarget.style.boxShadow = "0 10px 30px rgba(0,0,0,0.35)";
+              }}
+            >
+              Get In Touch
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+
+            <Link
+              href="/work"
+              className="btn-secondary"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                padding: "16px 36px",
+                background: "transparent",
+                color: "var(--brand-cream)",
+                fontFamily: "var(--font-mono)",
+                fontSize: 11, letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                borderRadius: 4,
+                border: "1px solid rgba(245, 230, 204, 0.35)",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--brand-gold)";
+                e.currentTarget.style.background = "rgba(200, 155, 93, 0.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "rgba(245, 230, 204, 0.35)";
+                e.currentTarget.style.background = "transparent";
+              }}
+            >
+              Explore Full Gallery
+            </Link>
+          </div>
         </div>
       </div>
     </section>

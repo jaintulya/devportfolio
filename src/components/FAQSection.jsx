@@ -7,29 +7,29 @@ gsap.registerPlugin(ScrollTrigger);
 
 const faqs = [
   {
-    question: "How far in advance should we book?",
+    question: "How far in advance should we book our wedding dates?",
     answer:
-      "We recommend booking 6-12 months in advance, especially for peak wedding season (October-March). However, we always do our best to accommodate last-minute requests whenever possible.",
+      "Reach out as soon as your dates are confirmed. While we don&apos;t enforce artificial booking windows, early conversations help us understand your vision and ensure we can craft the story your wedding deserves.",
   },
   {
-    question: "Do you travel for weddings?",
+    question: "Do you travel outside Ahmedabad for destination weddings?",
     answer:
-      "Absolutely! We love destination weddings and are available to travel worldwide. Travel and accommodation costs are additional and will be quoted based on your location.",
+      "Yes, absolutely. While Ahmedabad is our creative home base, we frequently shoot celebrations across Udaipur, Jaipur, Goa, Mumbai, and internationally. Travel and accommodation are handled transparently.",
   },
   {
-    question: "How long does it take to receive our wedding films?",
+    question: "When do we receive our wedding reels and clips?",
     answer:
-      "Our standard delivery time is 5-7 days for reels and 2-3 weeks for full films. We understand how eager you are to relive your day, so we always prioritize getting your memories to you as quickly as possible.",
+      "Your first cinematic teaser and highlight reels are delivered within 24 to 48 hours while the celebration energy is still electric. Complete curated reels and organized archives of all footage are finalized within 5 to 7 days.",
   },
   {
-    question: "Can we customize our package?",
+    question: "How do you coordinate with our main photo and video team?",
     answer:
-      "Of course! Every love story is unique, and we believe your package should reflect that. We offer completely customizable packages tailored to your specific needs and vision.",
+      "Seamlessly and respectfully. We specialize in agile, mobile-first wedding content creation — capturing unscripted behind-the-scenes intimacies and cinematic micro-moments. We coordinate with your primary photographers ahead of time.",
   },
   {
-    question: "Do you work with photographers?",
+    question: "Can we curate our music choices and aesthetic preferences?",
     answer:
-      "We have an amazing network of professional photographers we frequently collaborate with. We'd be happy to recommend photographers whose style complements our work perfectly.",
+      "Absolutely. Before the wedding, we conduct a pre-event creative session to map your aesthetic preferences — whether vintage Bollywood, soulful classical, or modern acoustic — ensuring your films reflect your authentic vibe.",
   },
 ];
 
@@ -40,70 +40,70 @@ function FAQItem({ faq, index }) {
 
   useEffect(() => {
     gsap.from(itemRef.current, {
-      y: 30,
-      opacity: 1,
-      duration: 0.7,
-      ease: "power3.out",
-      delay: index * 0.1,
-      scrollTrigger: {
-        trigger: itemRef.current,
-        start: "top 85%",
-      },
+      y: 24, opacity: 0, duration: 0.6, ease: "power2.out",
+      delay: index * 0.06,
+      scrollTrigger: { trigger: itemRef.current, start: "top 88%" },
     });
   }, [index]);
 
   return (
-    <div
+    <article
       ref={itemRef}
       style={{
-        borderBottom: "1px solid rgba(46,46,46,0.1)",
-        padding: "24px 0",
+        borderBottom: "1px solid rgba(94, 24, 28, 0.1)",
+        borderLeft: isOpen ? "3px solid var(--brand-gold)" : "3px solid transparent",
+        padding: "24px 20px",
+        background: isOpen ? "rgba(94, 24, 28, 0.03)" : "transparent",
+        borderRadius: "0 8px 8px 0",
+        transition: "all 0.35s ease",
       }}
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
         style={{
           width: "100%",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          gap: 16,
           background: "none",
           border: "none",
-          cursor: "none",
+          cursor: "pointer",
           textAlign: "left",
           padding: 0,
         }}
       >
         <span
           style={{
-            fontFamily: "var(--font-cormorant,serif)",
-            fontSize: 20,
+            fontFamily: "var(--font-display, serif)",
+            fontSize: "clamp(17px, 2.2vw, 22px)",
             fontWeight: 500,
-            color: "#2E2E2E",
+            color: isOpen ? "var(--brand-maroon)" : "var(--brand-maroon-dark)",
+            transition: "color 0.3s ease",
+            lineHeight: 1.3,
           }}
         >
           {faq.question}
         </span>
         <div
           style={{
-            width: 32,
-            height: 32,
+            width: 34, height: 34, minWidth: 34,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            border: "1px solid rgba(201,162,126,0.4)",
+            border: isOpen ? "1px solid var(--brand-gold)" : "1px solid rgba(94, 24, 28, 0.18)",
+            background: isOpen ? "var(--brand-gold)" : "transparent",
             borderRadius: "50%",
             transition: "all 0.3s ease",
             transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
           }}
         >
           <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
+            width="14" height="14" viewBox="0 0 24 24"
             fill="none"
-            stroke="#C9A27E"
-            strokeWidth="1.5"
+            stroke={isOpen ? "#ffffff" : "var(--brand-maroon)"}
+            strokeWidth="2" strokeLinecap="round"
           >
             <path d="M12 5v14M5 12h14" />
           </svg>
@@ -112,24 +112,27 @@ function FAQItem({ faq, index }) {
       <div
         ref={contentRef}
         style={{
-          maxHeight: isOpen ? 300 : 0,
+          maxHeight: isOpen ? 400 : 0,
+          opacity: isOpen ? 1 : 0,
           overflow: "hidden",
-          transition: "max-height 0.3s ease",
+          transition: "max-height 0.45s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s ease",
         }}
       >
         <p
           style={{
             marginTop: 16,
-            fontFamily: "var(--font-jost, sans-serif)",
+            fontFamily: "var(--font-body)",
             fontSize: 15,
-            color: "#6B6B6B",
-            lineHeight: 1.7,
+            color: "#4A3F3F",
+            lineHeight: 1.8,
+            paddingRight: 16,
+            maxWidth: 640,
           }}
         >
           {faq.answer}
         </p>
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -140,14 +143,8 @@ export default function FAQSection() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
-        y: 50,
-        opacity: 1,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: headRef.current,
-          start: "top 80%",
-        },
+        y: 40, opacity: 0, duration: 0.9, ease: "power3.out",
+        scrollTrigger: { trigger: headRef.current, start: "top 82%" },
       });
     }, secRef);
     return () => ctx.revert();
@@ -158,16 +155,24 @@ export default function FAQSection() {
       id="faq"
       ref={secRef}
       style={{
-        padding: "120px 24px",
-        background: "#F8F5F2",
+        padding: "clamp(80px, 10vw, 140px) clamp(16px, 4vw, 48px)",
+        background: "var(--brand-off-white)",
+        position: "relative",
       }}
     >
-      <div style={{ maxWidth: 800, margin: "0 auto" }}>
-        <div
+      {/* Subtle dot texture */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: `radial-gradient(rgba(94, 24, 28, 0.03) 1px, transparent 1px)`,
+        backgroundSize: "28px 28px",
+      }} />
+
+      <div style={{ maxWidth: 840, margin: "0 auto", position: "relative", zIndex: 2 }}>
+        <header
           ref={headRef}
           style={{
             textAlign: "center",
-            marginBottom: 70,
+            marginBottom: 64,
           }}
         >
           <div
@@ -175,94 +180,89 @@ export default function FAQSection() {
               display: "inline-flex",
               alignItems: "center",
               gap: 12,
-              fontFamily: "monospace",
+              fontFamily: "var(--font-mono)",
               fontSize: 10,
-              letterSpacing: "0.3em",
+              letterSpacing: "0.28em",
               textTransform: "uppercase",
-              color: "#C9A27E",
+              color: "var(--brand-maroon)",
               marginBottom: 16,
             }}
           >
-            <span
-              style={{
-                width: 28,
-                height: 1,
-                background: "#C9A27E",
-                display: "block",
-              }}
-            />
-            Questions?
-            <span
-              style={{
-                width: 28,
-                height: 1,
-                background: "#C9A27E",
-                display: "block",
-              }}
-            />
+            <span style={{ width: 28, height: 1, background: "var(--brand-maroon)", display: "block" }} />
+            Need Clarity?
+            <span style={{ width: 28, height: 1, background: "var(--brand-maroon)", display: "block" }} />
           </div>
           <h2
             style={{
-              fontFamily: "var(--font-cormorant,serif)",
-              fontSize: "clamp(36px, 6vw, 64px)",
+              fontFamily: "var(--font-display, serif)",
+              fontSize: "clamp(34px, 5.5vw, 56px)",
               fontWeight: 300,
-              lineHeight: 1.1,
-              color: "#2E2E2E",
+              lineHeight: 1.15,
+              color: "var(--brand-maroon-dark)",
+              letterSpacing: "-0.01em",
             }}
           >
-            Frequently Asked
+            Frequently Asked Questions
           </h2>
-        </div>
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: 16,
+              color: "rgba(58,13,16,0.5)",
+              marginTop: 12,
+              maxWidth: 500,
+              margin: "12px auto 0",
+              lineHeight: 1.7,
+            }}
+          >
+            Everything you need to know about our workflow, coverage, and how we tell your story.
+          </p>
+        </header>
 
-        <div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           {faqs.map((faq, index) => (
             <FAQItem key={index} faq={faq} index={index} />
           ))}
         </div>
 
-        <div style={{ marginTop: 50, textAlign: "center" }}>
-          <p
-            style={{
-              fontFamily: "var(--font-jost, sans-serif)",
-              fontSize: 15,
-              color: "#6B6B6B",
-              marginBottom: 16,
-            }}
-          >
-            Still have questions?
+        <footer style={{ marginTop: 56, textAlign: "center" }}>
+          <p style={{
+            fontFamily: "var(--font-body)",
+            fontSize: 15,
+            color: "var(--brand-maroon-dark)",
+            lineHeight: 1.75,
+            marginBottom: 20,
+          }}>
+            Have a custom requirement or specific dates in mind?
           </p>
-          <button
-            onClick={() =>
-              document
-                .querySelector("#contact")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="focus-sq"
+          <a
+            href="#contact"
             style={{
-              padding: "14px 32px",
-              border: "1px solid #C9A27E",
+              display: "inline-block",
+              padding: "14px 34px",
+              border: "1.5px solid var(--brand-maroon)",
               background: "transparent",
-              color: "#C9A27E",
-              fontFamily: "monospace",
+              color: "var(--brand-maroon)",
+              fontFamily: "var(--font-mono)",
               fontSize: 10,
-              letterSpacing: "0.2em",
+              letterSpacing: "0.22em",
               textTransform: "uppercase",
-              borderRadius: 8,
-              cursor: "none",
+              borderRadius: 4,
+              textDecoration: "none",
               transition: "all 0.3s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#C9A27E";
-              e.currentTarget.style.color = "#fff";
+              e.currentTarget.style.background = "var(--brand-maroon)";
+              e.currentTarget.style.color = "var(--brand-cream)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "#C9A27E";
+              e.currentTarget.style.color = "var(--brand-maroon)";
             }}
           >
             Get In Touch
-          </button>
-        </div>
+          </a>
+        </footer>
       </div>
     </section>
   );
