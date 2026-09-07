@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import MobileMemoryStack from "./MobileMemoryStack";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -231,8 +232,14 @@ export default function StorySection() {
 
   /* ══════════════════════════════════════════
      RENDER
-     ════════════════���═════════════════════════ */
+     ══════════════════════════════════════════ */
   return (
+    <>
+    <style>{`
+      @media (max-width: 768px) { .desktop-story-section { display: none; } }
+      @media (min-width: 769px) { .mobile-memory-stack { display: none; } }
+    `}</style>
+    <div className="desktop-story-section">
     <section
       id="story"
       className="journey-section"
@@ -968,8 +975,20 @@ export default function StorySection() {
             from { transform: translate(-50%,-50%) rotateX(68deg) rotateZ(20deg); }
             to   { transform: translate(-50%,-50%) rotateX(68deg) rotateZ(380deg); }
           }
+          @media (max-width: 768px) {
+            .desktop-story-section { display: none !important; }
+          }
+          @media (min-width: 769px) {
+            .mobile-story-section { display: none !important; }
+          }
       `}</style>
       </div>
     </section>
+    </div>
+
+    <div className="mobile-story-section">
+      <MobileMemoryStack />
+    </div>
+    </>
   );
 }
