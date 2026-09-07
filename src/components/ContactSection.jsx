@@ -19,6 +19,19 @@ const contactMethods = [
     primary: true,
   },
   {
+    title: "Email",
+    description: "Send us your wedding details, dates, and vision. We will get back to you within 24 hours.",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="M3 7l9 6 9-6" />
+      </svg>
+    ),
+    ctaText: "shaadi.pitaraa@gmail.com",
+    link: "mailto:shaadi.pitaraa@gmail.com",
+    primary: false,
+  },
+  {
     title: "Call",
     description: "Prefer to talk? Reach Devarsh directly to discuss dates, venues, and filming expectations.",
     icon: (
@@ -182,8 +195,9 @@ export default function ContactSection() {
       ref={secRef}
       style={{
         padding: "clamp(80px, 10vw, 140px) clamp(16px, 4vw, 48px)",
-        background: "var(--brand-off-white)",
+        background: "var(--brand-maroon-dark)",
         position: "relative",
+        scrollMarginTop: 72,
       }}
     >
       {/* Subtle dot texture */}
@@ -204,7 +218,7 @@ export default function ContactSection() {
             Let&apos;s Connect
             <span style={{ background: "var(--brand-maroon)", display: "block" }} />
           </div>
-          <h2 className="section-heading section-heading-light">
+          <h2 className="section-heading">
             Co-create Your Story
           </h2>
           <p style={{
@@ -248,7 +262,7 @@ export default function ContactSection() {
           justifyContent: "space-between",
           gap: 24,
           flexWrap: "wrap",
-          border: "1px solid rgba(200,155,93,0.15)",
+          border: "1px solid rgba(212,184,150,0.15)",
           position: "relative",
           overflow: "hidden",
         }}>
@@ -256,14 +270,14 @@ export default function ContactSection() {
           <div aria-hidden="true" style={{
             position: "absolute", top: "-50%", right: "-20%",
             width: 300, height: 300, borderRadius: "50%",
-            background: "radial-gradient(ellipse, rgba(200,155,93,0.06) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse, rgba(212,184,150,0.06) 0%, transparent 70%)",
             pointerEvents: "none",
           }} />
 
           <div style={{ display: "flex", alignItems: "center", gap: 16, position: "relative", zIndex: 2 }}>
             <div style={{
               width: 48, height: 48, borderRadius: 12,
-              background: "rgba(200,155,93,0.12)",
+              background: "rgba(212,184,150,0.12)",
               display: "flex", alignItems: "center", justifyContent: "center",
               color: "var(--brand-gold)",
               flexShrink: 0,

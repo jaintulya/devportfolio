@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { scrollRef } from "@/lib/scrollRef";
 import { TIERS } from "@/lib/quality";
 
-// ── Simplex-like noise for organic drift (permutation table hoisted) ──
+// ── Minimal 3D noise for CtaBokeh drift ──
 const NOISE_PERM = (() => {
   const p = [151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,202,18,245,164,212,147,187,198,200,133,158,134,148,175,212,162,168,154,143,174,164,177,160,157,155,152,150];
   const perm = new Array(512);
@@ -37,76 +37,6 @@ function noise3D(x, y, z) {
       lerp(u, grad3(perm[AB + 1], x, y - 1, z - 1), grad3(perm[BB + 1], x - 1, y - 1, z - 1))));
 }
 
-function HeroBokeh({ mouseRef, count }) {
-  const ref = useRef(null);
-  const noiseTime = useRef(0);
-
-  const { positions, colors, basePositions } = useMemo(() => {
-    const p = new Float32Array(count * 3);
-    const bp = new Float32Array(count * 3);
-    const c = new Float32Array(count * 3);
-    const palette = [
-      new THREE.Color("#C9A27E"),
-      new THREE.Color("#E8CBAA"),
-      new THREE.Color("#A8825A"),
-      new THREE.Color("#F5ead6"),
-    ];
-    for (let i = 0; i < count; i++) {
-      const x = (Math.random() - 0.5) * 22;
-      const y = (Math.random() - 0.5) * 14;
-      const z = (Math.random() - 0.5) * 5 - 1;
-      p[i * 3] = bp[i * 3] = x;
-      p[i * 3 + 1] = bp[i * 3 + 1] = y;
-      p[i * 3 + 2] = bp[i * 3 + 2] = z;
-      const col = palette[Math.floor(Math.random() * palette.length)].clone();
-      col.multiplyScalar(0.35 + Math.random() * 0.65);
-      c[i * 3] = col.r; c[i * 3 + 1] = col.g; c[i * 3 + 2] = col.b;
-    }
-    return { positions: p, colors: c, basePositions: bp };
-  }, [count]);
-
-  useFrame((_state, delta) => {
-    if (!ref.current) return;
-    noiseTime.current += delta * 0.15;
-    const pts = ref.current;
-    const pos = pts.geometry.attributes.position.array;
-    const t = noiseTime.current;
-    const heroOpacity = Math.max(0, 1 - scrollRef.current.progress * 2.5);
-
-    for (let i = 0; i < count; i++) {
-      const i3 = i * 3;
-      const bx = basePositions[i3], by = basePositions[i3 + 1], bz = basePositions[i3 + 2];
-      const nx = noise3D(bx * 0.3 + t * 0.4, by * 0.3, bz * 0.3) * 0.6;
-      const ny = noise3D(bx * 0.3, by * 0.3 + t * 0.35, bz * 0.3) * 0.6;
-      const nz = noise3D(bx * 0.3, by * 0.3, bz * 0.3 + t * 0.3) * 0.3;
-      pos[i3] = bx + nx;
-      pos[i3 + 1] = by + ny;
-      pos[i3 + 2] = bz + nz;
-    }
-    pts.geometry.attributes.position.needsUpdate = true;
-
-    const mx = mouseRef.current?.x || 0;
-    const my = mouseRef.current?.y || 0;
-    pts.rotation.y = THREE.MathUtils.lerp(pts.rotation.y, mx * 0.04, 0.04);
-    pts.rotation.x = THREE.MathUtils.lerp(pts.rotation.x, my * 0.025, 0.04);
-    pts.material.opacity = heroOpacity;
-  });
-
-  return (
-    <Points ref={ref} positions={positions} colors={colors} stride={3}>
-      <PointMaterial
-        transparent
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-        size={0.16}
-        sizeAttenuation
-        vertexColors
-      />
-    </Points>
-  );
-}
-
-// ── Light streak curve for Story section ──
 function LightStreakCurve() {
   const lineRef = useRef(null);
 
@@ -267,13 +197,12 @@ function CtaBokeh({ count }) {
   );
 }
 
-// ── Main scene component ──
-export default function R3FScene({ mouseRef, tier }) {
+// ── Main scene component — clean atmospheric elements only ──
+export default function R3FScene({ tier }) {
   const count = TIERS[tier]?.count || TIERS.high.count;
 
   return (
     <group>
-      <HeroBokeh mouseRef={mouseRef} count={count} />
       <LightStreakCurve />
       <StoryCamera />
       <CtaBokeh count={count} />

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { PerformanceMonitor, AdaptiveDpr } from "@react-three/drei";
 import R3FScene from "./R3FScene";
-import { mouseRef } from "@/lib/mouseRef";
 import { TIERS } from "@/lib/quality";
 
 export default function R3FCanvas({ tier }) {
@@ -34,7 +33,7 @@ export default function R3FCanvas({ tier }) {
         onDecline={() => setDpr((d) => Math.max(cfg.dpr[0], d / 1.5))}
       >
         <AdaptiveDpr pixelated />
-        <R3FScene mouseRef={mouseRef} tier={tier} />
+        <R3FScene tier={tier} />
       </PerformanceMonitor>
     </Canvas>
   );

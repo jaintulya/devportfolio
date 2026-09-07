@@ -8,68 +8,102 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const navRef = useRef(null);
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
-  const indicatorRef = useRef(null);
   const linkRefs = useRef({});
-  const [menuStagger, setMenuStagger] = useState(0);
+  const [menuReady, setMenuReady] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll, { passive: true });
+    const onScroll = () => {};
+    window.addEventListener("scroll", () => {}, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Entrance animation — capsule slides down from top
   useEffect(() => {
-    gsap.from(navRef.current, {
-      y: -60, opacity: 0, duration: 1, ease: "power3.out", delay: 0.5,
-    });
+    const ctx = gsap.context(() => {
+      gsap.from(navRef.current, {
+        y: -60, opacity: 0, duration: 1.2, ease: "power3.out", delay: 0.5,
+      });
+    }, navRef);
+    return () => ctx.revert();
   }, []);
 
+  // Active section tracking — single observer with narrow top detection band
   useEffect(() => {
     const sectionIds = ["hero", "reels", "services", "story", "behind-the-scenes", "testimonials", "faq", "contact"];
-    const observers = sectionIds.map((id) => {
+    const intersecting = new Map(); // el → id
+    let rafId;
+
+    const pickActive = () => {
+      let best = null;
+      let bestTop = Infinity;
+      intersecting.forEach((id, el) => {
+        const top = el.getBoundingClientRect().top;
+        if (top < bestTop) { bestTop = top; best = id; }
+      });
+      if (best) setActiveSection(best);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            intersecting.set(entry.target, entry.target.id);
+          } else {
+            intersecting.delete(entry.target);
+          }
+        });
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(pickActive);
+      },
+      {
+        rootMargin: "-80px 0px -92% 0px",
+        threshold: 0,
+      }
+    );
+
+    const onResize = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(pickActive);
+    };
+
+    sectionIds.forEach((id) => {
       const el = document.getElementById(id);
-      if (!el) return null;
-      const io = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
-        { threshold: 0.3, rootMargin: "-80px 0px -40% 0px" }
-      );
-      io.observe(el);
-      return io;
+      if (el) observer.observe(el);
     });
-    return () => observers.forEach((io) => io?.disconnect());
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", onResize);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
-  useEffect(() => {
-    const activeEl = linkRefs.current[activeSection];
-    const indicator = indicatorRef.current;
-    if (!activeEl || !indicator) return;
-    const rect = activeEl.getBoundingClientRect();
-    const navRect = activeEl.closest("nav")?.getBoundingClientRect();
-    if (!navRect) return;
-    const left = rect.left - navRect.left;
-    indicator.style.width = `${rect.width}px`;
-    indicator.style.transform = `translateX(${left}px)`;
-  }, [activeSection]);
-
+  // Mobile menu open/close
   useEffect(() => {
     if (mobileOpen) {
-      setMenuStagger(0);
-      const timer = setInterval(() => {
-        setMenuStagger((p) => {
-          if (p >= 5) { clearInterval(timer); return p; }
-          return p + 1;
-        });
-      }, 80);
-      return () => clearInterval(timer);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setMenuReady(true));
+      });
+    } else {
+      setMenuReady(false);
     }
   }, [mobileOpen]);
 
+  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
+  // Escape to close mobile menu
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e) => { if (e.key === "Escape") setMobileOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
 
   const go = (target) => {
@@ -86,102 +120,75 @@ export default function Navbar() {
   };
 
   const links = [
-    { l: "Work", h: "/work", sectionId: "reels" },
+    { l: "Work", h: "#reels", sectionId: "reels" },
     { l: "Services", h: "#services", sectionId: "services" },
     { l: "Our Story", h: "#story", sectionId: "story" },
-    { l: "BTS", h: "#behind-the-scenes", sectionId: "behind-the-scenes" },
     { l: "Contact", h: "#contact", sectionId: "contact" },
   ];
 
   return (
     <>
+      {/* Floating capsule navbar */}
       <nav
         ref={navRef}
         aria-label="Main navigation"
         style={{
           position: "fixed",
-          top: scrolled ? "12px" : "0",
-          left: scrolled ? "50%" : "0",
-          transform: scrolled ? "translateX(-50%)" : "none",
-          right: scrolled ? "auto" : "0",
-          width: scrolled ? "calc(100% - 32px)" : "100%",
-          maxWidth: scrolled ? "980px" : "100%",
-          zIndex: 100,
-          background: scrolled
-            ? "rgba(46,10,13,0.88)"
-            : "transparent",
-          backdropFilter: scrolled ? "blur(20px) saturate(1.2)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(20px) saturate(1.2)" : "none",
-          border: scrolled
-            ? "1px solid rgba(200,155,93,0.18)"
-            : "1px solid transparent",
-          borderBottom: scrolled
-            ? "1px solid rgba(200,155,93,0.12)"
-            : "1px solid rgba(200,155,93,0.06)",
-          borderRadius: scrolled ? "9999px" : "0",
-          boxShadow: scrolled ? "0 16px 40px rgba(0,0,0,0.35)" : "none",
-          transition: "all 0.5s cubic-bezier(0.25, 1, 0.5, 1)",
+          top: 16,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 200,
+          width: "auto",
+          maxWidth: "calc(100vw - 32px)",
+          borderRadius: 100,
+          background: "rgba(26, 5, 7, 0.72)",
+          backdropFilter: "blur(24px) saturate(1.1)",
+          WebkitBackdropFilter: "blur(24px) saturate(1.1)",
+          border: "1px solid rgba(212,184,150,0.14)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.2)",
           paddingLeft: "env(safe-area-inset-left)",
           paddingRight: "env(safe-area-inset-right)",
         }}
-        className="flex items-center justify-between"
       >
         <div style={{
-          width: "100%",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: scrolled ? "10px 24px" : "16px 24px",
-          transition: "padding 0.5s cubic-bezier(0.25, 1, 0.5, 1)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 6,
+          padding: "0 8px",
+          height: 48,
         }}>
-          {/* Logo */}
+          {/* Logo only — no text */}
           <button
             onClick={() => {
               if (pathname !== "/") { router.push("/"); return; }
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
-            className="flex items-center gap-3"
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              padding: "6px 10px", display: "flex", alignItems: "center",
+              flexShrink: 0,
+            }}
             aria-label="Shaadi Pitara — Home"
           >
             <div style={{
-              position: "relative", width: 36, height: 36,
-              borderRadius: 8, overflow: "hidden",
-              border: scrolled ? "1px solid rgba(200,155,93,0.2)" : "1px solid rgba(200,155,93,0.15)",
-              transition: "border-color 0.4s ease",
+              position: "relative", width: 28, height: 28,
+              borderRadius: 6, overflow: "hidden",
+              flexShrink: 0,
             }}>
               <Image
                 src="/1.jpg"
                 alt="Shaadi Pitara"
                 fill
-                sizes="36px"
+                sizes="28px"
                 style={{ objectFit: "cover" }}
                 priority
               />
             </div>
-            <span style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(16px, 1.8vw, 19px)",
-              fontWeight: 600,
-              color: "var(--brand-cream)",
-              letterSpacing: "0.06em",
-              whiteSpace: "nowrap",
-            }}>
-              Shaadi Pitara
-            </span>
           </button>
 
           {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-8 relative">
-            <div
-              ref={indicatorRef}
-              style={{
-                position: "absolute", bottom: -6, left: 0,
-                height: "1.5px",
-                background: "var(--brand-gold)",
-                transition: "transform 0.4s cubic-bezier(0.65,0,0.35,1), width 0.4s cubic-bezier(0.65,0,0.35,1)",
-                pointerEvents: "none",
-                width: 0,
-              }}
-            />
+          <div className="nav-desktop-links items-center gap-1 relative" style={{ display: "flex", alignItems: "center", gap: 2 }}>
             {links.map((l) => {
               const isActive = activeSection === l.sectionId;
               return (
@@ -192,15 +199,20 @@ export default function Navbar() {
                   style={{
                     fontFamily: "var(--font-mono)",
                     fontSize: 10,
-                    letterSpacing: "0.2em",
+                    letterSpacing: "0.18em",
                     textTransform: "uppercase",
-                    color: isActive ? "var(--brand-cream)" : "rgba(245,230,204,0.5)",
+                    color: isActive
+                      ? "var(--brand-cream)"
+                      : "rgba(247,230,204,0.55)",
                     background: "none",
                     border: "none",
-                    padding: "6px 0",
+                    padding: "7px 14px",
                     cursor: "pointer",
                     transition: "color 0.3s ease",
                     position: "relative",
+                    lineHeight: 1,
+                    whiteSpace: "nowrap",
+                    borderRadius: 100,
                   }}
                 >
                   {l.l}
@@ -210,49 +222,61 @@ export default function Navbar() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden lg:block">
+          <div className="nav-desktop-cta" style={{ display: "flex", alignItems: "center" }}>
             <button
               className="btn-primary"
               onClick={() => go("#contact")}
               style={{
-                padding: "10px 24px",
+                padding: "8px 18px",
                 fontSize: 9,
+                borderRadius: 100,
+                letterSpacing: "0.18em",
+                margin: "0 6px",
               }}
             >
-              Let&apos;s Talk
+              Let&apos;s Connect
             </button>
           </div>
 
           {/* Mobile hamburger */}
           <button
-            className="lg:hidden"
+            className="nav-hamburger"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             style={{
               background: "none", border: "none",
-              cursor: "pointer", padding: 8,
+              cursor: "pointer", padding: "0 8px",
               display: "flex", flexDirection: "column", gap: 5,
-              zIndex: 100,
+              zIndex: 300,
+              width: 36, height: 36,
+              alignItems: "center", justifyContent: "center",
+              flexShrink: 0,
             }}
           >
             <span style={{
-              display: "block", width: 24, height: 1.5,
+              display: "block", width: 18, height: 1.5,
               background: "var(--brand-cream)",
-              transition: "all 0.35s cubic-bezier(0.23,1,0.32,1)",
+              transition: "all 0.4s cubic-bezier(0.23,1,0.32,1)",
               transform: mobileOpen ? "rotate(45deg) translate(4px, 4px)" : "none",
+              transformOrigin: "center",
+              borderRadius: 1,
             }} />
             <span style={{
-              display: "block", width: 24, height: 1.5,
+              display: "block", width: 18, height: 1.5,
               background: "var(--brand-cream)",
               transition: "all 0.35s cubic-bezier(0.23,1,0.32,1)",
               opacity: mobileOpen ? 0 : 1,
+              transform: mobileOpen ? "scaleX(0)" : "scaleX(1)",
+              borderRadius: 1,
             }} />
             <span style={{
-              display: "block", width: 24, height: 1.5,
+              display: "block", width: 18, height: 1.5,
               background: "var(--brand-cream)",
-              transition: "all 0.35s cubic-bezier(0.23,1,0.32,1)",
+              transition: "all 0.4s cubic-bezier(0.23,1,0.32,1)",
               transform: mobileOpen ? "rotate(-45deg) translate(4px, -4px)" : "none",
+              transformOrigin: "center",
+              borderRadius: 1,
             }} />
           </button>
         </div>
@@ -260,11 +284,28 @@ export default function Navbar() {
 
       {/* Mobile full-screen menu */}
       {mobileOpen && (
-        <div className="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+        <div
+          style={{
+            position: "fixed", inset: 0, zIndex: 150,
+            background: "rgba(26, 5, 7, 0.97)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            padding: "max(24px, env(safe-area-inset-top)) max(24px) max(24px, env(safe-area-inset-bottom))",
+            opacity: menuReady ? 1 : 0,
+            transition: "opacity 0.4s cubic-bezier(0.23,1,0.32,1)",
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+          onClick={(e) => { if (e.target === e.currentTarget) setMobileOpen(false); }}
+        >
           <div style={{
             display: "flex", flexDirection: "column",
-            alignItems: "center", gap: 6,
-            width: "100%", maxWidth: 360,
+            alignItems: "center",
+            width: "100%", maxWidth: 320,
+            gap: 2,
           }}>
             {links.map((l, i) => (
               <button
@@ -272,37 +313,40 @@ export default function Navbar() {
                 onClick={() => go(l.h)}
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: "clamp(28px, 7vw, 40px)",
+                  fontSize: "clamp(30px, 7vw, 42px)",
                   fontWeight: 400,
-                  color: "var(--brand-cream)",
+                  color: activeSection === l.sectionId
+                    ? "var(--brand-gold-light)"
+                    : "var(--brand-cream)",
                   background: "none",
                   border: "none",
+                  borderBottom: i < links.length - 1 ? "1px solid rgba(212,184,150,0.08)" : "none",
                   cursor: "pointer",
-                  padding: "14px 0",
-                  width: "100%", textAlign: "center",
-                  opacity: menuStagger >= i ? 1 : 0,
-                  transform: menuStagger >= i ? "translateY(0)" : "translateY(20px)",
-                  transition: "all 0.5s cubic-bezier(0.23,1,0.32,1)",
-                  borderBottom: i < links.length - 1 ? "1px solid rgba(200,155,93,0.1)" : "none",
+                  padding: "16px 0",
+                  width: "100%",
+                  textAlign: "center",
+                  opacity: menuReady ? 1 : 0,
+                  transform: menuReady ? "translateY(0)" : "translateY(20px)",
+                  transition: `all 0.55s cubic-bezier(0.23,1,0.32,1) ${i * 0.06}s`,
                 }}
               >
                 {l.l}
               </button>
             ))}
             <div style={{
-              marginTop: 28,
-              opacity: menuStagger >= 5 ? 1 : 0,
-              transform: menuStagger >= 5 ? "translateY(0)" : "translateY(20px)",
-              transition: "all 0.5s cubic-bezier(0.23,1,0.32,1) 0.1s",
+              marginTop: 36,
+              opacity: menuReady ? 1 : 0,
+              transform: menuReady ? "translateY(0)" : "translateY(20px)",
+              transition: "all 0.55s cubic-bezier(0.23,1,0.32,1) 0.24s",
             }}>
               <button
                 className="btn-primary-gold"
                 onClick={() => go("#contact")}
                 style={{
-                  padding: "14px 36px",
+                  padding: "14px 40px",
                 }}
               >
-                Let&apos;s Talk
+                Let&apos;s Connect
               </button>
             </div>
           </div>

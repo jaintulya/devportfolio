@@ -39,11 +39,14 @@ function FAQItem({ faq, index }) {
   const itemRef = useRef(null);
 
   useEffect(() => {
-    gsap.from(itemRef.current, {
-      y: 24, opacity: 0, duration: 0.6, ease: "power2.out",
-      delay: index * 0.06,
-      scrollTrigger: { trigger: itemRef.current, start: "top 88%" },
+    const ctx = gsap.context(() => {
+      gsap.from(itemRef.current, {
+        y: 24, opacity: 0, duration: 0.6, ease: "power2.out",
+        delay: index * 0.06,
+        scrollTrigger: { trigger: itemRef.current, start: "top 88%" },
+      });
     });
+    return () => ctx.revert();
   }, [index]);
 
   return (
@@ -102,7 +105,7 @@ function FAQItem({ faq, index }) {
           <svg
             width="14" height="14" viewBox="0 0 24 24"
             fill="none"
-            stroke={isOpen ? "#ffffff" : "var(--brand-maroon)"}
+            stroke={isOpen ? "var(--brand-cream)" : "var(--brand-maroon)"}
             strokeWidth="2" strokeLinecap="round"
           >
             <path d="M12 5v14M5 12h14" />

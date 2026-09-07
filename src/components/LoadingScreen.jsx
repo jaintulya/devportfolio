@@ -54,7 +54,7 @@ export default function LoadingScreen({ onComplete }) {
           transform: "translate(-50%, -50%)",
           width: 400, height: 400,
           borderRadius: "50%",
-          background: "radial-gradient(ellipse, rgba(200,155,93,0.06) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse, rgba(212,184,150,0.06) 0%, transparent 70%)",
           pointerEvents: "none",
         }}
       />

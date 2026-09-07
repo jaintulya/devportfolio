@@ -9,25 +9,26 @@
 
 :root {
   /* ── Core Palette ── */
-  --brand-maroon:         #5E181C;
-  --brand-maroon-dark:    #2E0A0D;
-  --brand-maroon-deep:    #1A0507;
-  --brand-maroon-soft:    #7A2A2F;
-  --brand-cream:          #F5E6CC;
+  --brand-maroon:         #3A0B0E;
+  --brand-maroon-dark:    #3A0B0E;
+  --brand-maroon-deep:    #3A0B0E;
+  --brand-maroon-soft:    #3A0B0E;
+  --brand-cream:          #F7E6CC;
   --brand-cream-light:    #FFF6E8;
   --brand-ivory:          #FFFDF8;
-  --brand-beige:          #E4CEAF;
-  --brand-beige-muted:    #C8AD8A;
-  --brand-gold:           #C89B5D;
-  --brand-gold-light:     #DDB97A;
-  --brand-gold-pale:      #E8D5B5;
-  --brand-gold-dark:      #A07840;
-  --brand-border:         rgba(200,155,93,0.18);
-  --brand-border-subtle:  rgba(200,155,93,0.08);
+  --brand-beige:          #EAD4BE;
+  --brand-beige-muted:    #DBC4AA;
+  --brand-gold:           #D4B896;
+  --brand-gold-light:     #E8D5B5;
+  --brand-gold-pale:      #F0E0CC;
+  --brand-gold-dark:      #B8976E;
+  --brand-border:         rgba(212,184,150,0.18);
+  --brand-border-subtle:  rgba(212,184,150,0.08);
+  --brand-off-white:      #F7E6CC;
 
   /* ── Typography ── */
-  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-  --font-body:    'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    'Space Mono', 'SF Mono', monospace;
 
   /* ── Semantic aliases ── */
@@ -151,6 +152,11 @@ body {
   50%      { transform: scale(1.08); opacity: 1; }
 }
 
+@keyframes scrollFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.45; }
+  50%      { transform: translateY(6px); opacity: 0.7; }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════
    GOLD SHIMMER TEXT
    ═══════════════════════════════════════════════════════════════════════ */
@@ -231,7 +237,7 @@ body {
   transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
 }
 .btn-primary:hover {
-  background: #ffffff;
+  background: var(--brand-cream);
   transform: translateY(-2px);
   box-shadow: 0 12px 32px rgba(0,0,0,0.2);
 }
@@ -243,7 +249,7 @@ body {
 }
 .btn-primary-gold:hover {
   background: var(--brand-gold-light);
-  box-shadow: 0 12px 32px rgba(200,155,93,0.3);
+  box-shadow: 0 12px 32px rgba(212,184,150,0.3);
 }
 
 .btn-secondary {
@@ -265,7 +271,7 @@ body {
 }
 .btn-secondary:hover {
   border-color: var(--brand-gold);
-  background: rgba(200,155,93,0.08);
+  background: rgba(212,184,150,0.08);
   color: var(--brand-gold-light);
 }
 .btn-secondary:active { transform: scale(0.97); }
@@ -275,7 +281,7 @@ body {
    ═══════════════════════════════════════════════════════════════════════ */
 
 .card-light {
-  background: rgba(255,255,255,0.9);
+  background: #F7E6CC;
   border: 1px solid var(--brand-border-subtle);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.04);
@@ -283,19 +289,19 @@ body {
 }
 .card-light:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 48px rgba(94,24,28,0.08), 0 0 0 1px rgba(200,155,93,0.12);
+  box-shadow: 0 20px 48px rgba(94,24,28,0.08), 0 0 0 1px rgba(212,184,150,0.12);
 }
 
 .card-dark {
   background: rgba(94,24,28,0.1);
-  border: 1px solid rgba(200,155,93,0.12);
+  border: 1px solid rgba(212,184,150,0.12);
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.06);
   transition: all 0.45s cubic-bezier(0.23,1,0.32,1);
 }
 .card-dark:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 48px rgba(0,0,0,0.2), 0 0 0 1px rgba(200,155,93,0.2);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.2), 0 0 0 1px rgba(212,184,150,0.2);
   background: rgba(94,24,28,0.18);
 }
 
@@ -310,12 +316,12 @@ body {
   overflow: hidden;
   cursor: pointer;
   background: var(--brand-maroon-dark);
-  border: 1px solid rgba(200,155,93,0.1);
+  border: 1px solid rgba(212,184,150,0.1);
   transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
 }
 .reel-card:hover {
   transform: scale(1.015);
-  border-color: rgba(200,155,93,0.35);
+  border-color: rgba(212,184,150,0.35);
   box-shadow: 0 24px 56px rgba(0,0,0,0.35);
 }
 .reel-card img {
@@ -364,7 +370,7 @@ body {
   border-radius: 50%;
   background: rgba(46,10,13,0.55);
   backdrop-filter: blur(8px);
-  border: 1.5px solid rgba(200,155,93,0.5);
+  border: 1.5px solid rgba(212,184,150,0.5);
   display: flex; align-items: center; justify-content: center;
   opacity: 0;
   transition: all 0.4s ease;
@@ -383,7 +389,7 @@ body {
 .testimonial-card {
   position: relative;
   padding: 48px;
-  border: 1px solid rgba(200,155,93,0.18);
+  border: 1px solid rgba(212,184,150,0.18);
   border-radius: 16px;
   background: rgba(94,24,28,0.12);
   overflow: hidden;
@@ -402,7 +408,7 @@ body {
 .testimonial-dot {
   width: 8px; height: 8px;
   border-radius: 50%;
-  border: 1px solid rgba(200,155,93,0.4);
+  border: 1px solid rgba(212,184,150,0.4);
   background: transparent;
   cursor: pointer;
   transition: all 0.35s ease;
@@ -499,7 +505,7 @@ html.lenis, html.lenis body { height: auto; }
   background: var(--brand-maroon-dark);
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(200,155,93,0.12);
+  border: 1px solid rgba(212,184,150,0.12);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -516,7 +522,7 @@ html.lenis, html.lenis body { height: auto; }
 .filter-tab {
   padding: 10px 22px;
   background: transparent;
-  border: 1px solid rgba(200,155,93,0.2);
+  border: 1px solid rgba(212,184,150,0.2);
   color: var(--brand-beige-muted);
   font-family: var(--font-mono);
   font-size: 10px;
@@ -589,4 +595,106 @@ html.lenis, html.lenis body { height: auto; }
   color: var(--brand-gold);
   opacity: 0;
   animation: fadeSlideUp 0.6s 0.5s cubic-bezier(0.23,1,0.32,1) forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SHAADI PITARA — SUBTLE WORK SECTION BACKGROUND
+   Primary: #5E181C
+   Secondary: #F7E6CC
+═══════════════════════════════════════════════════════════════════════ */
+
+.work-section {
+  --maroon: #5E181C;
+  --maroon-dark: #3F0F12;
+  --maroon-deep: #2A080A;
+  --beige: #F7E6CC;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  background:
+    /* subtle readability overlay — lets image show through */
+    linear-gradient(
+      180deg,
+      rgba(26, 5, 7, 0.45) 0%,
+      rgba(26, 5, 7, 0.28) 40%,
+      rgba(26, 5, 7, 0.50) 100%
+    ),
+    /* workbg image — responsive cover */
+    url("/workbg.png") center / cover no-repeat,
+    /* deep maroon fallback base */
+    linear-gradient(
+      180deg,
+      var(--maroon-dark) 0%,
+      var(--maroon) 48%,
+      var(--maroon-dark) 100%
+    );
+}
+
+
+/* 1. FINE PAPER / FABRIC TEXTURE (removed — replaced by workbg image) */
+
+.work-section::before {
+  display: none;
+}
+
+
+/* 2. VERY SUBTLE ORGANIC GRAIN (removed — replaced by workbg image) */
+
+.work-section .work-texture {
+  display: none;
+}
+
+
+/* 3. VERY FAINT FLORAL LINE ART (removed — replaced by workbg image) */
+
+.work-section .work-pattern {
+  display: none;
+}
+
+
+/* 4. EDGE VIGNETTE (removed — replaced by workbg image) */
+
+.work-section .work-vignette {
+  display: none;
+}
+
+
+/* 5. MOBILE — EVEN MORE SUBTLE (texture removed) */
+
+@media (max-width: 768px) {
+
+  .work-section::before {
+    display: none;
+  }
+
+  .work-section .work-texture {
+    display: none;
+  }
+
+  .work-section .work-pattern {
+    display: none;
+  }
+
+  .work-section .work-vignette {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   NAVBAR RESPONSIVE BREAKPOINTS
+   (1024px = lg — matches Tailwind default, enforced here for reliability)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023px) {
+  .nav-desktop-links { display: none !important; }
+  .nav-desktop-cta  { display: none !important; }
+  .nav-hamburger    { display: flex !important; }
+}
+
+@media (min-width: 1024px) {
+  .nav-desktop-links { display: flex !important; }
+  .nav-desktop-cta  { display: block !important; }
+  .nav-hamburger    { display: none !important; }
 }

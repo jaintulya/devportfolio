@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadi Pitara — Our Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --beige:#F4E2C5;
+  --cream:#FFF6E7;
+  --maroon:#5B171B;
+  --deep:#3B0D10;
+  --wine:#7C292D;
+  --brown:#9E776A;
+  --line:rgba(91,23,27,.18);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--beige);
+  color:var(--maroon);
+  font-family:"DM Sans",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+button{font:inherit}
+
+/* Fixed atmospheric layers */
+.grain{
+  position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.progress{
+  position:fixed;right:22px;top:50%;transform:translateY(-50%);
+  width:3px;height:92px;background:rgba(91,23,27,.12);z-index:40;border-radius:2px;
+}
+.progress b{display:block;width:100%;height:0;background:var(--maroon);transition:height .15s linear;border-radius:2px}
+
+.wrap{width:min(1180px,88vw);margin:auto;position:relative;z-index:2}
+.mono{font:500 10px "DM Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+.topline{
+  position:absolute;top:28px;left:0;right:0;display:flex;justify-content:space-between;
+  color:var(--brown);z-index:10;
+}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--wine)}
+
+/* ============================================
+   HERO
+   ============================================ */
+.hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1.15fr .85fr;align-items:center;
+  gap:7vw;padding-top:9vw;
+  perspective:1800px;
+  position:relative;
+}
+.hero-copy{
+  position:relative;z-index:3;
+}
+.hero-copy h1{
+  font:500 clamp(74px,10vw,150px)/.78 "Cormorant Garamond",serif;
+  letter-spacing:-.045em;margin:0;
+}
+.hero-copy h1 .l-1{display:block;overflow:hidden}
+.hero-copy h1 .l-2{display:block;overflow:hidden}
+.hero-copy h1 .l-1 span,
+.hero-copy h1 .l-2 span{display:inline-block;transform:translateY(110%)}
+.hero-copy h1 .l-1.ready span{transform:translateY(0);transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.hero-copy h1 .l-2.ready span{transform:translateY(0);transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .15s}
+.hero-copy h1 span.accent{color:var(--wine)}
+.hero-copy p{
+  width:min(470px,100%);margin:34px 0 0;color:var(--brown);font-size:15px;line-height:1.9;
+  opacity:0;transform:translateY(20px);
+}
+.hero-copy.ready p{opacity:1;transform:none;transition:opacity 1s .7s, transform 1s .7s}
+.enter{
+  margin-top:34px;border:0;background:none;color:var(--maroon);padding:0;cursor:pointer;
+  display:flex;align-items:center;gap:12px;font:500 10px "DM Mono";letter-spacing:.16em;text-transform:uppercase;
+  opacity:0;transform:translateY(15px);
+}
+.hero-copy.ready .enter{opacity:1;transform:none;transition:opacity 1s .9s, transform 1s .9s}
+.enter i{
+  width:36px;height:36px;border:1px solid var(--maroon);border-radius:50%;display:grid;place-items:center;
+  font-style:normal;transition:.4s;
+}
+.enter:hover i{transform:translateY(4px);background:var(--maroon);color:var(--cream)}
+
+/* HERO ORBIT — PLANET-STYLE AUTOMATIC */
+.hero-orbit{
+  height:520px;
+  position:relative;
+  transform-style:preserve-3d;
+  perspective:1200px;
+}
+.orbit-ring{
+  position:absolute;inset:8% 4%;border:1px solid rgba(91,23,27,.14);border-radius:50%;
+  transform:rotateX(70deg) rotateZ(-8deg);
+  box-shadow:0 0 60px rgba(91,23,27,.04) inset;
+}
+.orbit-ring.r2{inset:18% 14%;border-color:rgba(91,23,27,.08);transform:rotateX(72deg) rotateZ(15deg)}
+.orbit-ring.r3{inset:28% 23%;border:1px dashed rgba(91,23,27,.07);transform:rotateX(68deg) rotateZ(-30deg)}
+
+.orbit-core{
+  position:absolute;left:50%;top:50%;width:210px;height:210px;
+  transform:translate(-50%,-50%) translateZ(60px);
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 30%, #fff6e7 0%, #f4d5b0 25%, #c08868 55%, #7c292d 85%, #4d1417 100%);
+  box-shadow:
+    inset 0 0 60px rgba(91,23,27,.35),
+    0 35px 85px rgba(91,23,27,.25),
+    0 0 120px rgba(124,41,45,.12);
+}
+.orbit-core::before{
+  content:"";position:absolute;inset:22px;border:1px solid rgba(255,246,231,.35);border-radius:50%;
+  box-shadow:inset 0 0 30px rgba(255,246,231,.1);
+}
+.orbit-core::after{
+  content:"";position:absolute;inset:-14px;border:1px solid rgba(91,23,27,.1);border-radius:50%;
+}
+.core-label{
+  position:absolute;inset:0;display:grid;place-items:center;text-align:center;
+  font:500 14px/1.15 "Cormorant Garamond",serif;letter-spacing:.04em;color:var(--cream);
+  text-shadow:0 2px 8px rgba(59,13,16,.4);
+}
+
+/* Planet cards (orbiting objects) */
+.orbit-card{
+  position:absolute;
+  left:50%;top:50%;
+  width:104px;height:104px;margin:-52px;
+  border-radius:50%;
+  background:rgba(255,246,231,.92);
+  border:1px solid rgba(91,23,27,.16);
+  box-shadow:0 18px 45px rgba(91,23,27,.12), inset 0 0 20px rgba(244,226,197,.4);
+  transform-style:preserve-3d;
+  display:grid;place-items:center;
+  will-change:transform,opacity;
+  transition:box-shadow .35s ease, background .35s ease;
+}
+.orbit-card:hover{
+  background:var(--cream);
+  box-shadow:0 28px 65px rgba(91,23,27,.22), inset 0 0 25px rgba(244,226,197,.6);
+}
+.creator-icon{
+  position:relative;width:64px;height:64px;display:grid;place-items:center;color:var(--maroon);
+  transform-style:preserve-3d;
+}
+.creator-icon svg{width:100%;height:100%}
+
+/* Creator icons */
+.ig{position:relative;width:60px;height:60px}
+.ig-outer{position:absolute;inset:0;border:5px solid var(--maroon);border-radius:18px}
+.ig-inner{position:absolute;left:50%;top:50%;width:23px;height:23px;border:4px solid var(--maroon);border-radius:50%;transform:translate(-50%,-50%)}
+.ig-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--maroon);right:6px;top:6px}
+
+.phone-shape{position:relative;width:38px;height:64px;border:3px solid var(--maroon);border-radius:11px}
+.phone-shape::before{content:"";position:absolute;left:50%;top:6px;transform:translateX(-50%);width:15px;height:3px;border-radius:5px;background:var(--maroon)}
+.phone-shape::after{content:"";position:absolute;left:50%;bottom:6px;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--maroon)}
+.phone-line{position:absolute;left:50%;transform:translateX(-50%);width:18px;height:2px;background:var(--maroon);border-radius:2px}
+
+.pr-mark{width:62px;height:62px;border:3px solid var(--maroon);border-radius:11px;display:grid;place-items:center;font:700 26px/1 "DM Sans";letter-spacing:-.06em;color:var(--maroon);background:rgba(91,23,27,.04)}
+
+.camera-mark{position:relative;width:64px;height:46px;border:3px solid var(--maroon);border-radius:11px}
+.camera-mark::before{content:"";position:absolute;width:20px;height:20px;border:3px solid var(--maroon);border-radius:50%;left:18px;top:10px}
+.camera-mark::after{content:"";position:absolute;width:18px;height:7px;border-radius:3px;background:var(--maroon);left:8px;top:-8px}
+
+.reel-mark{position:relative;width:60px;height:60px;border:3px solid var(--maroon);border-radius:50%}
+.reel-mark::before{content:"";position:absolute;inset:14px;border:3px solid var(--maroon);border-radius:50%}
+.reel-mark::after{content:"";position:absolute;left:23px;top:19px;border-left:12px solid var(--maroon);border-top:9px solid transparent;border-bottom:9px solid transparent}
+
+.clapper-mark{position:relative;width:66px;height:50px;border:3px solid var(--maroon);border-radius:6px;margin-top:8px}
+.clapper-mark::before{content:"";position:absolute;left:-3px;right:-3px;top:-13px;height:12px;border:3px solid var(--maroon);border-radius:4px;transform:skew(-16deg);background:repeating-linear-gradient(120deg,transparent 0 12px,var(--maroon) 12px 16px,transparent 16px 26px)}
+.clapper-mark::after{content:"";position:absolute;left:10px;right:10px;top:22px;height:2px;background:var(--maroon);box-shadow:0 9px 0 var(--maroon)}
+
+/* ============================================
+   PINNED STORY — THE BEGINNING
+   ============================================ */
+.pin{
+  min-height:175vh;
+  position:relative;
+  background:linear-gradient(180deg,var(--beige) 0%,var(--deep) 8%,var(--deep) 92%,var(--beige) 100%);
+  color:var(--cream);
+}
+.pin-inner{
+  position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden;
+}
+.pin-layout{
+  width:min(1180px,88vw);display:grid;grid-template-columns:.42fr .58fr;gap:7vw;align-items:center;
+  perspective:1600px;
+}
+.pin-label{color:#c9aa9e}
+.pin-copy h2{
+  margin:14px 0 26px;font:500 clamp(60px,7.2vw,105px)/.82 "Cormorant Garamond",serif;letter-spacing:-.04em;
+}
+.pin-copy h2 span{color:#d4b3a8}
+.pin-copy p{max-width:570px;color:#d2b3a8;font-size:15px;line-height:1.9}
+.pin-copy p strong{color:var(--cream);font-weight:500;font-style:italic;font-family:"Cormorant Garamond",serif;font-size:18px}
+
+.scene{
+  height:600px;position:relative;transform-style:preserve-3d;
+}
+.scene-floor{
+  position:absolute;inset:13% 5% 9%;
+  border:1px solid rgba(255,246,231,.13);
+  transform:rotateX(67deg) translateZ(-90px);
+  background:linear-gradient(180deg,transparent 0%,rgba(255,246,231,.02) 100%);
+}
+.scene-line{position:absolute;left:10%;right:5%;top:52%;height:1px;background:rgba(255,246,231,.15);transform:translateZ(-120px)}
+.film{
+  position:absolute;width:330px;height:450px;left:18%;top:13%;
+  background:linear-gradient(150deg,#ead6bb 0%,#a86657 43%,#47191d 100%);
+  box-shadow:0 45px 95px rgba(0,0,0,.36), 0 0 0 1px rgba(255,246,231,.08);
+  transform-style:preserve-3d;
+  transform:translateZ(100px) rotateY(-13deg) rotateX(4deg);
+  overflow:hidden;
+  will-change:transform;
+}
+.film::before{
+  content:"";position:absolute;inset:18px;border:1px solid rgba(255,246,231,.28)
+}
+.film::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 30%,rgba(255,246,231,.35),transparent 19%),linear-gradient(180deg,transparent 50%,rgba(59,13,16,.55))
+}
+.film-label{position:absolute;z-index:2;bottom:22px;left:22px;color:var(--cream);font:500 9px "DM Mono";letter-spacing:.14em}
+.film-date{position:absolute;z-index:2;top:22px;right:22px;color:rgba(255,246,231,.75);font:500 9px "DM Mono"}
+.float-note{
+  position:absolute;padding:14px 16px;background:var(--cream);color:var(--maroon);
+  box-shadow:0 22px 50px rgba(0,0,0,.22);font:500 22px/1 "Cormorant Garamond",serif;
+  will-change:transform;
+}
+.float-note.n1{right:3%;top:18%;transform:translateZ(175px) rotate(5deg)}
+.float-note.n2{left:0%;bottom:13%;transform:translateZ(210px) rotate(-4deg)}
+.scroll-hint{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  color:#b99487;font:500 9px "DM Mono";letter-spacing:.14em;
+  display:flex;align-items:center;gap:10px;
+}
+.scroll-hint i{
+  display:inline-block;width:1px;height:18px;background:#b99487;
+  animation:scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse{
+  0%,100%{transform:scaleY(1);transform-origin:top;opacity:.4}
+  50%{transform:scaleY(1.4);opacity:1}
+}
+
+/* ============================================
+   JOURNEY
+   ============================================ */
+.journey{background:var(--cream);padding:12vw 0;color:var(--maroon);overflow:hidden}
+.journey-head{
+  display:grid;grid-template-columns:1.2fr .8fr;gap:7vw;align-items:end;margin-bottom:80px;
+}
+.journey-head h2{font:500 clamp(60px,7.5vw,105px)/.84 "Cormorant Garamond",serif;letter-spacing:-.04em;margin:0}
+.journey-head p{max-width:380px;color:var(--brown);font-size:14px;line-height:1.85;margin:0}
+
+.route{
+  position:relative;
+  height:230px;
+  margin-top:2vw;
+}
+.route-line{
+  position:absolute;
+  left:5%;top:29px;
+  width:90%;
+  height:2px;
+  z-index:1;
+  pointer-events:none;
+}
+.route-line svg{width:100%;height:24px;overflow:visible}
+.route-line path{fill:none;stroke:rgba(91,23,27,.22);stroke-width:1.4;stroke-linecap:round}
+.route-line .progress-line{
+  fill:none;stroke:var(--wine);stroke-width:1.4;stroke-linecap:round;
+  stroke-dasharray:1000;stroke-dashoffset:1000;
+  transition:stroke-dashoffset .1s linear;
+}
+
+.stop{
+  position:absolute;
+  top:0;
+  width:18%;
+  text-align:center;
+  z-index:2;
+}
+.stop:nth-of-type(1){left:0%}
+.stop:nth-of-type(2){left:20.5%}
+.stop:nth-of-type(3){left:41%}
+.stop:nth-of-type(4){left:61.5%}
+.stop:nth-of-type(5){left:82%}
+
+.stop-dot{
+  width:16px;height:16px;
+  border-radius:50%;
+  background:var(--wine);
+  margin:0 auto 22px;
+  box-shadow:0 0 0 8px rgba(124,41,45,.08), 0 0 0 1px rgba(124,41,45,.2);
+  transition:.4s;
+  position:relative;
+  z-index:3;
+}
+.stop-dot::after{
+  content:"";position:absolute;inset:-3px;border-radius:50%;
+  border:1px solid transparent;transition:.4s;
+}
+.stop:hover .stop-dot{
+  box-shadow:0 0 0 16px rgba(124,41,45,.12), 0 0 0 1px rgba(124,41,45,.3);
+  transform:scale(1.15);
+}
+.stop h3{font:500 30px/.9 "Cormorant Garamond",serif;margin:0 0 8px;color:var(--maroon)}
+.stop p{font-size:11.5px;line-height:1.65;color:var(--brown);margin:0;max-width:160px;margin:0 auto}
+.stop .stop-index{
+  display:block;
+  font:500 9px "DM Mono",monospace;letter-spacing:.14em;
+  color:var(--brown);margin-bottom:14px;text-transform:uppercase;
+}
+
+/* ============================================
+   DISCOVERY
+   ============================================ */
+.discovery{
+  min-height:100vh;display:grid;place-items:center;
+  background:var(--beige);position:relative;text-align:center;padding:10vw 0;
+}
+.discovery h2{
+  max-width:1000px;margin:auto;font:500 clamp(63px,8vw,118px)/.83 "Cormorant Garamond",serif;letter-spacing:-.045em;
+}
+.discovery h2 span{color:var(--wine)}
+.discovery h2 .line{display:block;overflow:hidden}
+.discovery h2 .line span{display:inline-block;transform:translateY(110%)}
+.discovery.in .line span{transform:translateY(0);transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.discovery.in .line:nth-of-type(2) span{transition-delay:.15s}
+.discovery p{max-width:660px;color:var(--brown);font-size:15px;line-height:1.9;margin:30px auto 0;opacity:.4;transform:translateY(15px);transition:1s .5s}
+.discovery.in p{opacity:1;transform:none}
+.discovery .mini{margin-bottom:24px;color:var(--brown)}
+
+/* ============================================
+   MOMENTS
+   ============================================ */
+.moments{
+  background:var(--cream);padding:12vw 0 13vw;
+}
+.moments-wrap{display:grid;grid-template-columns:.75fr 1.25fr;gap:8vw;align-items:start}
+.moments h2{font:500 clamp(60px,7vw,100px)/.84 "Cormorant Garamond",serif;letter-spacing:-.04em;margin:0}
+.moments h2 span{color:var(--wine)}
+.moment-copy{position:sticky;top:15vh}
+.moment-copy p{color:var(--brown);line-height:1.9;font-size:14px;max-width:360px;margin-top:18px}
+.moment-pills{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pill{
+  position:relative;min-height:120px;border:1px solid var(--line);background:var(--beige);
+  padding:20px;display:flex;align-items:end;justify-content:space-between;cursor:pointer;transition:.45s cubic-bezier(.2,.8,.2,1);
+  overflow:hidden;
+}
+.pill::before{
+  content:"";position:absolute;width:120px;height:120px;border-radius:50%;right:-30px;top:-30px;
+  background:var(--wine);opacity:.06;transition:.5s ease;
+}
+.pill::after{
+  content:"\2192";position:absolute;right:20px;top:20px;color:var(--brown);
+  font-size:14px;transition:.45s ease;
+}
+.pill b{font:500 32px/.9 "Cormorant Garamond",serif;position:relative;z-index:2;transition:color .45s}
+.pill:hover{
+  background:var(--deep);color:var(--cream);
+  transform:translateY(-6px) rotateX(2deg);
+  box-shadow:0 20px 40px rgba(91,23,27,.18);
+}
+.pill:hover b{color:var(--cream)}
+.pill:hover::before{transform:scale(2.5);opacity:.18}
+.pill:hover::after{color:var(--cream);transform:translate(4px,-4px)}
+.pill.active{
+  background:var(--deep);color:var(--cream);
+  transform:translateY(-4px);
+  box-shadow:0 15px 35px rgba(91,23,27,.2);
+}
+.pill.active b{color:var(--cream)}
+.pill.active::before{transform:scale(2.5);opacity:.18}
+.pill.active::after{color:var(--cream)}
+
+.pill-detail-wrap{
+  grid-column:1/-1;margin-top:8px;border-top:1px solid var(--line);padding-top:24px;min-height:80px;
+  position:relative;
+}
+.pill-detail{
+  color:var(--brown);font-size:15px;line-height:1.8;
+  opacity:0;transform:translateY(15px);filter:blur(3px);
+  transition:opacity .5s cubic-bezier(.2,.8,.2,1), transform .55s cubic-bezier(.2,.8,.2,1), filter .5s;
+}
+.pill-detail.show{opacity:1;transform:none;filter:blur(0)}
+
+/* ============================================
+   PHILOSOPHY
+   ============================================ */
+.philosophy{
+  min-height:90vh;background:var(--beige);display:grid;place-items:center;text-align:center;padding:11vw 0;overflow:hidden;
+}
+.philosophy h2{
+  font:500 clamp(63px,8vw,116px)/.84 "Cormorant Garamond",serif;letter-spacing:-.045em;margin:0;
+  max-width:1100px;
+}
+.philosophy h2 .line{display:block;overflow:hidden}
+.philosophy h2 .line span{display:inline-block;transform:translateY(110%);transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.philosophy.in .line span{transform:translateY(0)}
+.philosophy.in .line.l2 span{transition-delay:.18s}
+.philosophy.in .line.l3 span{transition-delay:.42s}
+.philosophy h2 span{color:var(--wine)}
+.philosophy h2 em{
+  font-style:italic;color:var(--wine);
+  opacity:0;transition:opacity 1s;
+}
+.philosophy.in em{opacity:1;transition-delay:1.1s}
+.philosophy p{
+  max-width:680px;color:var(--brown);line-height:1.9;font-size:15px;margin:32px auto 0;
+  opacity:0;transform:translateY(15px);transition:opacity 1s .4s, transform 1s .4s;
+}
+.philosophy.in p{opacity:1;transform:none}
+
+/* ============================================
+   BEATS / WHY IT MATTERS
+   ============================================ */
+.beats{background:var(--cream)}
+.beats-inner{padding:11vw 0}
+.beats-grid{
+  display:grid;grid-template-columns:.3fr .7fr;gap:7vw;align-items:center;
+}
+.beats h2{
+  font:500 clamp(58px,7vw,100px)/.84 "Cormorant Garamond",serif;letter-spacing:-.04em;margin:0 0 24px;
+}
+.beats h2 span{color:var(--wine)}
+.beats h2 .line{display:block;overflow:hidden}
+.beats h2 .line span{display:inline-block;transform:translateY(110%);transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.beats.in .line span{transform:translateY(0)}
+.beats.in .line.l2 span{transition-delay:.18s}
+.beats p{
+  max-width:680px;color:var(--brown);font-size:15px;line-height:1.9;margin:0;
+  opacity:0;transform:translateY(15px);transition:opacity .9s .35s, transform .9s .35s;
+}
+.beats.in p{opacity:1;transform:none}
+
+/* ============================================
+   ENDING
+   ============================================ */
+.end{
+  background:var(--deep);color:var(--cream);padding:12vw 0 7vw;
+  position:relative;overflow:hidden;
+}
+.end::before{
+  content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,41,45,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.endgrid{
+  display:grid;grid-template-columns:1.5fr 1fr;gap:8vw;align-items:end;
+  position:relative;z-index:2;
+}
+.end h2{
+  font:500 clamp(58px,8vw,116px)/.84 "Cormorant Garamond",serif;letter-spacing:-.045em;margin:0;
+}
+.end h2 span{color:#d5b3a8}
+.end h2 .line{display:block;overflow:hidden}
+.end h2 .line span{display:inline-block;transform:translateY(110%);transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.end.in .l1 span{transform:translateY(0)}
+.end.in .l1 span{transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.end.in .l2 span{transform:translateY(0);transition-delay:.18s}
+.end.in .l3 span{transform:translateY(0);transition-delay:.36s}
+
+.end-copy p{color:#d1afa4;line-height:1.9;font-size:15px;margin:0 0 24px;opacity:0;transform:translateY(15px);transition:opacity .9s .5s,transform .9s .5s}
+.end.in .end-copy p{opacity:1;transform:none}
+.signature{
+  font:500 42px "Cormorant Garamond",serif;margin-top:18px;color:var(--cream);
+  opacity:0;transform:translateY(15px);transition:opacity 1s .85s,transform 1s .85s;
+}
+.end.in .signature{opacity:1;transform:none}
+.footer{
+  margin-top:9vw;border-top:1px solid rgba(255,246,231,.14);
+  padding-top:24px;display:flex;justify-content:space-between;color:#b99186;
+  position:relative;z-index:2;
+}
+
+/* ============================================
+   REVEAL ANIMATION (general)
+   ============================================ */
+.reveal{
+  opacity:0;transform:translateY(40px);filter:blur(2px);
+  transition:1.1s cubic-bezier(.2,.8,.2,1);
+}
+.reveal.show{opacity:1;transform:none;filter:blur(0)}
+
+@media(prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important;
+  }
+  .reveal{opacity:1;transform:none;filter:none}
+  .hero-orbit .orbit-card{transition:none!important}
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:auto;padding:25vw 0 18vw;gap:0}
+  .hero-orbit{height:480px;margin-top:8vw}
+  .pin{min-height:140vh}.pin-layout{grid-template-columns:1fr;gap:25px}
+  .scene{height:440px;order:2}.film{left:15%;width:270px;height:370px}
+  .journey-head,.moments-wrap{display:block}.journey-head{margin-bottom:55px}
+  .journey-head p{margin-top:24px}
+  .moment-copy{position:static;margin-bottom:45px}
+  .endgrid{display:block}.end-copy{margin-top:32px}
+  .beats-grid{display:block}
+  .route{height:auto;padding-left:38px}
+  .route-line{display:none}
+  .stop,.stop:nth-of-type(1),.stop:nth-of-type(2),.stop:nth-of-type(3),.stop:nth-of-type(4),.stop:nth-of-type(5){
+    position:relative;left:auto!important;top:auto!important;width:100%;text-align:left;padding-left:34px;margin:0 0 42px;
+  }
+  .stop-dot{position:absolute;left:-3px;top:2px;margin:0;width:14px;height:14px}
+  .stop p{max-width:none}
+  .stop h3{font-size:30px}
+}
+
+@media(max-width:560px){
+  .wrap{width:88vw}
+  .topline{font-size:8px;top:18px}
+  .progress{right:14px;height:60px}
+  .hero-copy h1{font-size:74px;line-height:.82}
+  .hero-copy p{font-size:14px}
+  .hero-orbit{height:380px}
+  .orbit-card{width:80px;height:80px;margin:-40px}
+  .creator-icon{transform:scale(.78);transform-origin:center}
+  .orbit-core{width:160px;height:160px}
+  .core-label{font-size:12px}
+
+  .pin-layout{width:88vw}.pin-copy h2{font-size:62px}
+  .scene{height:380px}
+  .film{width:220px;height:305px;left:14%;top:18%}
+  .float-note{font-size:17px;padding:10px 12px}
+
+  .journey-head h2{font-size:62px}
+  .moment-pills{grid-template-columns:1fr}
+  .pill-detail-wrap{grid-column:auto}
+
+  .philosophy,.discovery{min-height:auto;padding:24vw 0}
+  .philosophy h2,.discovery h2,.end h2{font-size:60px}
+  .beats h2{font-size:56px}
+  .footer{display:block;line-height:1.8;font-size:9px}
+  .footer div+div{margin-top:8px}
+  .signature{font-size:34px}
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="progress"><b id="bar"></b></div>
+
+<main class="stage">
+
+<!-- HERO -->
+<section class="wrap hero" id="hero">
+  <div class="topline mono"><span>SHADI PITARA</span><span><i class="dot"></i> OUR STORY</span></div>
+
+  <div class="hero-copy" id="heroCopy">
+    <div class="mono" style="color:var(--brown);margin-bottom:22px">THE STORY BEHIND THE STORY</div>
+    <h1 id="heroTitle">
+      <span class="l-1">How Shadi</span>
+      <span class="l-2">Pitara started.</span>
+    </h1>
+    <p>It started with a simple love for capturing everything around me. A phone, Snapchat, random moments, editing, sharing — and slowly, a feeling that this could become something more.</p>
+    <button class="enter" onclick="document.querySelector('#story').scrollIntoView({behavior:'smooth'})">
+      Enter the story <i>↓</i>
+    </button>
+  </div>
+
+  <div class="hero-orbit reveal" id="heroOrbit">
+    <div class="orbit-ring"></div>
+    <div class="orbit-ring r2"></div>
+    <div class="orbit-ring r3"></div>
+    <div class="orbit-core">
+      <div class="core-label">MOMENTS<br>IN MOTION</div>
+    </div>
+    <div class="orbit-card"><div class="creator-icon"><div class="ig"><div class="ig-outer"></div><div class="ig-inner"></div><div class="ig-dot"></div></div></div></div>
+    <div class="orbit-card"><div class="creator-icon"><div class="phone-shape"></div></div></div>
+    <div class="orbit-card"><div class="creator-icon"><div class="pr-mark">Pr</div></div></div>
+    <div class="orbit-card"><div class="creator-icon"><div class="camera-mark"></div></div></div>
+    <div class="orbit-card"><div class="creator-icon"><div class="reel-mark"></div></div></div>
+    <div class="orbit-card"><div class="creator-icon"><div class="clapper-mark"></div></div></div>
+  </div>
+</section>
+
+<!-- BEGINNING -->
+<section class="pin" id="story">
+  <div class="pin-inner">
+    <div class="pin-layout">
+      <div class="pin-copy reveal">
+        <div class="mono pin-label">THE BEGINNING</div>
+        <h2>Something done for fun became <span>something more.</span></h2>
+        <p>I would shoot almost anything that caught my attention, put it together on Snapchat, edit it and share it. Soon my friends started noticing.</p>
+        <p>Whenever something happened, I heard: <strong>“Tu hi story laga diya kar, tu achhe se edit karta hai.”</strong></p>
+      </div>
+      <div class="scene" id="scene">
+        <div class="scene-floor"></div><div class="scene-line"></div>
+        <div class="film" id="film"><div class="film-date mono">01 / 05</div><div class="film-label mono">FIRST MEMORY · 2019</div></div>
+        <div class="float-note n1" id="note1">“I loved doing it.”</div>
+        <div class="float-note n2" id="note2">fun → passion</div>
+      </div>
+    </div>
+    <div class="scroll-hint mono">KEEP SCROLLING · THE STORY MOVES <i></i></div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section class="journey">
+  <div class="wrap">
+    <div class="journey-head reveal">
+      <div><div class="mono" style="color:var(--brown);margin-bottom:18px">THE JOURNEY</div><h2>Learning by<br>making.</h2></div>
+      <p>What began casually slowly became professional exploration. College, a viral reel, food creators, struggle, experimenting and learning — every phase added something.</p>
+    </div>
+
+    <div class="route reveal" id="route">
+      <div class="route-line">
+        <svg viewBox="0 0 1000 24" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 12 C 100 8, 150 16, 200 12 S 320 8, 400 12 S 520 16, 600 12 S 720 8, 800 12 S 920 16, 1000 12"/>
+          <path class="progress-line" d="M0 12 C 100 8, 150 16, 200 12 S 320 8, 400 12 S 520 16, 600 12 S 720 8, 800 12 S 920 16, 1000 12" id="routeProgress"/>
+        </svg>
+      </div>
+      <article class="stop"><span class="stop-index">01</span><div class="stop-dot"></div><h3>College</h3><p>A reel unexpectedly went viral.</p></article>
+      <article class="stop"><span class="stop-index">02</span><div class="stop-dot"></div><h3>Confidence</h3><p>People connecting with the work changed the pace.</p></article>
+      <article class="stop"><span class="stop-index">03</span><div class="stop-dot"></div><h3>Food Creators</h3><p>Real projects brought real learning.</p></article>
+      <article class="stop"><span class="stop-index">04</span><div class="stop-dot"></div><h3>Struggle</h3><p>Uncertainty, experiments and figuring it out.</p></article>
+      <article class="stop"><span class="stop-index">05</span><div class="stop-dot"></div><h3>Storytelling</h3><p>Learning how to make people feel something.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- DISCOVERY -->
+<section class="discovery" id="discovery">
+  <div class="wrap">
+    <div class="mini mono">THE TURNING POINT</div>
+    <h2>
+      <span class="line">And then, I discovered</span>
+      <span class="line"><span>wedding social media.</span></span>
+    </h2>
+    <p>It immediately felt different. A wedding photographer captures the beautiful, important moments. I kept noticing the world happening around those perfect frames.</p>
+  </div>
+</section>
+
+<!-- MOMENTS -->
+<section class="moments">
+  <div class="wrap moments-wrap">
+    <div class="moment-copy reveal">
+      <div class="mono" style="color:var(--brown);margin-bottom:20px">THE MOMENTS BETWEEN</div>
+      <h2>What makes a wedding <span>feel like a wedding.</span></h2>
+      <p>The chaos behind the scenes. The laughter, nerves, parents, cousins, tiny conversations, madness and happiness — all the things that may never become the hero frame, but become the memory.</p>
+    </div>
+    <div class="moment-pills reveal">
+      <button class="pill active" data-k="chaos"><b>The chaos</b></button>
+      <button class="pill" data-k="laugh"><b>The laughter</b></button>
+      <button class="pill" data-k="nerves"><b>The nervousness</b></button>
+      <button class="pill" data-k="parents"><b>The parents</b></button>
+      <button class="pill" data-k="cousins"><b>The cousins</b></button>
+      <button class="pill" data-k="talks"><b>The conversations</b></button>
+      <button class="pill" data-k="madness"><b>The madness</b></button>
+      <button class="pill" data-k="happy"><b>The happiness</b></button>
+      <div class="pill-detail-wrap"><div class="pill-detail show" id="detail">The behind-the-scenes rush and imperfect little moments nobody planned.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy" id="philosophy">
+  <div class="wrap">
+    <div class="mono" style="color:var(--brown);margin-bottom:22px">THE IDEA</div>
+    <h2>
+      <span class="line l1">We don't just capture the <em>moment.</em></span>
+      <span class="line l2">We capture the</span>
+      <span class="line l3"><em>story behind</em> it.</span>
+    </h2>
+    <p>Our content is raw, real, spontaneous and alive — the emotional, fun and candid side that might never make the final wedding album, but is often what people remember most.</p>
+  </div>
+</section>
+
+<!-- WHY IT MATTERS -->
+<section class="beats" id="beats">
+  <div class="wrap beats-inner">
+    <article class="beats-grid">
+      <div class="mono" style="color:var(--brown)">WHY IT MATTERS</div>
+      <div>
+        <h2>
+          <span class="line l1">Not just how it <span>looked.</span></span>
+          <span class="line l2">How it <em>felt.</em></span>
+        </h2>
+        <p>Months or even years later, you can go back to those stories and relive the wedding exactly as it felt — not just how it looked. That thought became the foundation of Shadi Pitara.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- END -->
+<section class="end" id="end">
+  <div class="wrap">
+    <div class="endgrid">
+      <h2>
+        <span class="line l1">A love for capturing moments</span>
+        <span class="line l2">became <span>Shadi Pitara.</span></span>
+      </h2>
+      <div class="end-copy">
+        <p>A space where every wedding gets to tell its own story, in its own way.</p>
+        <div class="signature">I’m Devarsh Jain.</div>
+      </div>
+    </div>
+    <div class="footer mono"><span>EVERY WEDDING HAS A STORY.</span><span>SHADI PITARA · WEDDING SOCIAL MEDIA</span></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+'use strict';
+
+/* -------- Hero staggered text reveal -------- */
+const heroCopy = document.getElementById('heroCopy');
+const heroLines = document.querySelectorAll('.hero-copy h1 .l-1, .hero-copy h1 .l-2');
+requestAnimationFrame(()=>{
+  setTimeout(()=>{
+    heroCopy.classList.add('ready');
+    heroLines.forEach(l=>l.classList.add('ready'));
+  }, 200);
+});
+
+/* -------- Generic reveal observer -------- */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('show');
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:.12, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* -------- Special section in-view observers (line reveals) -------- */
+const sectionObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      sectionObs.unobserve(e.target);
+    }
+  });
+},{threshold:.25});
+['philosophy','discovery','beats','end'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) sectionObs.observe(el);
+});
+
+/* -------- Moment pills interaction -------- */
+const detailText = {
+  chaos:"The behind-the-scenes rush and imperfect little moments nobody planned.",
+  laugh:"Friends laughing between shots — the real moments behind the posed ones.",
+  nerves:"That quiet nervousness before an entry, a ritual, or a life-changing moment.",
+  parents:"Parents getting emotional, proud and overwhelmed outside the perfect frame.",
+  cousins:"Cousins dancing when nobody is watching and making memories of their own.",
+  talks:"Tiny conversations that feel ordinary then, but become priceless later.",
+  madness:"The beautiful madness that makes a wedding feel alive.",
+  happy:"All the little pieces together — the feeling that makes a wedding a wedding."
+};
+const detailEl = document.getElementById('detail');
+document.querySelectorAll('.pill').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(btn.classList.contains('active')) return;
+    document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+    btn.classList.add('active');
+    // animate detail out then in
+    detailEl.classList.remove('show');
+    setTimeout(()=>{
+      detailEl.textContent = detailText[btn.dataset.k] || '';
+      detailEl.classList.add('show');
+    }, 300);
+  });
+});
+
+/* -------- Hero orbit — PLANET-STYLE AUTOMATIC -------- */
+const orbit = document.getElementById('heroOrbit');
+const orbitCards = Array.from(document.querySelectorAll('.hero-orbit .orbit-card'));
+let orbitAngle = 0;
+let lastT = performance.now();
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function renderOrbit(now){
+  const dt = Math.min(now - lastT, 40);
+  lastT = now;
+
+  // Orbit moves automatically — scroll does NOT control it.
+  orbitAngle += dt * 0.00032;
+
+  // Adaptive radii based on container size
+  const W = orbit.clientWidth;
+  const H = orbit.clientHeight;
+  const radiusX = Math.min(200, W * 0.36);
+  const radiusY = Math.min(155, H * 0.30);
+
+  const N = orbitCards.length;
+  orbitCards.forEach((el, i)=>{
+    const phase = orbitAngle + (Math.PI * 2 / N) * i;
+    const x = Math.cos(phase) * radiusX;
+    const y = Math.sin(phase) * radiusY;
+    // depth: 0 (far) to 1 (near) — used for scale, opacity, shadow
+    const depth = (Math.sin(phase) + 1) / 2;
+    const z = depth * 140 - 25;
+    const scale = 0.72 + depth * 0.34;
+    const opacity = 0.55 + depth * 0.45;
+    const shadowStrength = 0.12 + depth * 0.18;
+
+    el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, ${z.toFixed(2)}px) scale(${scale.toFixed(3)})`;
+    el.style.opacity = opacity.toFixed(3);
+    el.style.zIndex = Math.round(20 + depth * 80);
+    el.style.boxShadow = `0 ${(18 + depth*20).toFixed(1)}px ${(45 + depth*25).toFixed(1)}px rgba(91,23,27,${shadowStrength.toFixed(3)}), inset 0 0 ${(20 + depth*10).toFixed(0)}px rgba(244,226,197,${(0.4 + depth*0.3).toFixed(2)})`;
+  });
+
+  requestAnimationFrame(renderOrbit);
+}
+
+if(!reduceMotion){
+  requestAnimationFrame(renderOrbit);
+} else {
+  // Static placement for reduced motion
+  orbitCards.forEach((el, i)=>{
+    const phase = (Math.PI * 2 / orbitCards.length) * i;
+    const W = orbit.clientWidth, H = orbit.clientHeight;
+    const radiusX = Math.min(200, W * 0.36);
+    const radiusY = Math.min(155, H * 0.30);
+    const x = Math.cos(phase) * radiusX;
+    const y = Math.sin(phase) * radiusY;
+    el.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(1)`;
+    el.style.opacity = '1';
+  });
+}
+
+/* -------- Pinned story scroll motion -------- */
+const film = document.getElementById('film');
+const note1 = document.getElementById('note1');
+const note2 = document.getElementById('note2');
+const pinSection = document.querySelector('.pin');
+
+function updateScrollMotion(){
+  const r = pinSection.getBoundingClientRect();
+  const total = Math.max(pinSection.offsetHeight - window.innerHeight, 1);
+  const p = Math.max(0, Math.min(1, -r.top / total));
+
+  if(!reduceMotion){
+    film.style.transform = `translateZ(${100 + p*180}px) rotateY(${-13 + p*24}deg) rotateX(${4 - p*9}deg) translateY(${p*-38}px)`;
+    note1.style.transform = `translate3d(${p*38}px, ${p*-32}px, ${175 + p*100}px) rotate(${5 - p*3}deg)`;
+    note2.style.transform = `translate3d(${p*-48}px, ${p*22}px, ${210 + p*120}px) rotate(${-4 + p*7}deg)`;
+  }
+
+  // Progress bar — represents whole page progression
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pageP = Math.max(0, Math.min(1, window.scrollY / docHeight));
+  document.getElementById('bar').style.height = (pageP * 100) + '%';
+
+  // Route progress line
+  const routeEl = document.getElementById('route');
+  const routeProgress = document.getElementById('routeProgress');
+  if(routeEl && routeProgress){
+    const rr = routeEl.getBoundingClientRect();
+    const vh = window.innerHeight;
+    // 0 when route just enters, 1 when route is fully past viewport center
+    const start = vh * 0.85;
+    const end = vh * 0.35;
+    const total2 = start - end;
+    const pp = Math.max(0, Math.min(1, (start - rr.top) / total2));
+    routeProgress.style.strokeDashoffset = (1000 * (1 - pp)).toFixed(1);
+  }
+
+  // Pinned section scroll hint
+  const scrollHint = document.querySelector('.scroll-hint');
+  if(scrollHint){
+    scrollHint.style.opacity = p < 0.05 ? '1' : Math.max(0, 1 - p*2).toFixed(2);
+  }
+}
+window.addEventListener('scroll', updateScrollMotion, {passive:true});
+window.addEventListener('resize', updateScrollMotion);
+updateScrollMotion();
+
+/* -------- Pointer parallax on hero orbit -------- */
+let tx=0, ty=0, cx=0, cy=0;
+window.addEventListener('pointermove', e=>{
+  tx = (e.clientX / window.innerWidth - 0.5) * 2;
+  ty = (e.clientY / window.innerHeight - 0.5) * 2;
+}, {passive:true});
+
+function tilt(){
+  cx += (tx - cx) * 0.06;
+  cy += (ty - cy) * 0.06;
+  const heroOrbit = document.getElementById('heroOrbit');
+  if(heroOrbit && !reduceMotion){
+    heroOrbit.style.transform = `rotateY(${cx*5}deg) rotateX(${cy*-4}deg)`;
+  }
+  requestAnimationFrame(tilt);
+}
+tilt();
+
+})();
+</script>
+</body>
+</html>

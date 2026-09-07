@@ -120,7 +120,7 @@ export default function TestimonialsSection() {
       {/* Dot texture */}
       <div aria-hidden="true" style={{
         position: "absolute", inset: 0, pointerEvents: "none",
-        backgroundImage: "radial-gradient(rgba(200,155,93,0.06) 1px, transparent 1px)",
+        backgroundImage: "radial-gradient(rgba(212,184,150,0.06) 1px, transparent 1px)",
         backgroundSize: "32px 32px",
       }} />
 
@@ -161,7 +161,7 @@ export default function TestimonialsSection() {
               position: "relative",
               zIndex: 2,
               paddingLeft: 24,
-              borderLeft: "2px solid rgba(200,155,93,0.35)",
+              borderLeft: "2px solid rgba(212,184,150,0.35)",
             }}>
               {t.quote}
             </p>
@@ -170,7 +170,7 @@ export default function TestimonialsSection() {
               <div style={{
                 width: 48, height: 48, borderRadius: "50%",
                 overflow: "hidden",
-                border: "2px solid rgba(200,155,93,0.4)",
+                border: "2px solid rgba(212,184,150,0.4)",
                 flexShrink: 0,
               }}>
                 <img
@@ -194,7 +194,7 @@ export default function TestimonialsSection() {
                   fontSize: 10,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
-                  color: "rgba(200,155,93,0.65)",
+                  color: "rgba(212,184,150,0.65)",
                   marginTop: 2,
                 }}>
                   {t.location}
@@ -216,7 +216,7 @@ export default function TestimonialsSection() {
               style={{
                 width: 44, height: 44,
                 borderRadius: "50%",
-                border: "1px solid rgba(200,155,93,0.3)",
+                border: "1px solid rgba(212,184,150,0.3)",
                 background: "transparent",
                 color: "var(--brand-cream)",
                 display: "flex",
@@ -227,10 +227,10 @@ export default function TestimonialsSection() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = "var(--brand-gold)";
-                e.currentTarget.style.background = "rgba(200,155,93,0.15)";
+                e.currentTarget.style.background = "rgba(212,184,150,0.15)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(200,155,93,0.3)";
+                e.currentTarget.style.borderColor = "rgba(212,184,150,0.3)";
                 e.currentTarget.style.background = "transparent";
               }}
             >
@@ -256,7 +256,7 @@ export default function TestimonialsSection() {
               style={{
                 width: 44, height: 44,
                 borderRadius: "50%",
-                border: "1px solid rgba(200,155,93,0.3)",
+                border: "1px solid rgba(212,184,150,0.3)",
                 background: "transparent",
                 color: "var(--brand-cream)",
                 display: "flex",
@@ -267,10 +267,10 @@ export default function TestimonialsSection() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = "var(--brand-gold)";
-                e.currentTarget.style.background = "rgba(200,155,93,0.15)";
+                e.currentTarget.style.background = "rgba(212,184,150,0.15)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(200,155,93,0.3)";
+                e.currentTarget.style.borderColor = "rgba(212,184,150,0.3)";
                 e.currentTarget.style.background = "transparent";
               }}
             >

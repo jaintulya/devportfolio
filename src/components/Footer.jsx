@@ -141,8 +141,20 @@ export default function Footer() {
               Reach Out
             </span>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 16 }}>
-              <li>
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" style={{
+               <li>
+                 <a href="mailto:shaadi.pitaraa@gmail.com" style={{
+                   fontFamily: "var(--font-body)", fontSize: 14,
+                   color: "var(--brand-cream)", textDecoration: "none",
+                   opacity: 0.85, transition: "all 0.25s ease", display: "inline-flex", alignItems: "center", gap: 10,
+                 }}
+                   onMouseEnter={(e) => { e.currentTarget.style.color = "var(--brand-gold)"; }}
+                   onMouseLeave={(e) => { e.currentTarget.style.color = "var(--brand-cream)"; }}>
+                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
+                   shaadi.pitaraa@gmail.com
+                 </a>
+               </li>
+               <li>
+                 <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" style={{
                   fontFamily: "var(--font-body)", fontSize: 14,
                   color: "var(--brand-cream)", textDecoration: "none",
                   opacity: 0.85, transition: "all 0.25s ease", display: "inline-flex", alignItems: "center", gap: 10,
@@ -167,7 +179,7 @@ export default function Footer() {
               </li>
               <li style={{
                 fontFamily: "var(--font-body)", fontSize: 14,
-                color: "rgba(200,155,93,0.5)", display: "flex", alignItems: "center", gap: 10,
+                color: "rgba(212,184,150,0.5)", display: "flex", alignItems: "center", gap: 10,
               }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                 Ahmedabad, Gujarat, India
@@ -183,14 +195,14 @@ export default function Footer() {
         }}>
           <p style={{
             fontFamily: "var(--font-body)", fontSize: 13,
-            color: "rgba(200,155,93,0.4)",
+            color: "rgba(212,184,150,0.4)",
           }}>
             &copy; {new Date().getFullYear()} Shaadi Pitara by Devarsh Jain. All rights reserved.
           </p>
           <p style={{
             fontFamily: "var(--font-mono)", fontSize: 9,
             letterSpacing: "0.18em", textTransform: "uppercase",
-            color: "rgba(200,155,93,0.25)",
+            color: "rgba(212,184,150,0.25)",
           }}>
             Crafted with love in Ahmedabad
           </p>
