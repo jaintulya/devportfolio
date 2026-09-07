@@ -93,12 +93,19 @@ const cardsData = [
 export default function MobileMemoryStack() {
   const [cards, setCards] = useState(cardsData);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [exitDirection, setExitDirection] = useState("right");
 
   const handleDragEnd = (event, info) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
     
-    if (offset > 100 || offset < -100 || velocity > 500 || velocity < -500) {
+    if (offset > 100 || velocity > 500) {
+      setExitDirection("right");
+      if (activeIndex < cards.length - 1) {
+        setActiveIndex((prev) => prev + 1);
+      }
+    } else if (offset < -100 || velocity < -500) {
+      setExitDirection("left");
       if (activeIndex < cards.length - 1) {
         setActiveIndex((prev) => prev + 1);
       }
@@ -120,12 +127,12 @@ export default function MobileMemoryStack() {
         alignItems: "center"
       }}
     >
-      <div style={{ marginBottom: "20px", textAlign: "center", color: "var(--brand-cream)", zIndex: 10 }}>
+      <div style={{ marginBottom: "16px", textAlign: "center", color: "var(--brand-cream)", zIndex: 10 }}>
         <h2 style={{
           fontFamily: "'Cormorant Garamond', Georgia, serif",
           fontSize: "32px",
           fontWeight: 500,
-          marginBottom: "8px",
+          marginBottom: "6px",
           color: "var(--brand-cream)"
         }}>
           Our Story
@@ -144,8 +151,8 @@ export default function MobileMemoryStack() {
         position: "relative",
         width: "100%",
         maxWidth: "380px",
-        height: "550px",
-        perspective: "1000px",
+        height: "600px",
+        perspective: "1200px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -159,11 +166,11 @@ export default function MobileMemoryStack() {
             const isTop = index === activeIndex;
             const depthIndex = index - activeIndex; 
             
-            const scale = 1 - depthIndex * 0.05;
-            const yOffset = depthIndex * 15; 
-            const opacity = 1 - depthIndex * 0.2;
+            const scale = 1 - depthIndex * 0.04;
+            const yOffset = depthIndex * 18; 
+            const opacity = 1 - depthIndex * 0.15;
             const zIndexVal = cards.length - index;
-            const initialRotation = depthIndex % 2 === 0 ? depthIndex * 2 : -depthIndex * 2;
+            const initialRotation = depthIndex % 2 === 0 ? depthIndex * 1.5 : -depthIndex * 1.5;
 
             return (
               <motion.div
@@ -184,34 +191,34 @@ export default function MobileMemoryStack() {
                   z: -depthIndex * 50
                 }}
                 exit={{ 
-                  x: 400, 
+                  x: exitDirection === "left" ? -400 : 400, 
                   opacity: 0, 
-                  rotate: 15,
-                  transition: { duration: 0.3 }
+                  rotate: exitDirection === "left" ? -15 : 15,
+                  transition: { duration: 0.35, ease: "easeOut" }
                 }}
-                whileDrag={{ scale: 0.98, rotate: 5, cursor: "grabbing" }}
+                whileDrag={{ scale: 0.98, rotate: exitDirection === "left" ? -3 : 3, cursor: "grabbing" }}
                 style={{
                   position: "absolute",
                   width: "88%",
                   height: "100%",
-                  maxHeight: "520px",
-                  background: card.isDevarsh ? "#2b080a" : "var(--brand-ivory)",
-                  borderRadius: "16px",
+                  maxHeight: "560px",
+                  background: card.isDevarsh ? "linear-gradient(180deg, #3A0B0E 0%, #1a0506 100%)" : "linear-gradient(145deg, #FDF7EC 0%, #F4E2C5 100%)",
+                  borderRadius: "20px",
                   boxShadow: isTop 
-                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0,0,0,0.1)" 
-                    : "0 10px 30px rgba(0, 0, 0, 0.3)",
+                    ? "0 30px 60px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255,255,255,0.4)" 
+                    : "0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255,255,255,0.2)",
                   zIndex: zIndexVal,
                   cursor: isTop ? "grab" : "auto",
                   display: "flex",
                   flexDirection: "column",
                   color: card.isDevarsh ? "var(--brand-cream)" : "var(--brand-maroon-dark)",
                   overflow: "hidden",
-                  border: card.isDevarsh ? "1px solid rgba(255,246,231,0.1)" : "1px solid rgba(91,23,27,0.1)",
+                  border: card.isDevarsh ? "1px solid rgba(255,246,231,0.15)" : "1px solid rgba(255,255,255,0.6)",
                   transformOrigin: "bottom center"
                 }}
               >
                 {card.isDevarsh && (
-                  <div style={{ position: "relative", width: "100%", height: "55%", flexShrink: 0, overflow: "hidden" }}>
+                  <div style={{ position: "relative", width: "100%", height: "48%", flexShrink: 0, overflow: "hidden" }}>
                     <img 
                       src="/devimg.jpeg" 
                       alt="Devarsh Jain" 
@@ -227,26 +234,25 @@ export default function MobileMemoryStack() {
                       bottom: 0,
                       left: 0,
                       width: "100%",
-                      height: "40%",
-                      background: "linear-gradient(to bottom, transparent, #2b080a)"
+                      height: "50%",
+                      background: "linear-gradient(to bottom, transparent, #220608)"
                     }} />
                   </div>
                 )}
 
                 <div style={{
-                  padding: "24px",
+                  padding: "20px 24px 24px 24px",
                   display: "flex",
                   flexDirection: "column",
                   flex: 1,
                   justifyContent: card.isDevarsh ? "flex-end" : "center",
-                  paddingTop: card.isDevarsh ? "10px" : "32px",
                 }}>
                   <div style={{
                     fontFamily: "var(--font-mono)",
                     fontSize: "10px",
                     letterSpacing: "0.14em",
                     color: card.isDevarsh ? "#d1afa4" : "#9E776A",
-                    marginBottom: "16px",
+                    marginBottom: "12px",
                     textTransform: "uppercase"
                   }}>
                     {card.chapter}
@@ -258,7 +264,7 @@ export default function MobileMemoryStack() {
                       fontWeight: 500,
                       fontSize: "36px",
                       lineHeight: 1,
-                      margin: "0 0 4px",
+                      margin: "0 0 6px",
                     }}>
                       {card.name}
                     </h2>
@@ -281,10 +287,10 @@ export default function MobileMemoryStack() {
                     <h2 style={{
                       fontFamily: "'Cormorant Garamond', Georgia, serif",
                       fontWeight: 500,
-                      fontSize: "30px",
-                      lineHeight: 1.1,
+                      fontSize: "28px",
+                      lineHeight: 1.15,
                       letterSpacing: "-0.02em",
-                      margin: "0 0 20px",
+                      margin: "0 0 16px",
                     }}>
                       {card.heading}
                     </h2>
@@ -296,14 +302,14 @@ export default function MobileMemoryStack() {
                     flex: 1,
                     display: "flex",
                     flexDirection: "column",
-                    gap: "12px"
+                    gap: "10px"
                   }}>
-                    {card.content && (
+                    {card.content && !card.isDevarsh && (
                       <p style={{
                         fontSize: "14px",
                         lineHeight: 1.6,
                         margin: 0,
-                        color: card.isDevarsh ? "rgba(255,246,231,0.8)" : "rgba(91,23,27,0.85)"
+                        color: "rgba(91,23,27,0.85)"
                       }}>
                         {card.content}
                       </p>
@@ -312,13 +318,25 @@ export default function MobileMemoryStack() {
                     {card.quote && (
                       <p style={{
                         fontFamily: "'Cormorant Garamond', Georgia, serif",
-                        fontSize: "20px",
+                        fontSize: card.isDevarsh ? "18px" : "20px",
                         fontWeight: 500,
                         fontStyle: "italic",
-                        margin: "8px 0",
-                        color: card.isDevarsh ? "#fff" : "var(--brand-maroon-dark)"
+                        margin: "4px 0",
+                        color: card.isDevarsh ? "rgba(255,246,231,0.9)" : "var(--brand-maroon-dark)",
+                        lineHeight: 1.4
                       }}>
                         {card.quote}
+                      </p>
+                    )}
+
+                    {card.isDevarsh && card.content && (
+                       <p style={{
+                        fontSize: "14px",
+                        lineHeight: 1.6,
+                        margin: "4px 0 0 0",
+                        color: "rgba(255,246,231,0.7)"
+                      }}>
+                        {card.content}
                       </p>
                     )}
 
@@ -326,16 +344,17 @@ export default function MobileMemoryStack() {
                       <div style={{
                         display: "inline-block",
                         background: "rgba(91,23,27,0.06)",
-                        padding: "8px 16px",
+                        padding: "6px 14px",
                         borderRadius: "20px",
                         fontFamily: "'Cormorant Garamond', Georgia, serif",
-                        fontSize: "22px",
+                        fontSize: "20px",
                         fontStyle: "italic",
                         textAlign: "center",
-                        marginTop: "8px",
-                        marginBottom: "8px",
+                        marginTop: "6px",
+                        marginBottom: "6px",
                         color: "var(--brand-maroon-dark)",
-                        alignSelf: "flex-start"
+                        alignSelf: "flex-start",
+                        border: "1px solid rgba(91,23,27,0.1)"
                       }}>
                         {card.visual}
                       </div>
@@ -344,7 +363,7 @@ export default function MobileMemoryStack() {
                     {card.statement && (
                       <p style={{
                         fontFamily: "'Cormorant Garamond', Georgia, serif",
-                        fontSize: "26px",
+                        fontSize: "24px",
                         fontWeight: 500,
                         lineHeight: 1.2,
                         margin: "4px 0",
@@ -356,14 +375,14 @@ export default function MobileMemoryStack() {
                     
                     {card.bullets && (
                       <ul style={{
-                        margin: "8px 0",
+                        margin: "6px 0",
                         paddingLeft: "18px",
-                        fontSize: "14px",
-                        lineHeight: 1.6,
+                        fontSize: "13.5px",
+                        lineHeight: 1.5,
                         color: "rgba(91,23,27,0.85)"
                       }}>
                         {card.bullets.map((bullet, i) => (
-                          <li key={i} style={{ marginBottom: "6px" }}>{bullet}</li>
+                          <li key={i} style={{ marginBottom: "4px" }}>{bullet}</li>
                         ))}
                       </ul>
                     )}
@@ -397,23 +416,47 @@ export default function MobileMemoryStack() {
         </AnimatePresence>
       </div>
 
-      {activeIndex === cards.length - 1 && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          style={{ 
-            marginTop: "30px", 
-            textAlign: "center", 
-            color: "rgba(255,246,231,0.6)",
-            fontFamily: "var(--font-mono)",
-            fontSize: "10px",
-            letterSpacing: "0.15em"
-          }}
-        >
-          CONTINUE ↓
-        </motion.div>
-      )}
+      <div style={{ 
+        marginTop: "30px", 
+        textAlign: "center", 
+        color: "rgba(255,246,231,0.5)",
+        fontFamily: "var(--font-mono)",
+        fontSize: "10px",
+        letterSpacing: "0.2em",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "12px",
+        height: "20px"
+      }}>
+        {activeIndex < cards.length - 1 ? (
+          <>
+            <motion.span 
+              initial={{ x: 5, opacity: 0.5 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ repeat: Infinity, duration: 1, repeatType: "reverse" }}
+            >
+              ←
+            </motion.span>
+            SWIPE CARD
+            <motion.span 
+              initial={{ x: -5, opacity: 0.5 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ repeat: Infinity, duration: 1, repeatType: "reverse" }}
+            >
+              →
+            </motion.span>
+          </>
+        ) : (
+          <motion.div 
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ repeat: Infinity, duration: 1.5, repeatType: "reverse" }}
+          >
+            CONTINUE ↓
+          </motion.div>
+        )}
+      </div>
     </section>
   );
 }
