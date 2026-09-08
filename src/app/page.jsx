@@ -33,6 +33,20 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Handle ?section= query param from cross-page navigation
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const section = params.get("section");
+    if (section) {
+      setTimeout(() => {
+        document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
+        const sectionToPath = { reels: "/work", services: "/services", story: "/story", contact: "/contact", hero: "/" };
+        window.history.replaceState(null, "", sectionToPath[section] || "/");
+      }, 300);
+    }
+  }, []);
+
   const showWebgl = tier !== null && tier !== "off";
 
   return (

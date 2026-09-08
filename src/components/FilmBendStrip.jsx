@@ -425,7 +425,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       {/* See More — mobile only */}
       {onSeeMore && (
         <Link
-          href={typeof onSeeMore === "string" ? onSeeMore : "/work"}
+          href={typeof onSeeMore === "string" ? onSeeMore : "/works"}
           style={{
             position: "absolute", bottom: 4, left: "50%",
             transform: "translateX(-50%)", zIndex: 20,

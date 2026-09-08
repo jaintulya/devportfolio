@@ -12,7 +12,6 @@ export const reelCategories = [
   { id: "dialogue", label: "Dialogue" },
   { id: "funny", label: "Funny" },
   { id: "moment", label: "Moment" },
-  { id: "bts", label: "BTS" },
 ];
 
 export const reelData = [
@@ -67,9 +66,6 @@ export const reelData = [
   { id: "m4", category: "moment", title: "Walking Together", couple: "Nidhi & Varun", location: "Ahmedabad", embedUrl: "https://www.instagram.com/reel/DV0MIl1jL6a/", poster: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=1067&fit=crop", duration: "0:45" },
   { id: "m5", category: "moment", title: "Parent Blessing", couple: "Aisha & James", location: "Goa", embedUrl: "https://www.instagram.com/reel/DUVh3hyjA8b/", poster: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&h=1067&fit=crop", duration: "0:52" },
   { id: "m6", category: "moment", title: "Farewell Tears", couple: "Pooja & Harsh", location: "Vadodara", embedUrl: "https://www.instagram.com/reel/DUFhLHFj3Km27IQuSxqbNUp8zZHfeCtKrqV98s0/", poster: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=600&h=1067&fit=crop", duration: "0:48" },
-
-  // BTS
-  { id: "b1", category: "bts", title: "Behind the Lens", couple: "Devarsh Jain", location: "Ahmedabad Studio", embedUrl: "https://www.instagram.com/reel/DUKaYtljLTKuf1UQ8dkcPY6ZncukhkOJ9B4IGs0/", poster: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=1067&fit=crop", duration: "1:15" },
 ];
 
 export const instagramProfileUrl = "https://www.instagram.com/shaadi.pitara";

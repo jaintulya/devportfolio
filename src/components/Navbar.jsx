@@ -81,6 +81,22 @@ export default function Navbar() {
     };
   }, []);
 
+  // Update URL as section changes (clean paths, no #)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const sectionToPath = {
+      hero: "/",
+      reels: "/work",
+      services: "/services",
+      story: "/story",
+      contact: "/contact",
+    };
+    const newUrl = sectionToPath[activeSection] ?? "/";
+    if (window.location.pathname !== newUrl) {
+      window.history.replaceState(null, "", newUrl);
+    }
+  }, [activeSection]);
+
   // Mobile menu open/close
   useEffect(() => {
     if (mobileOpen) {
@@ -106,24 +122,36 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
 
-  const go = (target) => {
+  // Map clean path → section element id
+  const pathToId = {
+    "/": "hero",
+    "/work": "reels",
+    "/services": "services",
+    "/story": "story",
+    "/contact": "contact",
+  };
+
+  const go = (path) => {
     setMobileOpen(false);
-    if (target === "/work") {
-      router.push("/work");
-      return;
-    }
     if (pathname !== "/") {
-      router.push("/" + target);
+      // Coming from /works or another page — navigate home first then scroll
+      router.push("/" + (path === "/" ? "" : `?section=${pathToId[path] ?? "hero"}`));
       return;
     }
-    document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
+    const id = pathToId[path] ?? "hero";
+    window.history.pushState(null, "", path);
+    if (id === "hero") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const links = [
-    { l: "Work", h: "#reels", sectionId: "reels" },
-    { l: "Services", h: "#services", sectionId: "services" },
-    { l: "Our Story", h: "#story", sectionId: "story" },
-    { l: "Contact", h: "#contact", sectionId: "contact" },
+    { l: "Work",     path: "/work",     sectionId: "reels" },
+    { l: "Services", path: "/services", sectionId: "services" },
+    { l: "Our Story",path: "/story",    sectionId: "story" },
+    { l: "Contact",  path: "/contact",  sectionId: "contact" },
   ];
 
   return (
@@ -166,9 +194,11 @@ export default function Navbar() {
             max-width: 100% !important;
             border-radius: 0 !important;
             border: none !important;
-            border-bottom: 1px solid rgba(212,184,150,0.14) !important;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+            box-shadow: none !important;
             margin: 0 !important;
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
           }
           .main-navbar.nav-transparent {
             background: transparent !important;
@@ -234,7 +264,7 @@ export default function Navbar() {
                 <button
                   key={l.l}
                   ref={(el) => { if (el) linkRefs.current[l.sectionId] = el; }}
-                  onClick={() => go(l.h)}
+                  onClick={() => go(l.path)}
                   style={{
                     fontFamily: "var(--font-mono)",
                     fontSize: 10,
@@ -349,7 +379,7 @@ export default function Navbar() {
             {links.map((l, i) => (
               <button
                 key={l.l}
-                onClick={() => go(l.h)}
+                onClick={() => go(l.path)}
                 style={{
                   fontFamily: "var(--font-display)",
                   fontSize: "clamp(30px, 7vw, 42px)",
@@ -380,7 +410,7 @@ export default function Navbar() {
             }}>
               <button
                 className="btn-primary-gold"
-                onClick={() => go("#contact")}
+                onClick={() => go("/contact")}
                 style={{
                   padding: "14px 40px",
                 }}

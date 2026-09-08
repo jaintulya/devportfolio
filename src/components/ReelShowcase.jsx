@@ -7,22 +7,22 @@ import { reelData, reelCategories } from "@/lib/reelData";
 import { lenisRef } from "@/components/SmoothScroll";
 import FilmBendStrip from "./FilmBendStrip";
 
-
 gsap.registerPlugin(ScrollTrigger);
-
-const CATEGORIES = [
-  { id: "all", label: "All" },
-  ...reelCategories,
-];
 
 function getEmbedUrl(url) {
   return url.replace(/\/$/, "") + "/embed/";
 }
 
-// ── Custom Coverflow for Desktop ────────────────────────────────────────────
-const useIsoLayoutEffect =
-  typeof window !== "undefined" ? useEffect : useEffect;
+// One featured reel per category
+function getFeaturedReels() {
+  return reelCategories
+    .map((cat) => reelData.find((r) => r.category === cat.id))
+    .filter(Boolean);
+}
+const FEATURED_REELS = getFeaturedReels();
 
+
+// ── Custom Coverflow for Desktop ─────────────────────────────────────────────
 function ReelCoverflow({ reels, onOpen, getCatLabel }) {
   const count = reels.length;
   const frameRef = useRef(null);
@@ -57,7 +57,6 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
       const edge = Math.min(1, Math.max(0, count / 2 - distance));
       card.style.opacity = String(Math.max(0, 1 - 0.12 * distance) * edge);
       card.style.zIndex = String(100 - Math.round(distance));
-      // Highlight centre card
       if (Math.round(distance) === 0) {
         card.style.boxShadow = "0 32px 80px rgba(0,0,0,0.6), 0 0 0 2px rgba(212,184,150,0.3)";
       } else {
@@ -85,7 +84,6 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
     rafRef.current = requestAnimationFrame(step);
   }, [indexAt, paint]);
 
-  const clamp = (pos) => pos; // always loop
   const nudge = useCallback((by) => settle(Math.round(targetRef.current) + by), [settle]);
 
   const onPointerDown = (e) => {
@@ -132,8 +130,6 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
 
   useEffect(() => () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); }, []);
 
-  const active = reels[selected] || reels[0];
-
   return (
     <div style={{ width: "100%", userSelect: "none" }}>
       {/* Coverflow track */}
@@ -171,9 +167,11 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
               onClick={() => {
                 const dist = ((index - Math.round(posRef.current)) % count + count) % count;
                 const realDist = dist > count / 2 ? dist - count : dist;
-                if (Math.abs(realDist) < 0.6) {
-                  onOpen(reel);
+                if (Math.abs(realDist) < 0.8) {
+                  // Centre card — open modal
+                  onOpen(reel, index);
                 } else {
+                  // Side card — bring to centre
                   settle(index + Math.round((targetRef.current - index) / count) * count);
                 }
               }}
@@ -191,7 +189,6 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
                 transition: "box-shadow 0.4s ease",
               }}
             >
-              {/* Poster */}
               <img
                 src={reel.poster}
                 alt={reel.title}
@@ -217,36 +214,23 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
               }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand-cream)"><polygon points="6 3 20 12 6 21 6 3" /></svg>
               </div>
-              {/* Bottom info — tight, no gap */}
+              {/* Bottom info */}
               <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 14px 14px", pointerEvents: "none" }}>
                 <div style={{
                   fontFamily: "'Playfair Display', Georgia, serif",
                   fontSize: "clamp(13px, 1.4vw, 17px)",
-                  fontStyle: "italic",
-                  fontWeight: 500,
-                  color: "var(--brand-cream)",
-                  lineHeight: 1.2,
-                  marginBottom: 4,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
+                  fontStyle: "italic", fontWeight: 500,
+                  color: "var(--brand-cream)", lineHeight: 1.2,
+                  marginBottom: 4, whiteSpace: "nowrap",
+                  overflow: "hidden", textOverflow: "ellipsis",
                 }}>
                   {reel.title}
                 </div>
-                <div style={{
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                }}>
-                  <span style={{
-                    fontFamily: "var(--font-mono)", fontSize: 9,
-                    letterSpacing: "0.2em", textTransform: "uppercase",
-                    color: "var(--brand-gold)",
-                  }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--brand-gold)" }}>
                     {getCatLabel(reel.category)}
                   </span>
-                  <span style={{
-                    fontFamily: "var(--font-mono)", fontSize: 10,
-                    color: "rgba(212,184,150,0.55)", letterSpacing: "0.05em",
-                  }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(212,184,150,0.55)", letterSpacing: "0.05em" }}>
                     {reel.duration}
                   </span>
                 </div>
@@ -256,7 +240,7 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
         </div>
       </div>
 
-      {/* Navigation arrows */}
+      {/* Navigation */}
       <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 8 }}>
         <button
           onClick={() => nudge(-1)}
@@ -280,13 +264,9 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
               key={i}
               onClick={() => settle(i + Math.round((targetRef.current - i) / count) * count)}
               style={{
-                width: selected === i ? 18 : 6,
-                height: 6,
-                borderRadius: 3,
+                width: selected === i ? 18 : 6, height: 6, borderRadius: 3,
                 background: selected === i ? "var(--brand-gold)" : "rgba(212,184,150,0.25)",
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
+                border: "none", cursor: "pointer", padding: 0,
                 transition: "all 0.35s ease",
               }}
             />
@@ -319,15 +299,12 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
 export default function ReelShowcase() {
   const secRef = useRef(null);
   const headRef = useRef(null);
-  const catRef = useRef(null);
-  const infoRef = useRef(null);
-  const [activeCat, setActiveCat] = useState("all");
   const [isMobile, setIsMobile] = useState(false);
   const [activeReel, setActiveReel] = useState(null);
   const [activeReelIndex, setActiveReelIndex] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const allReels = FEATURED_REELS;
   const iframeRef = useRef(null);
-  const [transitioning, setTransitioning] = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -336,36 +313,29 @@ export default function ReelShowcase() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  const filteredReels = activeCat === "all"
-    ? reelData
-    : reelData.filter((r) => r.category === activeCat);
-
   const getCatLabel = (catId) => {
     const found = reelCategories.find((c) => c.id === catId);
     return found ? found.label : catId;
   };
 
-  const openModal = useCallback((reel) => {
-    const idx = filteredReels.findIndex((r) => r.id === reel.id);
-    setActiveReelIndex(idx >= 0 ? idx : 0);
+  const openModal = useCallback((reel, idx) => {
+    setActiveReelIndex(idx ?? allReels.findIndex((r) => r.id === reel.id));
     setActiveReel(reel);
     setModalOpen(true);
     document.body.style.overflow = "hidden";
     document.body.classList.add("hide-navbar");
     lenisRef.current?.stop();
-  }, [filteredReels]);
+  }, [allReels]);
 
   const navigateModal = useCallback((dir) => {
-    const next = (activeReelIndex + dir + filteredReels.length) % filteredReels.length;
+    const next = (activeReelIndex + dir + allReels.length) % allReels.length;
     setActiveReelIndex(next);
-    setActiveReel(filteredReels[next]);
-  }, [activeReelIndex, filteredReels]);
+    setActiveReel(allReels[next]);
+  }, [activeReelIndex, allReels]);
 
   const closeModal = useCallback(() => {
     if (iframeRef.current) {
-      try {
-        iframeRef.current.contentWindow?.postMessage('{"action":"pause"}', "*");
-      } catch { /* cross-origin */ }
+      try { iframeRef.current.contentWindow?.postMessage('{"action":"pause"}', "*"); } catch {}
     }
     setModalOpen(false);
     setActiveReel(null);
@@ -385,51 +355,19 @@ export default function ReelShowcase() {
     return () => window.removeEventListener("keydown", onKey);
   }, [modalOpen, closeModal, navigateModal]);
 
-  // Entrance animations
+  // Entrance animation
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(headRef.current, {
-        y: 40, opacity: 0, duration: 1, ease: "power3.out",
-        scrollTrigger: { trigger: headRef.current, start: "top 82%" },
-      });
-
-      gsap.from(catRef.current?.children || [], {
-        y: 16, opacity: 0, duration: 0.6, stagger: 0.04, ease: "power2.out",
-        scrollTrigger: { trigger: catRef.current, start: "top 90%" },
-      });
-
-      if (infoRef.current) {
-        gsap.from(infoRef.current, {
-          y: 40, opacity: 0, duration: 1, ease: "power3.out",
-          scrollTrigger: { trigger: infoRef.current, start: "top 82%" },
+      if (headRef.current) {
+        gsap.from(headRef.current.children, {
+          y: 24, opacity: 0, duration: 0.9, ease: "power3.out",
+          stagger: 0.12,
+          scrollTrigger: { trigger: headRef.current, start: "top 85%" },
         });
       }
     }, secRef);
     return () => ctx.revert();
   }, []);
-
-  // Category transition
-  const switchCategory = useCallback((catId) => {
-    if (catId === activeCat || transitioning) return;
-    setTransitioning(true);
-    setActiveCat(catId);
-
-    if (infoRef.current) {
-      gsap.to(infoRef.current, {
-        opacity: 0, y: 12, duration: 0.3, ease: "power2.in",
-        onComplete: () => {
-          gsap.to(infoRef.current, {
-            opacity: 1, y: 0, duration: 0.5, ease: "power2.out",
-          });
-          setTransitioning(false);
-        },
-      });
-    } else {
-      setTransitioning(false);
-    }
-  }, [activeCat, transitioning]);
-
-  const displayReel = filteredReels[0];
 
   return (
     <section
@@ -456,7 +394,6 @@ export default function ReelShowcase() {
           marginBottom: "clamp(32px, 4vw, 48px)",
         }}
       >
-
         <h2 className="section-heading" style={{ fontStyle: "italic" }}>
           Our Work
         </h2>
@@ -464,67 +401,43 @@ export default function ReelShowcase() {
           fontFamily: "var(--font-body)",
           fontSize: "clamp(14px, 1.3vw, 16px)",
           color: "rgba(247,230,204,0.5)",
-          lineHeight: 1.75,
-          maxWidth: 480,
-          margin: "14px auto 0",
-          fontWeight: 300,
+          lineHeight: 1.75, maxWidth: 480,
+          margin: "14px auto 0", fontWeight: 300,
         }}>
           Every reel is a love story, a celebration, a memory frozen in motion.
         </p>
       </div>
 
-
-      {/* ── Film Bend Strip or Coverflow Carousel ── */}
-      <div style={{
-        maxWidth: 1100,
-        margin: "0 auto",
-        position: "relative",
-        zIndex: 10,
-        marginBottom: "clamp(24px, 3vw, 36px)",
-      }}>
+      {/* ── Carousel / Strip ── */}
+      <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 10, marginBottom: "clamp(24px, 3vw, 36px)" }}>
         {isMobile ? (
           <FilmBendStrip
-            reels={filteredReels}
-            onOpen={openModal}
+            reels={FEATURED_REELS}
+            onOpen={(reel) => openModal(reel, FEATURED_REELS.findIndex((r) => r.id === reel.id))}
             isMobile={true}
-            onSeeMore="/work"
+            onSeeMore="/works"
           />
         ) : (
-          <ReelCoverflow reels={filteredReels} onOpen={openModal} getCatLabel={getCatLabel} />
+          <ReelCoverflow reels={FEATURED_REELS} onOpen={openModal} getCatLabel={getCatLabel} />
         )}
       </div>
 
-      {/* ── Info panel (desktop only, removed since CoverflowCarousel handles it) ── */}
+      {/* See More */}
       {!isMobile && (
         <div style={{ textAlign: "center", marginTop: 24, zIndex: 10, position: "relative" }}>
           <Link
-            href="/work"
+            href="/works"
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "14px 32px",
-              background: "transparent",
-              color: "var(--brand-cream)",
-              fontFamily: "var(--font-body)",
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              border: "1px solid rgba(212,184,150,0.25)",
-              textDecoration: "none",
-              cursor: "pointer",
-              borderRadius: 0,
+              display: "inline-flex", alignItems: "center", gap: 10,
+              padding: "14px 32px", background: "transparent",
+              color: "var(--brand-cream)", fontFamily: "var(--font-body)",
+              fontSize: 10, fontWeight: 600, letterSpacing: "0.2em",
+              textTransform: "uppercase", border: "1px solid rgba(212,184,150,0.25)",
+              textDecoration: "none", cursor: "pointer", borderRadius: 0,
               transition: "all 0.35s ease",
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "rgba(212,184,150,0.55)";
-              e.currentTarget.style.background = "rgba(212,184,150,0.06)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(212,184,150,0.25)";
-              e.currentTarget.style.background = "transparent";
-            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,184,150,0.55)"; e.currentTarget.style.background = "rgba(212,184,150,0.06)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,184,150,0.25)"; e.currentTarget.style.background = "transparent"; }}
           >
             See More
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -534,21 +447,15 @@ export default function ReelShowcase() {
         </div>
       )}
 
-      {/* ── Modal — reel iframe + right info panel ── */}
+      {/* ── Modal (same as /work) ── */}
       {modalOpen && activeReel && (
         <div
-          className="reel-modal-overlay"
           onClick={closeModal}
           style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 500,
+            position: "fixed", inset: 0, zIndex: 500,
             background: "rgba(8, 1, 2, 0.96)",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
+            display: "flex", alignItems: "center", justifyContent: "center",
             padding: isMobile ? "0" : "clamp(20px, 4vw, 48px)",
           }}
           role="dialog"
@@ -558,29 +465,23 @@ export default function ReelShowcase() {
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: isMobile ? 0 : 48,
-              width: "100%",
+              display: "flex", alignItems: "center",
+              gap: isMobile ? 0 : 48, width: "100%",
               maxWidth: isMobile ? "100vw" : 900,
               maxHeight: "90vh",
               flexDirection: isMobile ? "column" : "row",
             }}
           >
-            {/* ── Reel iframe ── */}
-            <div
-              style={{
-                position: "relative",
-                flexShrink: 0,
-                width: isMobile ? "100vw" : "min(380px, 42vw)",
-                aspectRatio: "9/16",
-                maxHeight: isMobile ? "100vh" : "85vh",
-                borderRadius: isMobile ? 0 : 16,
-                overflow: "hidden",
-                background: "#0A0203",
-                boxShadow: isMobile ? "none" : "0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,184,150,0.12)",
-              }}
-            >
+            {/* Iframe */}
+            <div style={{
+              position: "relative", flexShrink: 0,
+              width: isMobile ? "100vw" : "min(380px, 42vw)",
+              aspectRatio: "9/16",
+              maxHeight: isMobile ? "100vh" : "85vh",
+              borderRadius: isMobile ? 0 : 16, overflow: "hidden",
+              background: "#0A0203",
+              boxShadow: isMobile ? "none" : "0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,184,150,0.12)",
+            }}>
               <iframe
                 ref={iframeRef}
                 key={activeReel.id}
@@ -588,152 +489,74 @@ export default function ReelShowcase() {
                 title={activeReel.title}
                 style={{ width: "100%", height: "100%", border: "none", position: "absolute", inset: 0 }}
                 allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-                scrolling="yes"
+                allowFullScreen scrolling="yes"
               />
-              {/* Mobile close */}
               {isMobile && (
-                <button
-                  onClick={closeModal}
-                  style={{
-                    position: "absolute", top: 14, right: 14, zIndex: 20,
-                    width: 36, height: 36, borderRadius: "50%",
-                    background: "rgba(10,2,3,0.7)", border: "1px solid rgba(212,184,150,0.25)",
-                    color: "var(--brand-cream)", cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    backdropFilter: "blur(8px)",
-                  }}
-                >
+                <button onClick={closeModal} style={{
+                  position: "absolute", top: 14, right: 14, zIndex: 20,
+                  width: 36, height: 36, borderRadius: "50%",
+                  background: "rgba(10,2,3,0.7)", border: "1px solid rgba(212,184,150,0.25)",
+                  color: "var(--brand-cream)", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  backdropFilter: "blur(8px)",
+                }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 6L6 18M6 6l12 12" /></svg>
                 </button>
               )}
             </div>
 
-            {/* ── Info panel (desktop only) ── */}
+            {/* Desktop info panel */}
             {!isMobile && (
-              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 0 }}>
-                {/* Close */}
-                <button
-                  onClick={closeModal}
-                  style={{
-                    alignSelf: "flex-end", marginBottom: 28,
-                    width: 38, height: 38, borderRadius: "50%",
-                    background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.18)",
-                    color: "var(--brand-cream)", cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "all 0.25s ease",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.15)"; e.currentTarget.style.borderColor = "rgba(212,184,150,0.45)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.06)"; e.currentTarget.style.borderColor = "rgba(212,184,150,0.18)"; }}
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+                <button onClick={closeModal} style={{
+                  alignSelf: "flex-end", marginBottom: 28,
+                  width: 38, height: 38, borderRadius: "50%",
+                  background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.18)",
+                  color: "var(--brand-cream)", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  transition: "all 0.25s ease",
+                }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.15)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.06)"; }}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 6L6 18M6 6l12 12" /></svg>
                 </button>
 
-                {/* Counter */}
                 <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.3em", color: "rgba(212,184,150,0.4)", marginBottom: 20, textTransform: "uppercase" }}>
-                  {String(activeReelIndex + 1).padStart(2, "0")} / {String(filteredReels.length).padStart(2, "0")}
+                  {String(activeReelIndex + 1).padStart(2, "0")} / {String(allReels.length).padStart(2, "0")}
                 </div>
 
-                {/* Category pill */}
-                <div style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  marginBottom: 16,
-                  padding: "5px 14px",
-                  background: "rgba(212,184,150,0.07)",
-                  border: "1px solid rgba(212,184,150,0.18)",
-                  borderRadius: 100,
-                }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 16, padding: "5px 14px", background: "rgba(212,184,150,0.07)", border: "1px solid rgba(212,184,150,0.18)", borderRadius: 100 }}>
                   <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--brand-gold)" }} />
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--brand-gold)" }}>
                     {getCatLabel(activeReel.category)}
                   </span>
                 </div>
 
-                {/* Title */}
-                <h2 style={{
-                  fontFamily: "'Playfair Display', Georgia, serif",
-                  fontSize: "clamp(28px, 3.5vw, 42px)",
-                  fontWeight: 400,
-                  fontStyle: "italic",
-                  color: "var(--brand-cream)",
-                  lineHeight: 1.1,
-                  letterSpacing: "-0.02em",
-                  marginBottom: 20,
-                  margin: 0,
-                }}>
+                <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 400, fontStyle: "italic", color: "var(--brand-cream)", lineHeight: 1.1, letterSpacing: "-0.02em", margin: 0 }}>
                   {activeReel.title}
                 </h2>
 
-                {/* Meta row */}
-                <div style={{ display: "flex", gap: 24, marginTop: 20, marginBottom: 28 }}>
-                  {activeReel.couple && (
-                    <div>
-                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(212,184,150,0.45)", marginBottom: 4 }}>Couple</div>
-                      <div style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--brand-cream)", fontWeight: 500 }}>{activeReel.couple}</div>
-                    </div>
-                  )}
-                  {activeReel.location && (
-                    <div>
-                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(212,184,150,0.45)", marginBottom: 4 }}>Location</div>
-                      <div style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--brand-cream)", fontWeight: 500 }}>{activeReel.location}</div>
-                    </div>
-                  )}
-                  <div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(212,184,150,0.45)", marginBottom: 4 }}>Duration</div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 14, color: "var(--brand-gold)", fontWeight: 600 }}>{activeReel.duration}</div>
-                  </div>
+              <div style={{ display: "flex", gap: 24, marginTop: 20, marginBottom: 28, flexWrap: "wrap" }}>
+                  <div><div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(212,184,150,0.45)", marginBottom: 4 }}>Duration</div><div style={{ fontFamily: "var(--font-mono)", fontSize: 14, color: "var(--brand-gold)", fontWeight: 600 }}>{activeReel.duration}</div></div>
                 </div>
 
-                {/* Divider */}
                 <div style={{ width: "100%", height: 1, background: "rgba(212,184,150,0.1)", marginBottom: 28 }} />
 
-                {/* Prev / Next nav */}
                 <div style={{ display: "flex", gap: 12 }}>
-                  <button
-                    onClick={() => navigateModal(-1)}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 10,
-                      padding: "12px 24px",
-                      background: "rgba(212,184,150,0.06)",
-                      border: "1px solid rgba(212,184,150,0.18)",
-                      color: "var(--brand-cream)",
-                      fontFamily: "var(--font-mono)", fontSize: 10,
-                      letterSpacing: "0.2em", textTransform: "uppercase",
-                      cursor: "pointer", borderRadius: 4,
-                      transition: "all 0.25s ease",
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.14)"; e.currentTarget.style.borderColor = "rgba(212,184,150,0.4)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.06)"; e.currentTarget.style.borderColor = "rgba(212,184,150,0.18)"; }}
-                  >
+                  <button onClick={() => navigateModal(-1)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 24px", background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.18)", color: "var(--brand-cream)", fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer", borderRadius: 4, transition: "all 0.25s ease" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.14)"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.06)"; }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
                     Prev
                   </button>
-                  <button
-                    onClick={() => navigateModal(1)}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 10,
-                      padding: "12px 24px",
-                      background: "rgba(212,184,150,0.06)",
-                      border: "1px solid rgba(212,184,150,0.18)",
-                      color: "var(--brand-cream)",
-                      fontFamily: "var(--font-mono)", fontSize: 10,
-                      letterSpacing: "0.2em", textTransform: "uppercase",
-                      cursor: "pointer", borderRadius: 4,
-                      transition: "all 0.25s ease",
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.14)"; e.currentTarget.style.borderColor = "rgba(212,184,150,0.4)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.06)"; e.currentTarget.style.borderColor = "rgba(212,184,150,0.18)"; }}
-                  >
+                  <button onClick={() => navigateModal(1)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 24px", background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.18)", color: "var(--brand-cream)", fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer", borderRadius: 4, transition: "all 0.25s ease" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.14)"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.06)"; }}>
                     Next
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                   </button>
                 </div>
 
-                {/* IG link */}
-                <a
-                  href={activeReel.embedUrl} target="_blank" rel="noopener noreferrer"
-                  style={{ marginTop: 20, color: "rgba(212,184,150,0.4)", fontSize: 11, fontFamily: "var(--font-body)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}
-                >
+                <a href={activeReel.embedUrl} target="_blank" rel="noopener noreferrer" style={{ marginTop: 20, color: "rgba(212,184,150,0.4)", fontSize: 11, fontFamily: "var(--font-body)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}>
                   View on Instagram
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" /></svg>
                 </a>

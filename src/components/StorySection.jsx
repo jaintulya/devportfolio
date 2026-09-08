@@ -94,33 +94,10 @@ export default function StorySection() {
     return () => observer.disconnect();
   }, []);
 
-  /* ─── Mouse parallax tilt on orbit container ─── */
+  /* ─── Mouse parallax tilt on orbit container removed to improve performance ─── */
   useEffect(() => {
-    if (reducedMotion || !orbitRef.current) return;
-    let tx = 0, ty = 0, cx = 0, cy = 0;
-
-    const onMove = (e) => {
-      tx = (e.clientX / window.innerWidth  - 0.5) * 2;
-      ty = (e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener("mousemove", onMove, { passive: true });
-
-    function tick() {
-      cx += (tx - cx) * 0.05;
-      cy += (ty - cy) * 0.05;
-      if (orbitRef.current) {
-        orbitRef.current.style.transform =
-          `rotateY(${cx * 5}deg) rotateX(${cy * -3}deg)`;
-      }
-      orbitRaf.current = requestAnimationFrame(tick);
-    }
-    orbitRaf.current = requestAnimationFrame(tick);
-
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(orbitRaf.current);
-    };
-  }, [reducedMotion]);
+    // Parallax tilt effect removed to prevent lag and excessive re-renders.
+  }, []);
 
   /* ══════════════════════════════════════════
      GSAP — SCROLL-DRIVEN ANIMATIONS
@@ -261,6 +238,7 @@ export default function StorySection() {
           gap: "clamp(24px, 6vw, 80px)",
           alignItems: "center",
           overflow: "hidden",
+          willChange: "transform, opacity",
           color: "var(--brand-cream)",
         }}
       >
