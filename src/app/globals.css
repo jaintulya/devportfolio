@@ -9,6 +9,12 @@
 
 :root {
   /* ── Core Palette ── */
+  --background: 26 5 7;
+  --foreground: 245 230 204;
+  --muted: 46 10 13;
+  --muted-foreground: 212 184 150;
+  --ring: 212 184 150;
+
   --brand-maroon:         #3A0B0E;
   --brand-maroon-dark:    #3A0B0E;
   --brand-maroon-deep:    #3A0B0E;
