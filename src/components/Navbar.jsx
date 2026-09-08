@@ -128,27 +128,50 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Floating capsule navbar */}
+      <style>{`
+        .main-navbar {
+          position: fixed;
+          top: 16px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 200;
+          width: auto;
+          max-width: calc(100vw - 32px);
+          border-radius: 100px;
+          background: rgba(26, 5, 7, 0.72);
+          backdrop-filter: blur(24px) saturate(1.1);
+          -webkit-backdrop-filter: blur(24px) saturate(1.1);
+          border: 1px solid rgba(212,184,150,0.14);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.2);
+          padding-left: env(safe-area-inset-left);
+          padding-right: env(safe-area-inset-right);
+        }
+
+        @media (max-width: 768px) {
+          .main-navbar {
+            position: sticky !important;
+            top: 0 !important;
+            left: 0 !important;
+            transform: none !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            border-radius: 0 !important;
+            border: none !important;
+            border-bottom: 1px solid rgba(212,184,150,0.14) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+            margin: 0 !important;
+          }
+        }
+
+        body.hide-navbar .main-navbar {
+          display: none !important;
+        }
+      `}</style>
+      {/* Responsive sticky/fixed navbar */}
       <nav
         ref={navRef}
         aria-label="Main navigation"
-        style={{
-          position: "fixed",
-          top: 16,
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 200,
-          width: "auto",
-          maxWidth: "calc(100vw - 32px)",
-          borderRadius: 100,
-          background: "rgba(26, 5, 7, 0.72)",
-          backdropFilter: "blur(24px) saturate(1.1)",
-          WebkitBackdropFilter: "blur(24px) saturate(1.1)",
-          border: "1px solid rgba(212,184,150,0.14)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.2)",
-          paddingLeft: "env(safe-area-inset-left)",
-          paddingRight: "env(safe-area-inset-right)",
-        }}
+        className="main-navbar"
       >
         <div style={{
           display: "flex",

@@ -96,16 +96,17 @@ export default function MobileMemoryStack() {
   const [exitDirection, setExitDirection] = useState("right");
 
   const handleDragEnd = (event, info) => {
-    const offset = info.offset.x;
-    const velocity = info.velocity.x;
+    const offsetX = info.offset.x;
+    const offsetY = info.offset.y;
+    const velocityX = info.velocity.x;
+    const velocityY = info.velocity.y;
     
-    if (offset > 100 || velocity > 500) {
-      setExitDirection("right");
-      if (activeIndex < cards.length - 1) {
-        setActiveIndex((prev) => prev + 1);
+    if (Math.abs(offsetX) > 100 || Math.abs(velocityX) > 500 || Math.abs(offsetY) > 100 || Math.abs(velocityY) > 500) {
+      if (Math.abs(offsetX) > Math.abs(offsetY)) {
+        setExitDirection(offsetX > 0 ? "right" : "left");
+      } else {
+        setExitDirection(offsetY > 0 ? "bottom" : "top");
       }
-    } else if (offset < -100 || velocity < -500) {
-      setExitDirection("left");
       if (activeIndex < cards.length - 1) {
         setActiveIndex((prev) => prev + 1);
       }
@@ -170,13 +171,13 @@ export default function MobileMemoryStack() {
             const yOffset = depthIndex * 18; 
             const opacity = 1 - depthIndex * 0.15;
             const zIndexVal = cards.length - index;
-            const initialRotation = depthIndex % 2 === 0 ? depthIndex * 1.5 : -depthIndex * 1.5;
+            const initialRotation = depthIndex % 2 === 0 ? depthIndex * 3 : -depthIndex * 3;
 
             return (
               <motion.div
                 key={card.id}
-                drag={isTop ? "x" : false}
-                dragConstraints={{ left: 0, right: 0 }}
+                drag={isTop ? true : false}
+                dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                 onDragEnd={handleDragEnd}
                 initial={{ 
                   scale: 0.8, 
@@ -191,12 +192,13 @@ export default function MobileMemoryStack() {
                   z: -depthIndex * 50
                 }}
                 exit={{ 
-                  x: exitDirection === "left" ? -400 : 400, 
+                  x: exitDirection === "left" ? -400 : exitDirection === "right" ? 400 : 0, 
+                  y: exitDirection === "top" ? -400 : exitDirection === "bottom" ? 400 : 0,
                   opacity: 0, 
-                  rotate: exitDirection === "left" ? -15 : 15,
+                  rotate: exitDirection === "left" ? -15 : exitDirection === "right" ? 15 : exitDirection === "top" ? -5 : 5,
                   transition: { duration: 0.35, ease: "easeOut" }
                 }}
-                whileDrag={{ scale: 0.98, rotate: exitDirection === "left" ? -3 : 3, cursor: "grabbing" }}
+                whileDrag={{ scale: 0.98, rotate: exitDirection === "left" || exitDirection === "top" ? -3 : 3, cursor: "grabbing" }}
                 style={{
                   position: "absolute",
                   width: "88%",

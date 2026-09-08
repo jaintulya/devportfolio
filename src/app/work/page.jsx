@@ -5,6 +5,7 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { reelData, reelCategories } from "@/lib/reelData";
+import { lenisRef } from "@/components/SmoothScroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,14 +15,14 @@ const CATEGORIES = [
 ];
 
 function getEmbedUrl(url) {
-  return url.replace(/\/$/, "") + "/embed/?autoplay=true&muted=1";
+  return url.replace(/\/$/, "") + "/embed/";
 }
 
 export default function WorkPage() {
   const [activeTab, setActiveTab] = useState("all");
   const [activeReel, setActiveReel] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   const tabsRef = useRef({});
   const secRef = useRef(null);
@@ -30,6 +31,13 @@ export default function WorkPage() {
     activeTab === "all"
       ? reelData
       : reelData.filter((item) => item.category === activeTab);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const currentTabEl = tabsRef.current[activeTab];
@@ -44,15 +52,17 @@ export default function WorkPage() {
   const openModal = (reel) => {
     setActiveReel(reel);
     setModalOpen(true);
-    setIsLoading(true);
     document.body.style.overflow = "hidden";
+    document.body.classList.add("hide-navbar");
+    lenisRef.current?.stop();
   };
 
   const closeModal = () => {
     setModalOpen(false);
     setActiveReel(null);
-    setIsLoading(true);
     document.body.style.overflow = "";
+    document.body.classList.remove("hide-navbar");
+    lenisRef.current?.start();
   };
 
   useEffect(() => {
@@ -66,10 +76,7 @@ export default function WorkPage() {
   // Entrance animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from("header", {
-        y: 40, opacity: 0, duration: 1, ease: "power3.out",
-        scrollTrigger: { trigger: "header", start: "top 80%" },
-      });
+
       gsap.utils.toArray(".work-card").forEach((card, i) => {
         gsap.from(card, {
           y: 30, opacity: 0, duration: 0.7, ease: "power3.out",
@@ -84,117 +91,29 @@ export default function WorkPage() {
   return (
     <div
       ref={secRef}
+      className="work-section"
       style={{
-        background: "var(--brand-maroon-dark)",
         minHeight: "100vh",
         color: "var(--brand-cream)",
+        paddingTop: 1,
       }}
     >
-      {/* Logo + header area */}
-      <header
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 80,
-          background: "rgba(46, 10, 13, 0.92)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(200, 155, 93, 0.12)",
-          padding: "14px 24px",
-        }}
+      <Link href="/#reels" style={{
+        position: "absolute", top: "clamp(20px, 4vw, 32px)", left: "clamp(16px, 4vw, 32px)", zIndex: 50,
+        display: "inline-flex", alignItems: "center", gap: 8,
+        color: "rgba(247,230,204,0.7)", fontFamily: "var(--font-mono)",
+        fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase",
+        textDecoration: "none", transition: "color 0.3s ease"
+      }}
+      onMouseEnter={(e) => e.currentTarget.style.color = "var(--brand-gold)"}
+      onMouseLeave={(e) => e.currentTarget.style.color = "rgba(247,230,204,0.7)"}
       >
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: 16,
-          }}
-        >
-          <Link
-            href="/"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 12,
-              textDecoration: "none",
-              transition: "opacity 0.3s ease",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.8"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-          >
-            <div style={{
-              position: "relative",
-              width: 36,
-              height: 36,
-              borderRadius: 8,
-              overflow: "hidden",
-              flexShrink: 0,
-            }}>
-              <Image src="/1.jpg" alt="Shaadi Pitara" fill sizes="36px" style={{ objectFit: "cover" }} />
-            </div>
-            <span style={{
-              fontFamily: "var(--font-display, serif)",
-              fontSize: 20, fontWeight: 600,
-              color: "var(--brand-cream)", letterSpacing: "0.04em",
-            }}>
-              Shaadi Pitara
-            </span>
-          </Link>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Back
+      </Link>
 
-          <nav
-            aria-label="Work category filters"
-            style={{
-              display: "flex",
-              gap: 6,
-              flexWrap: "wrap",
-              position: "relative",
-            }}
-          >
-            {/* Sliding indicator */}
-            <div
-              style={{
-                position: "absolute",
-                bottom: -1,
-                left: indicatorStyle.left,
-                width: indicatorStyle.width,
-                height: 2,
-                background: "var(--brand-gold)",
-                transition: "all 0.4s cubic-bezier(0.65,0,0.35,1)",
-                pointerEvents: "none",
-                borderRadius: 1,
-              }}
-            />
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                ref={(el) => { if (el) tabsRef.current[cat.id] = el; }}
-                onClick={() => setActiveTab(cat.id)}
-                style={{
-                  padding: "8px 18px",
-                  background: activeTab === cat.id ? "var(--brand-gold)" : "transparent",
-                  color: activeTab === cat.id ? "var(--brand-maroon-dark)" : "var(--brand-beige-muted)",
-                  border: `1px solid ${activeTab === cat.id ? "var(--brand-gold)" : "rgba(212,184,150,0.18)"}`,
-                  borderRadius: 4,
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 10,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  fontWeight: activeTab === cat.id ? 600 : 400,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </header>
 
       {/* Section header */}
       <div
@@ -223,24 +142,86 @@ export default function WorkPage() {
         </p>
       </div>
 
-      {/* Work grid — 2 rows of 4 on desktop */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(32px, 5vw, 56px) clamp(16px, 4vw, 48px)" }}>
-        {filteredItems.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "80px 24px", color: "rgba(245,230,204,0.4)" }}>
-            <p style={{ fontFamily: "var(--font-display)", fontSize: 24 }}>No reels in this category yet.</p>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, marginTop: 8 }}>
-              Check back soon.
-            </p>
+      {/* Work grid */}
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(32px, 5vw, 56px) 0" }}>
+        {isMobile ? (
+          // Mobile Layout: Stacked Category Sections
+          <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+            {reelCategories.map((cat) => {
+              const catReels = reelData.filter((r) => r.category === cat.id);
+              if (catReels.length === 0) return null;
+              return (
+                <div key={cat.id}>
+                  {/* Header */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12, padding: "0 16px" }}>
+                    <h3 style={{ fontFamily: "var(--font-display)", fontSize: 20, fontWeight: 700, margin: 0, color: "var(--brand-cream)" }}>
+                      {cat.label}
+                    </h3>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(245,230,204,0.5)", textTransform: "uppercase" }}>
+                      {catReels.length} Reels
+                    </span>
+                  </div>
+                  {/* Strip */}
+                  <div style={{
+                    display: "flex", gap: 8, overflowX: "auto", padding: "0 16px",
+                    scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch",
+                  }} className="cat-scroll">
+                    <style>{`.cat-scroll::-webkit-scrollbar { display: none; }`}</style>
+                    {catReels.map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => openModal(item)}
+                        style={{
+                          flexShrink: 0, width: 80, aspectRatio: "9/16", borderRadius: 8,
+                          background: "var(--brand-maroon-dark)", position: "relative",
+                          overflow: "hidden", cursor: "pointer", border: "1px solid rgba(212,184,150,0.15)",
+                        }}
+                      >
+                        <img src={item.poster} alt={item.title} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <div style={{
+                          position: "absolute", inset: 0,
+                          background: "linear-gradient(to top, rgba(46,10,13,0.7) 0%, transparent 50%)",
+                          zIndex: 2, pointerEvents: "none",
+                        }} />
+                        {/* Play button */}
+                        <div style={{
+                          position: "absolute", top: "50%", left: "50%",
+                          transform: "translate(-50%,-50%)", zIndex: 4,
+                          width: 28, height: 28, borderRadius: "50%",
+                          background: "rgba(46,10,13,0.6)", backdropFilter: "blur(4px)",
+                          border: "1px solid rgba(212,184,150,0.4)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          pointerEvents: "none",
+                        }}>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--brand-cream)">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                          </svg>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "clamp(12px, 1.8vw, 20px)",
-            }}
-          >
-            {filteredItems.map((item, i) => {
+          <div style={{ padding: "0 clamp(16px, 4vw, 48px)" }}>
+            {filteredItems.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "80px 24px", color: "rgba(245,230,204,0.4)" }}>
+                <p style={{ fontFamily: "var(--font-display)", fontSize: 24 }}>No reels in this category yet.</p>
+                <p style={{ fontFamily: "var(--font-body)", fontSize: 14, marginTop: 8 }}>
+                  Check back soon.
+                </p>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(4, 1fr)",
+                  gap: "clamp(12px, 1.8vw, 20px)",
+                }}
+              >
+            {filteredItems.map((item) => {
               const cat = reelCategories.find((c) => c.id === item.category);
               return (
                 <article
@@ -342,6 +323,8 @@ export default function WorkPage() {
                 </article>
               );
             })}
+              </div>
+            )}
           </div>
         )}
 
@@ -423,6 +406,7 @@ export default function WorkPage() {
               boxShadow: "0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,184,150,0.1)",
             }}
           >
+
             <button
               className="reel-modal-close"
               onClick={closeModal}
@@ -458,35 +442,9 @@ export default function WorkPage() {
               &times;
             </button>
 
-            {isLoading && (
-              <div style={{
-                position: "absolute", inset: 0,
-                display: "flex", flexDirection: "column",
-                alignItems: "center", justifyContent: "center",
-                zIndex: 5, background: "#0A0203",
-                gap: 14,
-              }}>
-                <div style={{
-                  width: 32, height: 32,
-                  border: "2px solid rgba(212,184,150,0.15)",
-                  borderTopColor: "var(--brand-gold)",
-                  borderRadius: "50%",
-                  animation: "spin 0.8s linear infinite",
-                }} />
-                <span style={{
-                  fontFamily: "var(--font-mono)", fontSize: 9,
-                  letterSpacing: "0.2em", textTransform: "uppercase",
-                  color: "rgba(245,230,204,0.4)",
-                }}>
-                  Loading reel...
-                </span>
-              </div>
-            )}
-
             <iframe
               src={getEmbedUrl(activeReel.embedUrl)}
               title={`${activeReel.title} — Instagram Reel`}
-              onLoad={() => setIsLoading(false)}
               style={{
                 width: "100%", height: "100%",
                 border: "none", display: "block",
@@ -494,6 +452,21 @@ export default function WorkPage() {
               allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
             />
+            {/* Fallback button if iframe fails to load */}
+            <a
+              href={activeReel.embedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                position: "absolute", bottom: -40, left: "50%",
+                transform: "translateX(-50%)", zIndex: 10,
+                color: "var(--brand-gold)", fontSize: 12, textDecoration: "underline",
+                fontFamily: "var(--font-body)", whiteSpace: "nowrap",
+                opacity: 0.8
+              }}
+            >
+              Watch directly on Instagram ↗
+            </a>
           </div>
         </div>
       )}

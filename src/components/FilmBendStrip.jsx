@@ -128,7 +128,6 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
   }, []);
 
   const SWIPE_THRESHOLD = 45;
-  const PREVIEW_DRAG_LIMIT = 100;
 
   const getRel = useCallback(
     (i) => {
@@ -239,7 +238,6 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
     (e) => {
       if (!dragState.dragging) return;
       const dx = e.clientX - dragState.startX;
-      if (Math.abs(dx) > PREVIEW_DRAG_LIMIT) return;
       setDragState((prev) => ({ ...prev, delta: dx }));
       applyDragPreview(dx);
     },
@@ -309,7 +307,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       style={{
         position: "relative",
         width: "100%",
-        minHeight: 380,
+        minHeight: 460,
         overflow: "hidden",
         touchAction: "none",
         overscrollBehavior: "contain",
@@ -367,6 +365,8 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
                 boxShadow: isCenter ? "0 28px 60px rgba(0,0,0,0.5)" : "0 12px 32px rgba(0,0,0,0.3)",
                 willChange: "transform, opacity, filter",
                 pointerEvents: isCenter ? "auto" : "none",
+                opacity: 0, // hide extra cards by default
+                transform: "translate(-50%,-50%) scale(0.5)", // shrink extra cards out of view
               }}
             >
               <img src={reel.poster} alt="" loading="lazy" decoding="async" style={{
@@ -379,11 +379,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
                 position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
                 background: "linear-gradient(to top, rgba(20,4,6,0.9) 0%, rgba(20,4,6,0.4) 35%, rgba(20,4,6,0.05) 65%, transparent 100%)",
               }} />
-              <div aria-hidden="true" style={{
-                position: "absolute", inset: 8,
-                border: "1px solid rgba(212,184,150,0.07)", borderRadius: 8,
-                pointerEvents: "none", zIndex: 3,
-              }} />
+
               {isCenter && (
                 <div aria-hidden="true" style={{
                   position: "absolute", top: "50%", left: "50%",
@@ -412,14 +408,29 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         })}
       </div>
 
+      {/* Active Reel Info — mobile only */}
+      <div style={{
+        position: "absolute", bottom: 48, left: "50%",
+        transform: "translateX(-50%)", zIndex: 20,
+        textAlign: "center", width: "100%", pointerEvents: "none",
+      }}>
+        <div style={{ fontSize: 10, color: "var(--brand-gold)", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 4, fontFamily: "var(--font-mono)" }}>
+          {reels[activeIndex]?.category}
+        </div>
+        <div style={{ fontSize: 18, color: "var(--brand-cream)", fontStyle: "italic", fontFamily: "'Playfair Display', Georgia, serif" }}>
+          {reels[activeIndex]?.title}
+        </div>
+      </div>
+
       {/* See More — mobile only */}
       {onSeeMore && (
         <Link
           href={typeof onSeeMore === "string" ? onSeeMore : "/work"}
           style={{
-            position: "absolute", bottom: 8, left: "50%",
+            position: "absolute", bottom: 4, left: "50%",
             transform: "translateX(-50%)", zIndex: 20,
             padding: "8px 22px",
+            display: "inline-flex", alignItems: "center", gap: 6,
             background: "rgba(10,2,3,0.6)", backdropFilter: "blur(10px)",
             WebkitBackdropFilter: "blur(10px)",
             border: "1px solid rgba(212,184,150,0.22)",
@@ -439,7 +450,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
           }}
         >
           See More
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} style={{ marginLeft: 6, verticalAlign: "middle" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </Link>

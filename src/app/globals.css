@@ -664,19 +664,35 @@ html.lenis, html.lenis body { height: auto; }
 /* 5. MOBILE — EVEN MORE SUBTLE (texture removed) */
 
 @media (max-width: 768px) {
+  .work-section {
+    background: linear-gradient(
+      180deg,
+      rgba(26, 5, 7, 0.45) 0%,
+      rgba(26, 5, 7, 0.28) 40%,
+      rgba(26, 5, 7, 0.50) 100%
+    ), var(--maroon-dark) !important;
+  }
 
   .work-section::before {
-    display: none;
+    content: "";
+    display: block !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150vh;  /* taller than typical width */
+    height: 100vw; /* full width as height */
+    transform: translate(-50%, -50%) rotate(90deg);
+    background-image: url("/workbg.png");
+    background-size: cover;
+    background-position: center;
+    mix-blend-mode: normal; /* keep it visible, since gradient is on background */
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
   }
 
-  .work-section .work-texture {
-    display: none;
-  }
-
-  .work-section .work-pattern {
-    display: none;
-  }
-
+  .work-section .work-texture,
+  .work-section .work-pattern,
   .work-section .work-vignette {
     display: none;
   }

@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import { reelData, reelCategories } from "@/lib/reelData";
+import { lenisRef } from "@/components/SmoothScroll";
 import FilmBendStrip from "./FilmBendStrip";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -14,7 +15,7 @@ const CATEGORIES = [
 ];
 
 function getEmbedUrl(url) {
-  return url.replace(/\/$/, "") + "/embed/?autoplay=true&muted=1";
+  return url.replace(/\/$/, "") + "/embed/";
 }
 
 export default function ReelShowcase() {
@@ -26,8 +27,6 @@ export default function ReelShowcase() {
   const [isMobile, setIsMobile] = useState(false);
   const [activeReel, setActiveReel] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalLoading, setModalLoading] = useState(true);
-  const [iframeReady, setIframeReady] = useState(false);
   const iframeRef = useRef(null);
   const [transitioning, setTransitioning] = useState(false);
 
@@ -50,9 +49,9 @@ export default function ReelShowcase() {
   const openModal = useCallback((reel) => {
     setActiveReel(reel);
     setModalOpen(true);
-    setModalLoading(true);
-    setIframeReady(false);
     document.body.style.overflow = "hidden";
+    document.body.classList.add("hide-navbar");
+    lenisRef.current?.stop();
   }, []);
 
   const closeModal = useCallback(() => {
@@ -63,9 +62,9 @@ export default function ReelShowcase() {
     }
     setModalOpen(false);
     setActiveReel(null);
-    setIframeReady(false);
-    setModalLoading(true);
     document.body.style.overflow = "";
+    document.body.classList.remove("hide-navbar");
+    lenisRef.current?.start();
   }, []);
 
   useEffect(() => {
@@ -167,56 +166,6 @@ export default function ReelShowcase() {
         </p>
       </div>
 
-      {/* ── Category selector ── */}
-      <div
-        ref={catRef}
-        style={{
-          maxWidth: 1100,
-          margin: "0 auto",
-          position: "relative",
-          zIndex: 10,
-          marginBottom: "clamp(32px, 4vw, 48px)",
-          display: "flex",
-          gap: 8,
-          overflowX: "auto",
-          overflowY: "hidden",
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-          padding: "2px 4px",
-          scrollSnapType: "x proximity",
-          WebkitOverflowScrolling: "touch",
-        }}
-        className="cat-scroll"
-      >
-        <style>{`.cat-scroll::-webkit-scrollbar { display: none; }`}</style>
-        {CATEGORIES.map((cat) => {
-          const isActive = activeCat === cat.id;
-          return (
-            <button
-              key={cat.id}
-              onClick={() => switchCategory(cat.id)}
-              style={{
-                flexShrink: 0,
-                padding: "9px 18px",
-                fontSize: 10,
-                fontFamily: "var(--font-body)",
-                fontWeight: isActive ? 600 : 400,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                cursor: "pointer",
-                borderRadius: 0,
-                transition: "all 0.4s cubic-bezier(0.23,1,0.32,1)",
-                background: isActive ? "var(--brand-cream)" : "transparent",
-                color: isActive ? "var(--brand-maroon-dark)" : "rgba(247,230,204,0.65)",
-                border: isActive ? "1px solid var(--brand-cream)" : "1px solid rgba(247,230,204,0.2)",
-                scrollSnapAlign: "start",
-              }}
-            >
-              {cat.label}
-            </button>
-          );
-        })}
-      </div>
 
       {/* ── Film Bend Strip ── */}
       <div style={{
@@ -324,7 +273,7 @@ export default function ReelShowcase() {
               width: "100%",
               maxWidth: isMobile ? "100%" : 420,
               aspectRatio: "9/16",
-              maxHeight: "85vh",
+              maxHeight: "80vh",
               borderRadius: 12,
               overflow: "hidden",
               background: "#0A0203",
@@ -368,42 +317,38 @@ export default function ReelShowcase() {
               </svg>
             </button>
 
-            {/* Loading spinner */}
-            {modalLoading && (
-              <div style={{
-                position: "absolute", inset: 0,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                zIndex: 3, background: "#0A0203",
-              }}>
-                <div style={{
-                  width: 28, height: 28,
-                  border: "2px solid rgba(212,184,150,0.1)",
-                  borderTopColor: "rgba(212,184,150,0.6)",
-                  borderRadius: "50%",
-                  animation: "spin 0.8s linear infinite",
-                }} />
-                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-              </div>
-            )}
-
             {/* Clean iframe — no title overlay, no extra UI */}
             <iframe
               ref={iframeRef}
               src={getEmbedUrl(activeReel.embedUrl)}
               title={activeReel.title}
-              onLoad={() => setIframeReady(true)}
               style={{
                 width: "100%",
                 height: "100%",
                 border: "none",
                 position: "absolute",
                 inset: 0,
-                opacity: iframeReady ? 1 : 0,
-                transition: "opacity 0.4s ease",
+                opacity: 1,
               }}
               allow="autoplay; fullscreen"
               allowFullScreen
             />
+            
+            {/* Fallback button if iframe fails to load */}
+            <a
+              href={activeReel.embedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                position: "absolute", bottom: -40, left: "50%",
+                transform: "translateX(-50%)", zIndex: 10,
+                color: "var(--brand-gold)", fontSize: 12, textDecoration: "underline",
+                fontFamily: "var(--font-body)", whiteSpace: "nowrap",
+                opacity: 0.8
+              }}
+            >
+              Watch directly on Instagram ↗
+            </a>
           </div>
         </div>
       )}
