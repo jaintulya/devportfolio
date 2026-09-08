@@ -15,11 +15,10 @@ export default function Footer() {
         position: "relative",
       }}
     >
-      {/* Dot texture */}
+      {/* Texture */}
       <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, pointerEvents: "none",
-        backgroundImage: "radial-gradient(rgba(200, 155, 93, 0.04) 1px, transparent 1px)",
-        backgroundSize: "28px 28px",
+        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
       }} />
 
       <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 2 }}>
@@ -59,7 +58,7 @@ export default function Footer() {
               {[
                 { href: "https://www.instagram.com/shaadi.pitara", label: "Instagram", icon: <svg key="ig" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="18" cy="6" r="1" /></svg> },
                 { href: "https://youtube.com/@shaadi.pitara", label: "YouTube", icon: <svg key="yt" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg> },
-                { href: "https://pin.it/5GKckms5T", label: "Pinterest", icon: <svg key="pi" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4c0 2.5-2 4.5-4 6" /><line x1="12" y1="17" x2="10" y2="22" /></svg> },
+                { href: "mailto:shaadi.pitaraa@gmail.com", label: "Email", icon: <svg key="em" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> },
                 { href: WHATSAPP_URL, label: "WhatsApp", icon: <svg key="wa" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg> },
               ].map((social) => (
                 <a

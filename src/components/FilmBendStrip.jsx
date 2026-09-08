@@ -79,18 +79,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
               position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
               background: "linear-gradient(to top, rgba(20,4,6,0.88) 0%, rgba(20,4,6,0.35) 35%, transparent 65%)",
             }} />
-            <div aria-hidden="true" style={{
-              position: "absolute", top: "50%", left: "50%",
-              transform: "translate(-50%,-50%)", zIndex: 3, pointerEvents: "none",
-              width: 40, height: 40, borderRadius: "50%",
-              background: "rgba(20,4,6,0.5)", backdropFilter: "blur(8px)",
-              border: "1px solid rgba(212,184,150,0.3)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--brand-cream)" style={{ marginLeft: 1, opacity: 0.85 }}>
-                <polygon points="5 3 19 12 5 21" />
-              </svg>
-            </div>
+
             <div style={{
               position: "absolute", top: 8, right: 8, zIndex: 4, pointerEvents: "none",
               padding: "2px 7px", background: "rgba(10,2,3,0.7)", backdropFilter: "blur(6px)",
@@ -307,7 +296,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       style={{
         position: "relative",
         width: "100%",
-        minHeight: 460,
+        height: "520px",
         overflow: "hidden",
         touchAction: "none",
         overscrollBehavior: "contain",
@@ -350,21 +339,28 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
               key={reel.id}
               ref={(el) => { cardRefs.current[i] = el; }}
               className="film-card"
-              onClick={isCenter ? () => onOpen?.(reel) : undefined}
-              role={isCenter ? "button" : "presentation"}
-              tabIndex={isCenter ? 0 : -1}
-              aria-label={isCenter ? `${reel.title} — click to play` : undefined}
-              onKeyDown={(e) => { if (e.key === "Enter" && isCenter) onOpen?.(reel); }}
+              onClick={() => {
+                if (!isCenter) {
+                  setActiveIndex(i);
+                  // Give it a tiny delay to start sliding before modal covers it
+                  setTimeout(() => applySlots(true), 50);
+                }
+                onOpen?.(reel);
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={`${reel.title} — click to play`}
+              onKeyDown={(e) => { if (e.key === "Enter") onOpen?.(reel); }}
               style={{
                 position: "absolute", left: 0, top: 0,
                 width: "clamp(145px, 44vw, 195px)",
                 aspectRatio: "9/16", borderRadius: 14, overflow: "hidden",
-                cursor: isCenter ? "pointer" : "default",
+                cursor: "pointer",
                 background: "linear-gradient(180deg, #1A0507 0%, #140406 100%)",
                 border: isCenter ? "1.5px solid rgba(212,184,150,0.22)" : "1px solid rgba(212,184,150,0.08)",
                 boxShadow: isCenter ? "0 28px 60px rgba(0,0,0,0.5)" : "0 12px 32px rgba(0,0,0,0.3)",
                 willChange: "transform, opacity, filter",
-                pointerEvents: isCenter ? "auto" : "none",
+                pointerEvents: "auto",
                 opacity: 0, // hide extra cards by default
                 transform: "translate(-50%,-50%) scale(0.5)", // shrink extra cards out of view
               }}
@@ -380,21 +376,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
                 background: "linear-gradient(to top, rgba(20,4,6,0.9) 0%, rgba(20,4,6,0.4) 35%, rgba(20,4,6,0.05) 65%, transparent 100%)",
               }} />
 
-              {isCenter && (
-                <div aria-hidden="true" style={{
-                  position: "absolute", top: "50%", left: "50%",
-                  transform: "translate(-50%,-50%)", zIndex: 5, pointerEvents: "none",
-                  width: 48, height: 48, borderRadius: "50%",
-                  background: "rgba(20,4,6,0.5)", backdropFilter: "blur(10px)",
-                  WebkitBackdropFilter: "blur(10px)",
-                  border: "1.5px solid rgba(212,184,150,0.4)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand-cream)" style={{ marginLeft: 2, opacity: 0.9 }}>
-                    <polygon points="5 3 19 12 5 21" />
-                  </svg>
-                </div>
-              )}
+
               <div style={{
                 position: "absolute", top: 8, right: 8, zIndex: 6, pointerEvents: "none",
                 padding: "2px 7px", background: "rgba(10,2,3,0.7)", backdropFilter: "blur(6px)",
@@ -410,7 +392,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
 
       {/* Active Reel Info — mobile only */}
       <div style={{
-        position: "absolute", bottom: 48, left: "50%",
+        position: "absolute", bottom: 58, left: "50%",
         transform: "translateX(-50%)", zIndex: 20,
         textAlign: "center", width: "100%", pointerEvents: "none",
       }}>
@@ -420,14 +402,19 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         <div style={{ fontSize: 18, color: "var(--brand-cream)", fontStyle: "italic", fontFamily: "'Playfair Display', Georgia, serif" }}>
           {reels[activeIndex]?.title}
         </div>
+        <div style={{ fontSize: 9, color: "rgba(247,230,204,0.4)", letterSpacing: "0.1em", marginTop: 8, fontFamily: "var(--font-body)", fontStyle: "italic" }}>
+          &larr; Drag or swipe to explore &rarr;
+        </div>
       </div>
 
       {/* See More — mobile only */}
       {onSeeMore && (
-        <Link
+        <a
           href={typeof onSeeMore === "string" ? onSeeMore : "/works"}
+          target={typeof onSeeMore === "string" && onSeeMore.startsWith("http") ? "_blank" : undefined}
+          rel={typeof onSeeMore === "string" && onSeeMore.startsWith("http") ? "noopener noreferrer" : undefined}
           style={{
-            position: "absolute", bottom: 4, left: "50%",
+            position: "absolute", bottom: 10, left: "50%",
             transform: "translateX(-50%)", zIndex: 20,
             padding: "8px 22px",
             display: "inline-flex", alignItems: "center", gap: 6,
@@ -449,11 +436,8 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
             e.currentTarget.style.borderColor = "rgba(212,184,150,0.22)";
           }}
         >
-          See More
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </Link>
+          SEE MORE &rarr;
+        </a>
       )}
     </div>
   );

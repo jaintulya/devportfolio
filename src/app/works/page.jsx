@@ -307,23 +307,7 @@ export default function WorkPage() {
                         }}>
                           {item.duration}
                         </div>
-                        {/* Play button */}
-                        <div style={{
-                          position: "absolute", top: "50%", left: "50%",
-                          transform: "translate(-50%,-50%)",
-                          zIndex: 4,
-                          width: 48, height: 48,
-                          borderRadius: "50%",
-                          background: "rgba(46,10,13,0.55)",
-                          backdropFilter: "blur(8px)",
-                          border: "1.5px solid rgba(212,184,150,0.45)",
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          pointerEvents: "none",
-                        }}>
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand-cream)">
-                            <polygon points="5 3 19 12 5 21 5 3" />
-                          </svg>
-                        </div>
+
                         {/* Title + category */}
                         <div style={{
                           position: "absolute", bottom: 0, left: 0, right: 0,
@@ -357,25 +341,20 @@ export default function WorkPage() {
           textAlign: "center",
           marginTop: "clamp(32px, 4vw, 48px)",
         }}>
-          <Link
-            href="/"
+          <a
+            href="https://www.instagram.com/shaadi.pitara/"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "14px 32px",
+              display: "inline-flex", alignItems: "center", gap: 10,
+              padding: "16px 36px",
               background: "transparent",
-              color: "var(--brand-cream)",
-              fontFamily: "var(--font-body)",
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
               border: "1px solid rgba(212,184,150,0.25)",
-              textDecoration: "none",
-              cursor: "pointer",
-              borderRadius: 0,
-              transition: "all 0.35s ease",
+              color: "var(--brand-cream)",
+              fontFamily: "var(--font-mono)", fontSize: 11,
+              letterSpacing: "0.25em", textTransform: "uppercase",
+              textDecoration: "none", cursor: "pointer",
+              transition: "all 0.3s ease",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = "rgba(212,184,150,0.55)";
@@ -386,11 +365,11 @@ export default function WorkPage() {
               e.currentTarget.style.background = "transparent";
             }}
           >
-            See More
+            See More on Instagram
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </Link>
+          </a>
         </div>
       </div>
 
@@ -412,11 +391,13 @@ export default function WorkPage() {
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              display: "flex", alignItems: "center",
+              display: "flex", alignItems: isMobile ? "flex-start" : "center",
               gap: isMobile ? 0 : 48, width: "100%",
               maxWidth: isMobile ? "100vw" : 900,
-              maxHeight: "90vh",
+              maxHeight: isMobile ? "100vh" : "90vh",
               flexDirection: isMobile ? "column" : "row",
+              overflowY: isMobile ? "auto" : "visible",
+              background: isMobile ? "#0A0203" : "transparent",
             }}
           >
             {/* Iframe panel */}
@@ -424,7 +405,7 @@ export default function WorkPage() {
               position: "relative", flexShrink: 0,
               width: isMobile ? "100vw" : "min(380px, 42vw)",
               aspectRatio: "9/16",
-              maxHeight: isMobile ? "100vh" : "85vh",
+              maxHeight: isMobile ? "70vh" : "85vh",
               borderRadius: isMobile ? 0 : 16,
               overflow: "hidden", background: "#0A0203",
               boxShadow: isMobile ? "none" : "0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,184,150,0.12)",
@@ -451,9 +432,9 @@ export default function WorkPage() {
               )}
             </div>
 
-            {/* Desktop info panel */}
-            {!isMobile && (
-              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+            {/* Info panel */}
+            <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", padding: isMobile ? "24px 20px" : 0, width: "100%" }}>
+              {!isMobile && (
                 <button onClick={closeModal} style={{
                   alignSelf: "flex-end", marginBottom: 28,
                   width: 38, height: 38, borderRadius: "50%",
@@ -463,45 +444,47 @@ export default function WorkPage() {
                 }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 6L6 18M6 6l12 12" /></svg>
                 </button>
+              )}
 
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.3em", color: "rgba(212,184,150,0.4)", marginBottom: 20, textTransform: "uppercase" }}>
-                  {String(activeReelIndex + 1).padStart(2, "0")} / {String(filteredItems.length).padStart(2, "0")}
-                </div>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.3em", color: "rgba(212,184,150,0.4)", marginBottom: isMobile ? 12 : 20, textTransform: "uppercase" }}>
+                {String(activeReelIndex + 1).padStart(2, "0")} / {String(filteredItems.length).padStart(2, "0")}
+              </div>
 
-                <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 16, padding: "5px 14px", background: "rgba(212,184,150,0.07)", border: "1px solid rgba(212,184,150,0.18)", borderRadius: 100 }}>
-                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--brand-gold)" }} />
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--brand-gold)" }}>
-                    {reelCategories.find((c) => c.id === activeReel.category)?.label}
-                  </span>
-                </div>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 16, padding: "5px 14px", background: "rgba(212,184,150,0.07)", border: "1px solid rgba(212,184,150,0.18)", borderRadius: 100, alignSelf: "flex-start" }}>
+                <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--brand-gold)" }} />
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--brand-gold)" }}>
+                  {reelCategories.find((c) => c.id === activeReel.category)?.label}
+                </span>
+              </div>
 
-                <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 400, fontStyle: "italic", color: "var(--brand-cream)", lineHeight: 1.1, letterSpacing: "-0.02em", margin: 0 }}>
-                  {activeReel.title}
-                </h2>
+              <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: isMobile ? "24px" : "clamp(28px, 3.5vw, 42px)", fontWeight: 400, fontStyle: "italic", color: "var(--brand-cream)", lineHeight: 1.1, letterSpacing: "-0.02em", margin: 0 }}>
+                {activeReel.title}
+              </h2>
 
-                <div style={{ display: "flex", gap: 24, marginTop: 20, marginBottom: 28, flexWrap: "wrap" }}>
-                  <div><div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(212,184,150,0.45)", marginBottom: 4 }}>Duration</div><div style={{ fontFamily: "var(--font-mono)", fontSize: 14, color: "var(--brand-gold)", fontWeight: 600 }}>{activeReel.duration}</div></div>
-                </div>
+              <div style={{ display: "flex", gap: 24, marginTop: 20, marginBottom: isMobile ? 20 : 28, flexWrap: "wrap" }}>
+                <div><div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(212,184,150,0.45)", marginBottom: 4 }}>Duration</div><div style={{ fontFamily: "var(--font-mono)", fontSize: 14, color: "var(--brand-gold)", fontWeight: 600 }}>{activeReel.duration}</div></div>
+              </div>
 
-                <div style={{ width: "100%", height: 1, background: "rgba(212,184,150,0.1)", marginBottom: 28 }} />
+              <div style={{ width: "100%", height: 1, background: "rgba(212,184,150,0.1)", marginBottom: isMobile ? 20 : 28 }} />
 
-                <div style={{ display: "flex", gap: 12 }}>
-                  <button onClick={() => navigateModal(-1)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 24px", background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.18)", color: "var(--brand-cream)", fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer", borderRadius: 4, transition: "all 0.25s ease" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
-                    Prev
-                  </button>
-                  <button onClick={() => navigateModal(1)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 24px", background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.18)", color: "var(--brand-cream)", fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer", borderRadius: 4, transition: "all 0.25s ease" }}>
-                    Next
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                  </button>
-                </div>
+              <div style={{ display: "flex", gap: 12, width: isMobile ? "100%" : "auto", justifyContent: isMobile ? "space-between" : "flex-start" }}>
+                <button onClick={() => navigateModal(-1)} style={{ flex: isMobile ? 1 : "initial", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, padding: "12px 24px", background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.18)", color: "var(--brand-cream)", fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer", borderRadius: 4, transition: "all 0.25s ease" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                  Prev
+                </button>
+                <button onClick={() => navigateModal(1)} style={{ flex: isMobile ? 1 : "initial", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, padding: "12px 24px", background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.18)", color: "var(--brand-cream)", fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", cursor: "pointer", borderRadius: 4, transition: "all 0.25s ease" }}>
+                  Next
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </button>
+              </div>
 
+              {!isMobile && (
                 <a href={activeReel.embedUrl} target="_blank" rel="noopener noreferrer" style={{ marginTop: 20, color: "rgba(212,184,150,0.4)", fontSize: 11, fontFamily: "var(--font-body)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}>
                   View on Instagram
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" /></svg>
                 </a>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}

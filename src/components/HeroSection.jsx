@@ -96,11 +96,11 @@ export default function HeroSection() {
   };
 
   const bgImage = isMobile ? "url('/herobgphone.png')" : "url('/herobg.png')";
-  const bgSize = isMobile ? "auto 100%" : "cover";
+  const bgSize = "cover";
   const bgPosition = isMobile ? "center top" : "center";
-  const bgInset = isMobile ? "0 -5% -5% -5%" : "-5%";
-  const bgWidth = isMobile ? "110%" : "110%";
-  const bgHeight = isMobile ? "120%" : "110%";
+  const bgInset = isMobile ? "0" : "-5%";
+  const bgWidth = isMobile ? "100%" : "110%";
+  const bgHeight = isMobile ? "100%" : "110%";
 
   return (
     <section
@@ -175,6 +175,7 @@ export default function HeroSection() {
               display: "flex", alignItems: "center", gap: 12,
               marginBottom: 32,
               justifyContent: isMobile ? "center" : "flex-start",
+              opacity: 0,
             }}>
               <span style={{
                 fontFamily: "var(--font-body)", fontSize: 11,
@@ -195,8 +196,8 @@ export default function HeroSection() {
                 letterSpacing: "-0.02em",
                 maxWidth: 560,
               }}>
-                <span className="hl" style={{ display: "block" }}>More Than</span>
-                <span className="hl" style={{ display: "block", margin: "0.04em 0" }}>Weddings.</span>
+                <span className="hl" style={{ display: "block", opacity: 0 }}>More Than</span>
+                <span className="hl" style={{ display: "block", margin: "0.04em 0", opacity: 0 }}>Weddings.</span>
                 <span className="hl" data-block="1" style={{
                   display: "block",
                   fontStyle: "italic",
@@ -204,6 +205,7 @@ export default function HeroSection() {
                   color: "rgba(212,184,150,0.92)",
                   marginTop: "0.12em",
                   lineHeight: "1.2",
+                  opacity: 0,
                 }}>A Feeling.</span>
               </h1>
             </div>
@@ -218,6 +220,7 @@ export default function HeroSection() {
               marginRight: isMobile ? "auto" : 0,
               marginBottom: 44,
               fontWeight: 300,
+              opacity: 0,
             }}>
               We turn your wedding moments into stories worth remembering.
             </div>
@@ -227,6 +230,7 @@ export default function HeroSection() {
               flexWrap: isMobile ? "column" : "wrap",
               alignItems: isMobile ? "stretch" : "flex-start",
               justifyContent: isMobile ? "center" : "flex-start",
+              opacity: 0,
             }}>
               <button
                 onClick={() => scrollTo("#reels")}

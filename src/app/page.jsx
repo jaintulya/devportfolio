@@ -33,17 +33,21 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Handle ?section= query param from cross-page navigation
+  // Handle direct navigation to section routes
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    const section = params.get("section");
-    if (section) {
+    const path = window.location.pathname;
+    const sectionMap = {
+      "/work": "reels",
+      "/services": "services",
+      "/story": "story",
+      "/contact": "contact"
+    };
+    const sectionId = sectionMap[path];
+    if (sectionId) {
       setTimeout(() => {
-        document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
-        const sectionToPath = { reels: "/work", services: "/services", story: "/story", contact: "/contact", hero: "/" };
-        window.history.replaceState(null, "", sectionToPath[section] || "/");
-      }, 300);
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: "instant" });
+      }, 100);
     }
   }, []);
 

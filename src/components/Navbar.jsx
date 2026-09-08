@@ -133,17 +133,18 @@ export default function Navbar() {
 
   const go = (path) => {
     setMobileOpen(false);
-    if (pathname !== "/") {
-      // Coming from /works or another page — navigate home first then scroll
-      router.push("/" + (path === "/" ? "" : `?section=${pathToId[path] ?? "hero"}`));
-      return;
-    }
     const id = pathToId[path] ?? "hero";
-    window.history.pushState(null, "", path);
-    if (id === "hero") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    const el = document.getElementById(id);
+    
+    if (el) {
+      window.history.pushState(null, "", path);
+      if (id === "hero") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
     } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      router.push("/" + (path === "/" ? "" : `?section=${id}`));
     }
   };
 
@@ -196,9 +197,9 @@ export default function Navbar() {
             border: none !important;
             box-shadow: none !important;
             margin: 0 !important;
-            background: transparent !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
+            background: rgba(26, 5, 7, 0.45) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
           }
           .main-navbar.nav-transparent {
             background: transparent !important;
@@ -217,7 +218,7 @@ export default function Navbar() {
       <nav
         ref={navRef}
         aria-label="Main navigation"
-        className={`main-navbar ${activeSection === "hero" && pathname === "/" ? "nav-transparent" : ""}`}
+        className="main-navbar"
       >
         <div style={{
           display: "flex",
