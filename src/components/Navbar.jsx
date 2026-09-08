@@ -170,6 +170,13 @@ export default function Navbar() {
             box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
             margin: 0 !important;
           }
+          .main-navbar.nav-transparent {
+            background: transparent !important;
+            border-bottom: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+          }
         }
 
         body.hide-navbar .main-navbar {
