@@ -205,126 +205,133 @@ export default function WorkPage() {
             })}
           </div>
         ) : (
-          <div style={{ padding: "0 clamp(16px, 4vw, 48px)" }}>
-            {filteredItems.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "80px 24px", color: "rgba(245,230,204,0.4)" }}>
-                <p style={{ fontFamily: "var(--font-display)", fontSize: 24 }}>No reels in this category yet.</p>
-                <p style={{ fontFamily: "var(--font-body)", fontSize: 14, marginTop: 8 }}>
-                  Check back soon.
-                </p>
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(4, 1fr)",
-                  gap: "clamp(12px, 1.8vw, 20px)",
-                }}
-              >
-            {filteredItems.map((item) => {
-              const cat = reelCategories.find((c) => c.id === item.category);
+          <div style={{ display: "flex", flexDirection: "column", gap: 64 }}>
+            {reelCategories.map((cat) => {
+              const catReels = reelData.filter((r) => r.category === cat.id);
+              if (catReels.length === 0) return null;
               return (
-                <article
-                  key={item.id}
-                  className="work-card"
-                  onClick={() => openModal(item)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Watch ${item.title}`}
-                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(item); } }}
-                  style={{
-                    position: "relative",
-                    aspectRatio: "9/16",
-                    borderRadius: 12,
-                    overflow: "hidden",
-                    cursor: "pointer",
-                    background: "var(--brand-maroon-dark)",
-                    border: "1px solid rgba(212,184,150,0.08)",
-                    transition: "all 0.5s cubic-bezier(0.23,1,0.32,1)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "scale(1.015)";
-                    e.currentTarget.style.borderColor = "rgba(212,184,150,0.3)";
-                    e.currentTarget.style.boxShadow = "0 24px 56px rgba(0,0,0,0.35)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.style.borderColor = "rgba(212,184,150,0.08)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                >
-                  <img
-                    src={item.poster}
-                    alt={item.title}
-                    loading="lazy"
-                    decoding="async"
+                <div key={cat.id}>
+                  {/* Header */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20, padding: "0 clamp(16px, 4vw, 48px)" }}>
+                    <h3 style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 700, margin: 0, color: "var(--brand-cream)" }}>
+                      {cat.label}
+                    </h3>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "rgba(245,230,204,0.5)", textTransform: "uppercase" }}>
+                      {catReels.length} Reels
+                    </span>
+                  </div>
+                  {/* Desktop Grid Wrapper */}
+                  <div
                     style={{
-                      width: "100%", height: "100%",
-                      objectFit: "cover",
-                      transition: "transform 0.7s cubic-bezier(0.23,1,0.32,1)",
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                      gap: 24,
+                      padding: "0 clamp(16px, 4vw, 48px)"
                     }}
-                  />
-                  <div style={{
-                    position: "absolute", inset: 0,
-                    background: "linear-gradient(to top, rgba(46,10,13,0.95) 0%, rgba(46,10,13,0.35) 45%, rgba(46,10,13,0.02) 100%)",
-                    zIndex: 2, pointerEvents: "none",
-                  }} />
-                  {/* Duration */}
-                  <div style={{
-                    position: "absolute", top: 14, right: 14,
-                    zIndex: 5, pointerEvents: "none",
-                    fontFamily: "var(--font-mono)", fontSize: 9,
-                    letterSpacing: "0.15em",
-                    color: "rgba(245,230,204,0.7)",
-                    background: "rgba(46,10,13,0.6)",
-                    backdropFilter: "blur(6px)",
-                    padding: "4px 10px",
-                    borderRadius: 4,
-                    border: "1px solid rgba(212,184,150,0.15)",
-                  }}>
-                    {item.duration}
+                  >
+                    {catReels.map((item) => (
+                      <article
+                        key={item.id}
+                        className="work-card"
+                        onClick={() => openModal(item)}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Watch ${item.title}`}
+                        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(item); } }}
+                        style={{
+                          position: "relative",
+                          aspectRatio: "9/16",
+                          borderRadius: 12,
+                          overflow: "hidden",
+                          cursor: "pointer",
+                          background: "var(--brand-maroon-dark)",
+                          border: "1px solid rgba(212,184,150,0.08)",
+                          transition: "all 0.5s cubic-bezier(0.23,1,0.32,1)",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = "scale(1.02)";
+                          e.currentTarget.style.borderColor = "rgba(212,184,150,0.3)";
+                          e.currentTarget.style.boxShadow = "0 24px 56px rgba(0,0,0,0.35)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = "scale(1)";
+                          e.currentTarget.style.borderColor = "rgba(212,184,150,0.08)";
+                          e.currentTarget.style.boxShadow = "none";
+                        }}
+                      >
+                        <img
+                          src={item.poster}
+                          alt={item.title}
+                          loading="lazy"
+                          decoding="async"
+                          style={{
+                            width: "100%", height: "100%",
+                            objectFit: "cover",
+                            transition: "transform 0.7s cubic-bezier(0.23,1,0.32,1)",
+                          }}
+                        />
+                        <div style={{
+                          position: "absolute", inset: 0,
+                          background: "linear-gradient(to top, rgba(46,10,13,0.95) 0%, rgba(46,10,13,0.35) 45%, rgba(46,10,13,0.02) 100%)",
+                          zIndex: 2, pointerEvents: "none",
+                        }} />
+                        {/* Duration */}
+                        <div style={{
+                          position: "absolute", top: 14, right: 14,
+                          zIndex: 5, pointerEvents: "none",
+                          fontFamily: "var(--font-mono)", fontSize: 10,
+                          letterSpacing: "0.15em",
+                          color: "rgba(245,230,204,0.7)",
+                          background: "rgba(46,10,13,0.6)",
+                          backdropFilter: "blur(6px)",
+                          padding: "4px 10px",
+                          borderRadius: 4,
+                          border: "1px solid rgba(212,184,150,0.15)",
+                        }}>
+                          {item.duration}
+                        </div>
+                        {/* Play button */}
+                        <div style={{
+                          position: "absolute", top: "50%", left: "50%",
+                          transform: "translate(-50%,-50%)",
+                          zIndex: 4,
+                          width: 48, height: 48,
+                          borderRadius: "50%",
+                          background: "rgba(46,10,13,0.55)",
+                          backdropFilter: "blur(8px)",
+                          border: "1.5px solid rgba(212,184,150,0.45)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          pointerEvents: "none",
+                        }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand-cream)">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                          </svg>
+                        </div>
+                        {/* Title + category */}
+                        <div style={{
+                          position: "absolute", bottom: 0, left: 0, right: 0,
+                          padding: 24, zIndex: 3, pointerEvents: "none",
+                        }}>
+                          <div style={{
+                            fontFamily: "var(--font-mono)", fontSize: 10,
+                            letterSpacing: "0.25em", textTransform: "uppercase",
+                            color: "var(--brand-gold)", marginBottom: 8,
+                          }}>
+                            {cat.label}
+                          </div>
+                          <div style={{
+                            fontFamily: "var(--font-display)", fontSize: 20,
+                            fontWeight: 600, color: "var(--brand-cream)", lineHeight: 1.2,
+                          }}>
+                            {item.title}
+                          </div>
+                        </div>
+                      </article>
+                    ))}
                   </div>
-                  {/* Play button */}
-                  <div style={{
-                    position: "absolute", top: "50%", left: "50%",
-                    transform: "translate(-50%,-50%)",
-                    zIndex: 4,
-                    width: 44, height: 44,
-                    borderRadius: "50%",
-                    background: "rgba(46,10,13,0.55)",
-                    backdropFilter: "blur(8px)",
-                    border: "1.5px solid rgba(212,184,150,0.45)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    pointerEvents: "none",
-                  }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand-cream)">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  </div>
-                  {/* Title + category */}
-                  <div style={{
-                    position: "absolute", bottom: 0, left: 0, right: 0,
-                    padding: 20, zIndex: 3, pointerEvents: "none",
-                  }}>
-                    <div style={{
-                      fontFamily: "var(--font-mono)", fontSize: 9,
-                      letterSpacing: "0.25em", textTransform: "uppercase",
-                      color: "var(--brand-gold)", marginBottom: 6,
-                    }}>
-                      {cat?.label || item.category}
-                    </div>
-                    <div style={{
-                      fontFamily: "var(--font-display)", fontSize: 18,
-                      fontWeight: 600, color: "var(--brand-cream)", lineHeight: 1.2,
-                    }}>
-                      {item.title}
-                    </div>
-                  </div>
-                </article>
+                </div>
               );
             })}
-              </div>
-            )}
           </div>
         )}
 
@@ -451,6 +458,7 @@ export default function WorkPage() {
               }}
               allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
+              scrolling="yes"
             />
             {/* Fallback button if iframe fails to load */}
             <a

@@ -145,6 +145,15 @@ export default function Navbar() {
           box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.2);
           padding-left: env(safe-area-inset-left);
           padding-right: env(safe-area-inset-right);
+          transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        .nav-transparent {
+          background: transparent !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          box-shadow: none !important;
+          border-color: transparent !important;
         }
 
         @media (max-width: 768px) {
@@ -171,7 +180,7 @@ export default function Navbar() {
       <nav
         ref={navRef}
         aria-label="Main navigation"
-        className="main-navbar"
+        className={`main-navbar ${activeSection === "hero" && pathname === "/" ? "nav-transparent" : ""}`}
       >
         <div style={{
           display: "flex",

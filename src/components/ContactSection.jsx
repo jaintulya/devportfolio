@@ -213,10 +213,10 @@ export default function ContactSection() {
           ref={headRef}
           style={{ textAlign: "center", marginBottom: "clamp(48px, 7vw, 80px)" }}
         >
-          <div className="eyebrow-label" style={{ justifyContent: "center", color: "var(--brand-maroon)" }}>
-            <span style={{ background: "var(--brand-maroon)", display: "block" }} />
+          <div className="eyebrow-label" style={{ justifyContent: "center", color: "var(--brand-gold)" }}>
+            <span style={{ background: "var(--brand-gold)", display: "block" }} />
             Let&apos;s Connect
-            <span style={{ background: "var(--brand-maroon)", display: "block" }} />
+            <span style={{ background: "var(--brand-gold)", display: "block" }} />
           </div>
           <h2 className="section-heading">
             Co-create Your Story

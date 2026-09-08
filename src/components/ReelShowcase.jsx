@@ -195,6 +195,9 @@ export default function ReelShowcase() {
             textAlign: "center",
           }}
         >
+          <div style={{ fontSize: 10, color: "var(--brand-gold)", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 8, fontFamily: "var(--font-mono)" }}>
+            {displayReel.category}
+          </div>
           <h3 style={{
             fontFamily: "'Playfair Display', Georgia, serif",
             fontSize: "clamp(24px, 3vw, 34px)",
@@ -330,8 +333,9 @@ export default function ReelShowcase() {
                 inset: 0,
                 opacity: 1,
               }}
-              allow="autoplay; fullscreen"
+              allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
+              scrolling="yes"
             />
             
             {/* Fallback button if iframe fails to load */}
