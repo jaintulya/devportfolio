@@ -43,7 +43,7 @@ export interface CoverflowCarouselProps {
 }
 
 export function CoverflowCarousel({
-  slides,
+  slides = [],
   rotate = 44,
   depth = 0.6,
   perspective = 3,
@@ -59,7 +59,7 @@ export function CoverflowCarousel({
   className,
   cardClassName,
 }: CoverflowCarouselProps) {
-  const count = slides.length;
+  const count = slides?.length || 0;
 
   const frameRef = React.useRef<HTMLDivElement>(null);
   const cardRefs = React.useRef<(HTMLDivElement | null)[]>([]);
@@ -82,7 +82,10 @@ export function CoverflowCarousel({
 
   /** Nearest whole card, folded back into 0..count-1. */
   const indexAt = React.useCallback(
-    (pos: number) => ((Math.round(pos) % count) + count) % count,
+    (pos: number) => {
+      if (count <= 0) return 0;
+      return ((Math.round(pos) % count) + count) % count;
+    },
     [count],
   );
 
@@ -241,12 +244,16 @@ export function CoverflowCarousel({
     [],
   );
 
-  const active = slides[selected];
+  const active = count > 0 ? slides[selected] : undefined;
+
+  if (count === 0) {
+    return null;
+  }
 
   return (
     <div
       className={cn("w-full", className)}
-      style={{ ["--cf-card" as string]: cardWidth }}
+      style={{ ["--cf-card" as string]: cardWidth } as React.CSSProperties}
       role="region"
       aria-roledescription="carousel"
       aria-label={label}
@@ -332,7 +339,7 @@ export function CoverflowCarousel({
         )}
       </div>
 
-      {showCaption && active?.title && (
+      {showCaption && active && active.title && (
         <div
           key={selected}
           className="mt-2 flex flex-col items-center px-6 duration-300 animate-in fade-in"
@@ -378,3 +385,5 @@ export function CoverflowCarousel({
     </div>
   );
 }
+
+export default CoverflowCarousel;

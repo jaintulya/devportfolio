@@ -129,8 +129,15 @@ export default function WorkPage() {
         background: "var(--brand-maroon-dark)",
         color: "var(--brand-cream)",
         paddingTop: 1,
+        position: "relative",
       }}
     >
+      {/* Texture overlay matching Contact, Review & Footer */}
+      <div aria-hidden="true" style={{
+        position: "fixed", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+      }} />
+
       <Link href="/#reels" style={{
         position: "absolute", top: "clamp(20px, 4vw, 32px)", left: "clamp(16px, 4vw, 32px)", zIndex: 50,
         display: "inline-flex", alignItems: "center", gap: 8,
@@ -458,7 +465,7 @@ export default function WorkPage() {
               maxHeight: isMobile ? "calc(100svh - 20px)" : "90vh",
               flexDirection: isMobile ? "column" : "row",
               overflow: "hidden",
-              background: "linear-gradient(145deg, #180306 0%, #0d0103 100%)",
+              background: "linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.png') center / cover no-repeat, #2A080A",
               borderRadius: isMobile ? 18 : 24,
               border: "1.5px solid rgba(212,184,150,0.26)",
               boxShadow: "0 35px 90px rgba(0,0,0,0.92), 0 0 0 1px rgba(212,184,150,0.12)",

@@ -253,7 +253,7 @@ export default function ContactSection() {
         .handwritten { margin-top: 34px; color: var(--brand-gold); font-family: var(--font-display); font-style: italic; font-size: 24px; transform: rotate(-3deg); display: inline-block; }
 
         .card-wall {
-          height: 680px; position: relative; transform-style: preserve-3d; transition: transform 0.18s ease-out;
+          height: 520px; position: relative; transform-style: preserve-3d; transition: transform 0.18s ease-out;
         }
 
         .card-3d {
@@ -279,22 +279,25 @@ export default function ContactSection() {
           }
         }
 
-        /* Default desktop positions */
-        .c1 { left: 0; top: 35px; transform: translateZ(55px) rotate(-7deg); z-index: 5; }
-        .c2 { right: 0; top: 8px; transform: translateZ(5px) rotate(6deg); z-index: 4; }
-        .c3 { left: 18px; top: 260px; transform: translateZ(20px) rotate(5deg); z-index: 3; }
-        .c4 { right: 12px; top: 245px; transform: translateZ(70px) rotate(-5deg); z-index: 6; }
-        .c5 { left: 30px; bottom: 25px; transform: translateZ(10px) rotate(-5deg); z-index: 2; }
-        .c6 { right: 20px; bottom: 10px; transform: translateZ(48px) rotate(6deg); z-index: 5; }
+        /* Default desktop positions with slight vertical overlap */
+        .c1 { left: 8px; top: 15px; transform: translateZ(25px) rotate(-6deg); z-index: 3; }
+        .c2 { right: 8px; top: 5px; transform: translateZ(20px) rotate(5deg); z-index: 3; }
+        .c3 { left: 20px; top: 156px; transform: translateZ(45px) rotate(4deg); z-index: 4; }
+        .c4 { right: 18px; top: 145px; transform: translateZ(40px) rotate(-5deg); z-index: 4; }
+        .c5 { left: 12px; top: 298px; transform: translateZ(65px) rotate(-4deg); z-index: 5; }
+        .c6 { right: 14px; top: 288px; transform: translateZ(60px) rotate(5deg); z-index: 5; }
 
         .card-num { position: absolute; right: 18px; top: 17px; color: #a68474; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; }
         .card-icon {
           width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px;
-          background: rgba(76,20,22,0.06); border: 1px solid rgba(74,23,24,0.08);
-          color: #4b1719; font-size: 20px; margin-bottom: 15px; transform: translateZ(20px);
+          background: rgba(122, 78, 23, 0.08); border: 1px solid rgba(122, 78, 23, 0.18);
+          color: #7A4E17; font-size: 20px; margin-bottom: 15px; transform: translateZ(20px);
         }
-        .card-3d h3 { margin: 0 0 6px; font-family: var(--font-display); font-size: 25px; font-weight: 500; line-height: 1.1; }
-        .card-3d p { margin: 0; max-width: 190px; color: #7e625a; font-size: 10.5px; line-height: 1.6; font-family: var(--font-body); }
+        .card-3d h3 {
+          margin: 0 0 6px; font-family: var(--font-display); font-size: 25px; font-weight: 600; line-height: 1.1;
+          color: #7A4E17 !important; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+        }
+        .card-3d p { margin: 0; max-width: 190px; color: #5D3D35; font-size: 10.5px; line-height: 1.6; font-family: var(--font-body); }
         .card-go {
           display: inline-block; margin-top: 10px; color: #3d1114; font-family: var(--font-mono); font-size: 9px;
           letter-spacing: 0.11em; border-bottom: 1px solid rgba(61,17,20,0.35); padding-bottom: 3px; font-weight: 600;
@@ -315,7 +318,7 @@ export default function ContactSection() {
         @keyframes sparkAnim { 50% { transform: translateY(-9px); opacity: 0.3; } }
 
         .c-bottom {
-          max-width: 1160px; margin: 65px auto 0; border-top: 1px solid rgba(244,222,185,0.08); padding-top: 19px;
+          max-width: 1160px; margin: 40px auto 0; border-top: 1px solid rgba(244,222,185,0.08); padding-top: 19px;
           display: flex; justify-content: space-between; color: rgba(245,230,204,0.4); font-family: var(--font-mono);
           font-size: 9px; letter-spacing: 0.09em; text-transform: uppercase; position: relative; z-index: 5;
         }
@@ -323,10 +326,12 @@ export default function ContactSection() {
 
         /* Responsive Layouts */
         @media (max-width: 1000px) {
-          .c-stage { grid-template-columns: 0.8fr 1.2fr; gap: 10px; }
+          .c-stage { grid-template-columns: 0.85fr 1.15fr; gap: 10px; }
           .card-3d { width: 215px; height: 165px; padding: 18px; }
-          .card-wall { height: 600px; }
-          .c1 { left: 0; } .c2 { right: 0; } .c3 { left: 5px; top: 240px; } .c4 { right: 0; top: 220px; } .c5 { left: 40px; bottom: 15px; } .c6 { right: 25px; bottom: 5px; }
+          .card-wall { height: 480px; }
+          .c1 { left: 0; top: 15px; } .c2 { right: 0; top: 5px; }
+          .c3 { left: 8px; top: 145px; } .c4 { right: 8px; top: 135px; }
+          .c5 { left: 4px; top: 275px; } .c6 { right: 4px; top: 265px; }
         }
         @media (max-width: 780px) {
           .contact-3d-section { padding: 60px 16px 40px; }
@@ -349,14 +354,36 @@ export default function ContactSection() {
             box-sizing: border-box !important;
             border-radius: 8px !important;
           }
-          .card-3d h3 { font-size: 16px !important; margin: 0 0 4px !important; }
-          .card-3d p { font-size: 9px !important; line-height: 1.4 !important; max-width: 100% !important; }
-          .card-icon { width: 32px !important; height: 32px !important; font-size: 15px !important; margin-bottom: 8px !important; }
+          .card-3d h3 { font-size: 16px !important; margin: 0 0 4px !important; color: #7A4E17 !important; }
+          .card-3d p { font-size: 9px !important; line-height: 1.4 !important; max-width: 100% !important; color: #5D3D35 !important; }
+          .card-icon { width: 32px !important; height: 32px !important; font-size: 15px !important; margin-bottom: 8px !important; color: #7A4E17 !important; border-color: rgba(122, 78, 23, 0.18) !important; background: rgba(122, 78, 23, 0.08) !important; }
           .card-num { right: 10px !important; top: 10px !important; font-size: 8px !important; }
           .card-go { font-size: 8px !important; margin-top: 8px !important; }
           .card-3d:hover { transform: translateY(-3px) !important; box-shadow: 0 12px 28px rgba(0,0,0,0.5) !important; z-index: 10 !important; }
           .c-ribbon, .c-spark { display: none; }
-          .c-bottom { display: block; text-align: center; line-height: 2.2; margin-top: 36px; }
+          .c-bottom {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            gap: 6px !important;
+            margin-top: 32px !important;
+            padding-top: 16px !important;
+          }
+          .c-bottom span {
+            font-size: clamp(7px, 2.1vw, 8.5px) !important;
+            white-space: nowrap !important;
+            letter-spacing: 0.06em !important;
+            opacity: 0.65 !important;
+          }
+          .c-bottom strong {
+            font-size: clamp(7.5px, 2.35vw, 9.5px) !important;
+            white-space: nowrap !important;
+            letter-spacing: 0.08em !important;
+            display: block !important;
+            text-align: center !important;
+          }
         }
         @media (prefers-reduced-motion: reduce) {
           .card-3d, .card-wall, .c-spark { transition: none !important; animation: none !important; transform: none !important; }
@@ -410,7 +437,7 @@ export default function ContactSection() {
                 <div className="card-icon">
                   {(() => { const Icon = method.IconComponent; return <Icon />; })()}
                 </div>
-                <h3>{method.title}</h3>
+                <h3 style={{ color: "#7A4E17" }}>{method.title}</h3>
                 <p>{method.description}</p>
                 <span className="card-go">{method.ctaText}</span>
               </a>

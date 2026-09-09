@@ -211,11 +211,11 @@ export default function Navbar() {
           width: auto;
           max-width: calc(100vw - 32px);
           border-radius: 100px;
-          background: rgba(18, 3, 5, 0.38);
-          backdrop-filter: blur(18px) saturate(1.25);
-          -webkit-backdrop-filter: blur(18px) saturate(1.25);
-          border: 1px solid rgba(212,184,150,0.14);
-          box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+          background: rgba(26, 5, 7, 0.82);
+          backdrop-filter: blur(20px) saturate(1.3);
+          -webkit-backdrop-filter: blur(20px) saturate(1.3);
+          border: 1px solid rgba(212, 184, 150, 0.22);
+          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
           padding-left: env(safe-area-inset-left);
           padding-right: env(safe-area-inset-right);
           transition: opacity 0.45s cubic-bezier(0.23, 1, 0.32, 1), transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
@@ -234,11 +234,11 @@ export default function Navbar() {
             pointer-events: auto !important;
             transform: translate(-50%, 0) !important;
             visibility: visible;
-            background: rgba(18, 3, 5, 0.38) !important;
-            backdrop-filter: blur(18px) saturate(1.25) !important;
-            -webkit-backdrop-filter: blur(18px) saturate(1.25) !important;
-            border: 1px solid rgba(212, 184, 150, 0.14) !important;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
+            background: rgba(26, 5, 7, 0.82) !important;
+            backdrop-filter: blur(20px) saturate(1.3) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(1.3) !important;
+            border: 1px solid rgba(212, 184, 150, 0.22) !important;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45) !important;
           }
         }
 
@@ -256,27 +256,32 @@ export default function Navbar() {
             top: 0 !important;
             left: 0 !important;
             right: 0 !important;
-            transform: none !important;
             width: 100% !important;
             max-width: 100% !important;
             border-radius: 0 !important;
             border: none !important;
             box-shadow: none !important;
             margin: 0 !important;
-            /* Transparent in hero section */
-            background: transparent !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            border-bottom: none !important;
-            transition: background 0.4s ease, backdrop-filter 0.4s ease, border-bottom 0.4s ease, box-shadow 0.4s ease;
+            transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1), transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), background 0.4s ease, backdrop-filter 0.4s ease, border-bottom 0.4s ease, box-shadow 0.4s ease;
+          }
+          /* Completely hide navbar in Hero section on phone/mobile */
+          .main-navbar.nav-in-hero {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateY(-100%) !important;
+            visibility: hidden !important;
           }
           .main-navbar.nav-scrolled {
-            /* In other sections: transparent with backdrop blur so background color is visible through the blur */
-            background: rgba(18, 3, 5, 0.28) !important;
-            backdrop-filter: blur(18px) saturate(1.25) !important;
-            -webkit-backdrop-filter: blur(18px) saturate(1.25) !important;
-            border-bottom: 1px solid rgba(212, 184, 150, 0.08) !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            transform: translateY(0) !important;
+            visibility: visible !important;
+            /* In other sections: subtle dark backdrop blur with high legibility */
+            background: rgba(26, 5, 7, 0.85) !important;
+            backdrop-filter: blur(20px) saturate(1.3) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(1.3) !important;
+            border-bottom: 1px solid rgba(212, 184, 150, 0.16) !important;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35) !important;
           }
           .main-navbar.nav-transparent {
             background: transparent !important;
@@ -349,8 +354,10 @@ export default function Navbar() {
                     letterSpacing: "0.18em",
                     textTransform: "uppercase",
                     color: isActive
-                      ? "var(--brand-cream)"
-                      : "rgba(247,230,204,0.55)",
+                      ? "#FFF8EE"
+                      : "rgba(247,230,204,0.85)",
+                    fontWeight: isActive ? 600 : 500,
+                    textShadow: "0 1px 3px rgba(0,0,0,0.5)",
                     background: "none",
                     border: "none",
                     padding: "7px 14px",

@@ -62,6 +62,12 @@ export default function EndingSection() {
         overflow: "hidden",
       }}
     >
+      {/* Texture overlay matching Contact, Review & Footer */}
+      <div aria-hidden="true" style={{
+        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+      }} />
+
       {/* Radial glow */}
       <div aria-hidden="true" style={{
         position: "absolute", left: "50%", top: "50%",
@@ -69,22 +75,23 @@ export default function EndingSection() {
         width: 600, height: 600, borderRadius: "50%",
         background: "radial-gradient(circle, rgba(124,41,45,0.14) 0%, transparent 70%)",
         pointerEvents: "none",
+        zIndex: 1,
       }} />
 
       <div style={{
         maxWidth: 1180, margin: "0 auto",
         display: "grid",
-        gridTemplateColumns: "minmax(280px, 1.6fr) minmax(220px, 1fr)",
-        gap: "clamp(24px, 8vw, 80px)",
-        alignItems: "end",
+        gridTemplateColumns: "minmax(320px, 1.35fr) minmax(250px, 1fr)",
+        gap: "clamp(32px, 6vw, 80px)",
+        alignItems: "center",
         position: "relative", zIndex: 2,
       }}>
         {/* Left — headline */}
         <h2 style={{
           fontFamily: "'Cormorant Garamond', Georgia, serif",
           fontWeight: 500,
-          fontSize: "clamp(48px, 8vw, 116px)",
-          lineHeight: 0.86,
+          fontSize: "clamp(46px, 7vw, 105px)",
+          lineHeight: 0.88,
           letterSpacing: "-0.045em",
           margin: 0,
           color: "var(--brand-cream)",
@@ -102,26 +109,101 @@ export default function EndingSection() {
           </span>
         </h2>
 
-        {/* Right — signature */}
-        <div>
-          <p style={{
-            color: "#d1afa4",
-            fontSize: 15, lineHeight: 1.9,
-            margin: "0 0 24px",
-          }}>
-            A space where every wedding gets to tell its own story, in its own way.
-          </p>
+        {/* Right — image and signature underneath */}
+        <div style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 16,
+        }}>
           <div
-            className="end-sig"
             style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontSize: "clamp(32px, 4vw, 42px)",
-              fontWeight: 500,
-              color: "var(--brand-cream)",
-              lineHeight: 1.2,
+              position: "relative",
+              width: "clamp(200px, 20vw, 270px)",
+              height: "clamp(260px, 26vw, 350px)",
+              flexShrink: 0,
             }}
           >
-            I&apos;m Devarsh Jain.
+            <img
+              src="/devimg.jpeg"
+              alt="Devarsh Jain - Founder of Shaadi Pitara"
+              loading="lazy"
+              decoding="async"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+                borderRadius: 12,
+                boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+              }}
+            />
+            {/* Floating note 1 */}
+            <div
+              style={{
+                position: "absolute",
+                right: "-18px",
+                top: "12px",
+                padding: "10px 14px",
+                background: "var(--brand-cream)",
+                color: "var(--brand-maroon-dark)",
+                boxShadow: "0 14px 35px rgba(0,0,0,0.3)",
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontSize: 17,
+                lineHeight: 1.2,
+                fontWeight: 500,
+                whiteSpace: "nowrap",
+                zIndex: 10,
+                borderRadius: 4,
+              }}
+            >
+              "I loved doing it."
+            </div>
+            {/* Floating note 2 */}
+            <div
+              style={{
+                position: "absolute",
+                left: "-16px",
+                bottom: "12px",
+                padding: "8px 14px",
+                background: "var(--brand-cream)",
+                color: "var(--brand-maroon-dark)",
+                boxShadow: "0 14px 35px rgba(0,0,0,0.3)",
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontSize: 15,
+                fontWeight: 500,
+                whiteSpace: "nowrap",
+                zIndex: 10,
+                borderRadius: 4,
+              }}
+            >
+              fun → passion
+            </div>
+          </div>
+
+          <div style={{ width: "clamp(200px, 20vw, 270px)", textAlign: "left" }}>
+            <p style={{
+              color: "#d1afa4",
+              fontSize: 14.5,
+              lineHeight: 1.75,
+              margin: "0 0 12px",
+            }}>
+              A space where every wedding gets to tell its own story, in its own way.
+            </p>
+            <div
+              className="end-sig"
+              style={{
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontSize: "clamp(28px, 3.2vw, 38px)",
+                fontWeight: 500,
+                color: "var(--brand-cream)",
+                lineHeight: 1.15,
+              }}
+            >
+              I&apos;m Devarsh Jain.
+            </div>
           </div>
         </div>
       </div>

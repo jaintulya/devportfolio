@@ -548,7 +548,7 @@ export default function ReelShowcase() {
               maxHeight: isMobile ? "calc(100svh - 20px)" : "90vh",
               flexDirection: isMobile ? "column" : "row",
               overflow: "hidden",
-              background: "linear-gradient(145deg, #180306 0%, #0d0103 100%)",
+              background: "linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.png') center / cover no-repeat, #2A080A",
               borderRadius: isMobile ? 18 : 24,
               border: "1.5px solid rgba(212,184,150,0.26)",
               boxShadow: "0 35px 90px rgba(0,0,0,0.92), 0 0 0 1px rgba(212,184,150,0.12)",

@@ -91,26 +91,13 @@ export default function StorySection() {
       }
 
       /* ── The Beginning reveal ── */
-      if (sceneRef.current) {
-        gsap.from(sceneRef.current.children, {
-          y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
-          stagger: 0.15,
-          scrollTrigger: { trigger: sceneRef.current, start: "top 85%" },
+      if (headRef.current) {
+        gsap.from(headRef.current.children, {
+          y: 20, opacity: 0, duration: 0.7, ease: "power2.out",
+          stagger: 0.1,
+          scrollTrigger: { trigger: sceneRef.current, start: "top 80%" },
         });
       }
-
-      /* ── Floating notes subtle natural floating ── */
-      [note1Ref, note2Ref].forEach((ref, i) => {
-        if (!ref.current || reducedMotion) return;
-        gsap.to(ref.current, {
-          y: i === 0 ? -12 : 10,
-          rotation: i === 0 ? 8 : -7,
-          duration: 3 + i,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        });
-      });
 
       /* ── Journey heading reveal ── */
       if (journeyHeadRef.current) {
@@ -198,107 +185,147 @@ export default function StorySection() {
           PART 1 — STORY HERO  (How Shadi Pitara started. + Orbit)
          ═══════════════════════════════════ */}
       <div
-        ref={storyHeroRef}
         className="jreveal"
         style={{
           position: "relative",
-          minHeight: "100vh",
           background: "#3A0B0E",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "clamp(24px, 6vw, 80px)",
-          alignItems: "center",
+          padding: "clamp(60px, 7vw, 100px) clamp(16px, 4vw, 48px) clamp(40px, 5.5vw, 75px)",
           overflow: "hidden",
-          willChange: "transform, opacity",
           color: "var(--brand-cream)",
         }}
       >
-        {/* Left — copy */}
-        <div style={{
-          padding: "clamp(80px, 10vw, 140px) clamp(16px, 6vw, 80px)",
-          position: "relative", zIndex: 3,
-        }}>
-          <div className="jreveal" style={{
-            fontFamily: "var(--font-mono)", fontSize: 10,
-            letterSpacing: "0.18em", textTransform: "uppercase",
-            color: "var(--brand-gold)", marginBottom: 22,
-          }}>
-            THE STORY BEHIND SHAADI PITARA
-          </div>
-          <h1 className="c-heading" style={{
-            margin: "0 0 24px",
-            lineHeight: 0.88,
-          }}>
-            How Shaadi<br /><i>Pitara started.</i>
-          </h1>
-          <p className="jreveal" style={{
-            maxWidth: 440,
-            color: "rgba(210,179,168,0.80)",
-            fontSize: 15, lineHeight: 1.9, margin: "0 0 32px",
-          }}>
-            It started with a simple love for capturing everything around me. A
-            phone, Snapchat, random moments, editing, sharing — and slowly, a
-            feeling that this could become something more.
-          </p>
-          <button
-            className="jreveal"
-            onClick={() => document.getElementById("story-begin")?.scrollIntoView({ behavior: "smooth" })}
-            style={{
-              border: "1px solid rgba(247,230,204,0.30)",
-              background: "transparent",
-              color: "var(--brand-cream)",
-              padding: "14px 28px",
-              fontFamily: "var(--font-mono)", fontSize: 10,
-              letterSpacing: "0.18em", textTransform: "uppercase",
-              cursor: "pointer",
-              display: "flex", alignItems: "center", gap: 12,
-              transition: "all 0.4s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(247,230,204,0.10)";
-              e.currentTarget.style.borderColor = "rgba(247,230,204,0.55)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.borderColor = "rgba(247,230,204,0.30)";
-            }}
-          >
-            Enter the story <span style={{ fontSize: 14 }}>↓</span>
-          </button>
-        </div>
+        {/* Texture overlay matching Contact, Review & Footer */}
+        <div aria-hidden="true" style={{
+          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        }} />
 
-        {/* Right — beginning image */}
         <div
-          ref={orbitRef}
+          ref={storyHeroRef}
           style={{
-            position: "relative",
-            width: "min(560px, 48vw)",
-            height: "min(640px, 50vw)",
+            maxWidth: 1180,
             margin: "0 auto",
-            transformStyle: "preserve-3d",
-            perspective: "1200px",
-            willChange: "transform",
+            width: "100%",
+            display: "grid",
+            gridTemplateColumns: "1.15fr 0.85fr",
+            gap: "clamp(24px, 5vw, 64px)",
+            alignItems: "center",
+            position: "relative",
+            zIndex: 3,
           }}
         >
-          <img
-            src="/beginningright.png"
-            alt="The Beginning"
-            crossOrigin="anonymous"
+          {/* Left — copy */}
+          <div style={{ position: "relative", zIndex: 3 }}>
+            <div className="jreveal" style={{
+              fontFamily: "var(--font-mono)", fontSize: 10,
+              letterSpacing: "0.18em", textTransform: "uppercase",
+              color: "var(--brand-gold)", marginBottom: 22,
+            }}>
+              THE STORY BEHIND SHAADI PITARA
+            </div>
+            <h1 className="c-heading" style={{
+              margin: "0 0 24px",
+              lineHeight: 0.88,
+            }}>
+              How Shaadi<br /><i>Pitara started.</i>
+            </h1>
+            <p className="jreveal" style={{
+              maxWidth: 440,
+              color: "rgba(210,179,168,0.80)",
+              fontSize: 15, lineHeight: 1.9, margin: "0 0 32px",
+            }}>
+              It started with a simple love for capturing everything around me. A
+              phone, Snapchat, random moments, editing, sharing — and slowly, a
+              feeling that this could become something more.
+            </p>
+            <button
+              className="jreveal"
+              onClick={() => document.getElementById("story-begin")?.scrollIntoView({ behavior: "smooth" })}
+              style={{
+                border: "1px solid rgba(247,230,204,0.30)",
+                background: "transparent",
+                color: "var(--brand-cream)",
+                padding: "14px 28px",
+                fontFamily: "var(--font-mono)", fontSize: 10,
+                letterSpacing: "0.18em", textTransform: "uppercase",
+                cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 12,
+                transition: "all 0.4s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(247,230,204,0.10)";
+                e.currentTarget.style.borderColor = "rgba(247,230,204,0.55)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = "rgba(247,230,204,0.30)";
+              }}
+            >
+              Enter the story <span style={{ fontSize: 14 }}>↓</span>
+            </button>
+          </div>
+
+          {/* Right — beginning image */}
+          <div
+            ref={orbitRef}
             style={{
-              position:"relative",
-              width:"100%",
-              height:"100%",
-              objectFit:"contain",
-              display:"block",
+              position: "relative",
+              width: "min(430px, 37vw)",
+              height: "min(500px, 43vw)",
+              margin: "0 auto",
+            }}
+          >
+            <img
+              src="/beginningright.png"
+              alt="The Beginning"
+              crossOrigin="anonymous"
+              loading="lazy"
+              decoding="async"
+              style={{
+                position:"relative",
+                width:"100%",
+                height:"100%",
+                objectFit:"contain",
+                display:"block",
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Separator Line between Part 1 & Part 2 ─── */}
+      <div
+        aria-hidden="true"
+        style={{
+          maxWidth: 1180,
+          margin: "0 auto",
+          padding: "0 clamp(16px, 4vw, 48px)",
+          position: "relative",
+          zIndex: 5,
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            height: 1,
+            background: "linear-gradient(90deg, transparent 0%, rgba(214,180,119,0.25) 15%, rgba(214,180,119,0.55) 50%, rgba(214,180,119,0.25) 85%, transparent 100%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: 8,
+              height: 8,
+              background: "var(--brand-gold, #c4965f)",
+              transform: "rotate(45deg)",
+              boxShadow: "0 0 12px rgba(196,150,95,0.7), 0 0 0 3px #3A0B0E",
             }}
           />
         </div>
       </div>
 
-      {/* ═══════════════════════════════════
-          PART 2 — THE BEGINNING  (pinned 3D scene)
-          Solid dark background — cream text always readable
-         ═══════════════════════════════════ */}
       {/* ═══════════════════════════════════
           PART 2 — THE BEGINNING
           Solid dark background — cream text always readable
@@ -310,18 +337,26 @@ export default function StorySection() {
           position: "relative",
           background: "#3A0B0E",
           color: "var(--brand-cream)",
-          display: "grid",
-          placeItems: "center",
-          padding: "clamp(80px, 10vw, 140px) clamp(16px, 6vw, 80px)",
+          padding: "clamp(45px, 6vw, 85px) clamp(16px, 4vw, 48px) clamp(60px, 8vw, 110px)",
+          overflow: "hidden",
         }}
       >
+        {/* Texture overlay matching Contact, Review & Footer */}
+        <div aria-hidden="true" style={{
+          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        }} />
+
         <div style={{
-          width: "min(1180px, 88vw)",
+          maxWidth: 1180,
+          margin: "0 auto",
+          width: "100%",
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
           gap: "clamp(32px, 6vw, 80px)",
           alignItems: "center",
-          perspective: "1600px",
+          position: "relative",
+          zIndex: 3,
         }}>
           {/* Left — narrative */}
           <div
@@ -366,50 +401,29 @@ export default function StorySection() {
             </p>
           </div>
 
-          {/* Right — devimg, right side */}
+          {/* Right — wedding photos */}
           <div style={{
             position: "relative",
-            width: "clamp(200px, 28vw, 360px)",
-            height: "clamp(300px, 50vh, 560px)",
+            width: "clamp(290px, 40vw, 520px)",
+            height: "clamp(340px, 46vw, 590px)",
             marginLeft: "auto",
-            transformStyle: "preserve-3d",
-            perspective: "1400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}>
             <img
-              src="/devimg.jpeg"
-              alt="The Beginning"
-              crossOrigin="anonymous"
+              src="/storylastright.png"
+              alt="The Beginning - Capturing moments"
+              loading="lazy"
+              decoding="async"
               style={{
-                position:"absolute",inset:0,width:"100%",height:"100%",
-                objectFit:"cover",display:"block",borderRadius:8,
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                display: "block",
+                filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.5))",
               }}
             />
-            {/* Floating note 1 */}
-            <div
-              ref={note1Ref}
-              style={{
-                position:"absolute",right:"-35px",top:"10px",
-                padding:"13px 16px",
-                background:"var(--brand-cream)",color:"var(--brand-maroon-dark)",
-                boxShadow:"0 18px 45px rgba(0,0,0,0.25)",
-                fontFamily:"'Cormorant Garamond',Georgia,serif",
-                fontSize:20,lineHeight:1.2,fontWeight:500,
-                maxWidth:170,whiteSpace:"nowrap",
-                zIndex: 10,
-            }}>"I loved doing it."</div>
-            {/* Floating note 2 */}
-            <div
-              ref={note2Ref}
-              style={{
-                position:"absolute",left:"-25px",bottom:"10px",
-                padding:"13px 16px",
-                background:"var(--brand-cream)",color:"var(--brand-maroon-dark)",
-                boxShadow:"0 18px 45px rgba(0,0,0,0.25)",
-                fontFamily:"'Cormorant Garamond',Georgia,serif",
-                fontSize:20,lineHeight:1.2,fontWeight:500,
-                whiteSpace:"nowrap",
-                zIndex: 10,
-            }}>fun → passion</div>
           </div>
         </div>
       </div>
@@ -483,12 +497,12 @@ export default function StorySection() {
                   overflow:"visible",pointerEvents:"none",zIndex:1,
                 }}
               >
-                {/* Visible curved stroke ��� clearly tdha (S-curve through dots) */}
+                {/* Visible curved stroke — clearly tdha (S-curve through dots) */}
                 <path
                   d={pathD}
                   fill="none"
-                  stroke="rgba(58,11,14,0.22)"
-                  strokeWidth="1.4"
+                  stroke="rgba(58,11,14,0.55)"
+                  strokeWidth="3.2"
                   strokeLinecap="round"
                 />
               </svg>
@@ -509,10 +523,11 @@ export default function StorySection() {
                 >
                   <span style={{
                     display:"block",
-                    fontFamily:"var(--font-mono)",fontSize:9,
+                    fontFamily:"var(--font-mono)",fontSize:10.5,
                     letterSpacing:".14em",
-                    color:"#3A0B0E",
-                    opacity:0.75,
+                    color:"#280508",
+                    fontWeight: 700,
+                    opacity:1,
                     marginBottom:14,textTransform:"uppercase",
                   }}>
                     {String(i+1).padStart(2,"0")}
@@ -521,20 +536,21 @@ export default function StorySection() {
                     width:16,height:16,borderRadius:"50%",
                     background:"#3A0B0E",
                     margin:"0 auto 22px",
-                    boxShadow:"0 0 0 8px rgba(124,41,45,0.08),0 0 0 1px rgba(124,41,45,0.20)",
+                    boxShadow:"0 0 0 8px rgba(124,41,45,0.12),0 0 0 1px rgba(124,41,45,0.30)",
                     transition:"0.4s",
                     position:"relative",zIndex:3,
                     cursor:"default",
                   }} />
                   <h3 style={{
                     fontFamily:"'Cormorant Garamond',Georgia,serif",
-                    fontWeight:500,fontSize:30,lineHeight:0.9,
-                    margin:"0 0 8px",color:"var(--brand-maroon-dark)",
+                    fontWeight:700,fontSize:33,lineHeight:0.95,
+                    margin:"0 0 8px",color:"#280508",
                   }}>{stop.title}</h3>
                   <p style={{
-                    fontFamily:"var(--font-body)",fontSize:11.5,
-                     lineHeight:1.65,color:"#3A0B0E",
-                    margin:0,maxWidth:160,marginLeft:"auto",marginRight:"auto",
+                    fontFamily:"var(--font-body)",fontSize:13,
+                    fontWeight: 600,
+                    lineHeight:1.6,color:"#1D0507",
+                    margin:0,maxWidth:170,marginLeft:"auto",marginRight:"auto",
                   }}>{stop.body}</p>
                 </div>
               ))}
@@ -791,6 +807,12 @@ export default function StorySection() {
           padding:"clamp(80px,12vw,180px) clamp(16px,4vw,48px)",
           position:"relative",overflow:"hidden",
         }}>
+          {/* Texture overlay matching Contact, Review & Footer */}
+          <div aria-hidden="true" style={{
+            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
+            backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+          }} />
+
           {/* Radial glow */}
           <div aria-hidden="true" style={{
             position:"absolute",left:"50%",top:"50%",
@@ -798,54 +820,136 @@ export default function StorySection() {
             width:600,height:600,borderRadius:"50%",
             background:"radial-gradient(circle,rgba(124,41,45,0.14) 0%,transparent 70%)",
             pointerEvents:"none",
+            zIndex: 1,
           }} />
 
           <div style={{
-            maxWidth:1180,margin:"0 auto",
-            display:"grid",
-            gridTemplateColumns:"minmax(280px,1.6fr) minmax(220px,1fr)",
-            gap:"clamp(24px,8vw,80px)",
-            alignItems:"end",
-            position:"relative",zIndex:2,
+            maxWidth: 1180, margin: "0 auto", width: "100%",
+            display: "grid",
+            gridTemplateColumns: "minmax(320px, 1.35fr) minmax(250px, 1fr)",
+            gap: "clamp(32px, 6vw, 80px)",
+            alignItems: "center",
+            position: "relative", zIndex: 2,
           }}>
             {/* Left headline */}
             <h2 style={{
-              fontFamily:"'Cormorant Garamond',Georgia,serif",
-              fontWeight:500,
-              fontSize:"clamp(48px,8vw,116px)",
-              lineHeight:0.86,
-              letterSpacing:"-0.045em",
-              margin:0,
-              color:"var(--brand-cream)",
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontWeight: 500,
+              fontSize: "clamp(46px, 7vw, 105px)",
+              lineHeight: 0.88,
+              letterSpacing: "-0.045em",
+              margin: 0,
+              color: "var(--brand-cream)",
             }}>
-              <span style={{display:"block",overflow:"hidden"}}>
-                <span className="jreveal" style={{display:"block"}}>
+              <span style={{ display: "block", overflow: "hidden" }}>
+                <span className="jreveal" style={{ display: "block" }}>
                   A love for capturing moments
                 </span>
               </span>
-              <span style={{display:"block",overflow:"hidden"}}>
-                <span className="jreveal" style={{display:"block"}}>
+              <span style={{ display: "block", overflow: "hidden" }}>
+                <span className="jreveal" style={{ display: "block" }}>
                   became{" "}
-                  <span style={{color:"var(--brand-gold)",fontStyle:"italic"}}>Shaadi Pitara.</span>
+                  <span style={{ color: "var(--brand-gold)", fontStyle: "italic" }}>Shaadi Pitara.</span>
                 </span>
               </span>
             </h2>
 
-            {/* Right — signature */}
-            <div>
-              <p className="jreveal" style={{
-                color:"#d1afa4",fontSize:15,lineHeight:1.9,
-                margin:"0 0 24px",
-              }}>
-                A space where every wedding gets to tell its own story, in its own way.
-              </p>
-              <div className="jreveal" style={{
-                fontFamily:"'Cormorant Garamond',Georgia,serif",
-                fontSize:"clamp(32px,4vw,42px)",
-                fontWeight:500,
-                color:"var(--brand-cream)",
-                lineHeight:1.2,
-              }}>I&apos;m Devarsh Jain.</div>
+            {/* Right — image and signature underneath it */}
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 16,
+            }}>
+              <div
+                style={{
+                  position: "relative",
+                  width: "clamp(200px, 20vw, 270px)",
+                  height: "clamp(260px, 26vw, 350px)",
+                  flexShrink: 0,
+                }}
+              >
+                <img
+                  src="/devimg.jpeg"
+                  alt="Devarsh Jain - Founder of Shaadi Pitara"
+                  loading="lazy"
+                  decoding="async"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                    borderRadius: 12,
+                    boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+                  }}
+                />
+                {/* Floating note 1 */}
+                <div
+                  ref={note1Ref}
+                  className="floating-note-1"
+                  style={{
+                    position: "absolute",
+                    right: "-18px",
+                    top: "12px",
+                    padding: "10px 14px",
+                    background: "var(--brand-cream)",
+                    color: "var(--brand-maroon-dark)",
+                    boxShadow: "0 14px 35px rgba(0,0,0,0.3)",
+                    fontFamily: "'Cormorant Garamond', Georgia, serif",
+                    fontSize: 17,
+                    lineHeight: 1.2,
+                    fontWeight: 500,
+                    whiteSpace: "nowrap",
+                    zIndex: 10,
+                    borderRadius: 4,
+                  }}
+                >
+                  "I loved doing it."
+                </div>
+                {/* Floating note 2 */}
+                <div
+                  ref={note2Ref}
+                  className="floating-note-2"
+                  style={{
+                    position: "absolute",
+                    left: "-16px",
+                    bottom: "12px",
+                    padding: "8px 14px",
+                    background: "var(--brand-cream)",
+                    color: "var(--brand-maroon-dark)",
+                    boxShadow: "0 14px 35px rgba(0,0,0,0.3)",
+                    fontFamily: "'Cormorant Garamond', Georgia, serif",
+                    fontSize: 15,
+                    fontWeight: 500,
+                    whiteSpace: "nowrap",
+                    zIndex: 10,
+                    borderRadius: 4,
+                  }}
+                >
+                  fun → passion
+                </div>
+              </div>
+
+              {/* Text underneath image */}
+              <div style={{ width: "clamp(200px, 20vw, 270px)", textAlign: "left" }}>
+                <p className="jreveal" style={{
+                  color: "#d1afa4",
+                  fontSize: 14.5,
+                  lineHeight: 1.75,
+                  margin: "0 0 12px",
+                }}>
+                  A space where every wedding gets to tell its own story, in its own way.
+                </p>
+                <div className="jreveal" style={{
+                  fontFamily: "'Cormorant Garamond', Georgia, serif",
+                  fontSize: "clamp(28px, 3.2vw, 38px)",
+                  fontWeight: 500,
+                  color: "var(--brand-cream)",
+                  lineHeight: 1.15,
+                }}>I&apos;m Devarsh Jain.</div>
+              </div>
             </div>
           </div>
 
@@ -867,6 +971,22 @@ export default function StorySection() {
 
         {/* ─── Styles ─── */}
         <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes floatNote1 {
+            0%, 100% { transform: translateY(0px) rotate(3deg); }
+            50%      { transform: translateY(-7px) rotate(6deg); }
+          }
+          @keyframes floatNote2 {
+            0%, 100% { transform: translateY(0px) rotate(-3deg); }
+            50%      { transform: translateY(7px) rotate(-6deg); }
+          }
+          .floating-note-1 {
+            animation: floatNote1 4.2s ease-in-out infinite;
+            will-change: transform;
+          }
+          .floating-note-2 {
+            animation: floatNote2 4.8s ease-in-out infinite;
+            will-change: transform;
+          }
           @keyframes scrollPulse {
             0%,100% { transform:scaleY(1); transform-origin:top; opacity:0.4; }
             50%     { transform:scaleY(1.5); opacity:1; }
