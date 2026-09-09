@@ -392,7 +392,7 @@ export default function ContactSection() {
 
       <div className="c-top">
         <div className="c-kicker">LET&apos;S CONNECT</div>
-        <h1 className="c-heading">Co-create <i>Your Story</i></h1>
+        <h2 className="c-heading">Co-create <i>Your Story</i></h2>
         <p className="c-intro">
           Your wedding deserves more than a booking form. Choose the way you want to connect
           and let&apos;s start turning your celebration into a story worth remembering.

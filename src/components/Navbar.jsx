@@ -330,7 +330,7 @@ export default function Navbar() {
             }}>
               <Image
                 src="/1.jpg"
-                alt="Shaadi Pitara"
+                alt="Shaadi Pitara — Cinematic Wedding Reels & Content Studio Logo"
                 fill
                 sizes="28px"
                 style={{ objectFit: "cover" }}

@@ -176,7 +176,7 @@ export default function TestimonialsSection() {
               }}>
                 <img
                   src={t.image}
-                  alt={t.name}
+                  alt={`${t.name} wedding couple review (${t.location})`}
                   loading="lazy"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />

@@ -207,7 +207,7 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
             >
               <img
                 src={reel.poster}
-                alt={reel.title}
+                alt={`${reel.title} — ${reel.couple || 'Wedding'} reel by Shaadi Pitara`}
                 draggable={false}
                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
               />

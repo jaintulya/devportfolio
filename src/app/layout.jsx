@@ -1,7 +1,7 @@
 import './globals.css';
 
 export const metadata = {
-  metadataBase: new URL("https://shaadipitara.vercel.app"),
+  metadataBase: new URL("https://www.shaadipitara.in"),
   title: 'Shaadi Pitara — Cinematic Wedding Reels & Content | Ahmedabad',
   description: 'Shaadi Pitara crafts cinematic wedding reels, couple stories, live stories, and Instagram content from Ahmedabad. Premium wedding storytelling by Devarsh Jain.',
   icons: {
@@ -39,7 +39,7 @@ export const metadata = {
     description: 'Premium wedding reels, live stories, and social-first storytelling from Ahmedabad. We tell your story the way it deserves to be told.',
     type: 'website',
     locale: 'en_IN',
-    url: 'https://shaadipitara.vercel.app',
+    url: 'https://www.shaadipitara.in',
     siteName: 'Shaadi Pitara',
     images: [
       {
@@ -68,29 +68,50 @@ export const metadata = {
     },
   },
   alternates: {
-    canonical: 'https://shaadipitara.vercel.app',
+    canonical: '/',
   },
 };
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  '@id': 'https://shaadipitara.vercel.app',
+  '@type': ['LocalBusiness', 'ProfessionalService'],
+  '@id': 'https://www.shaadipitara.in/#business',
   name: 'Shaadi Pitara',
-  description: 'Cinematic wedding reel and content studio based in Ahmedabad, Gujarat.',
-  url: 'https://shaadipitara.vercel.app',
+  alternateName: 'Content Ka Pitara',
+  legalName: 'Shaadi Pitara',
+  description: 'Cinematic wedding reels, couple stories, live stories, and Instagram content studio based in Ahmedabad, Gujarat. Premium wedding storytelling by Devarsh Jain.',
+  url: 'https://www.shaadipitara.in',
+  logo: 'https://www.shaadipitara.in/logo.jpg',
+  image: 'https://www.shaadipitara.in/logo.jpg',
   founder: {
     '@type': 'Person',
     name: 'Devarsh Jain',
+    jobTitle: 'Founder & Creative Director',
     url: 'https://www.instagram.com/shaadi.pitara',
   },
+  telephone: '+91-9377150889',
+  email: 'shaadi.pitaraa@gmail.com',
+  priceRange: '₹₹ - ₹₹₹',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Ahmedabad',
     addressRegion: 'Gujarat',
     addressCountry: 'IN',
   },
-  areaServed: ['Ahmedabad', 'Gujarat', 'India'],
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 23.0225,
+    longitude: 72.5714,
+  },
+  areaServed: [
+    { '@type': 'City', name: 'Ahmedabad' },
+    { '@type': 'AdministrativeArea', name: 'Gujarat' },
+    { '@type': 'City', name: 'Udaipur' },
+    { '@type': 'City', name: 'Jaipur' },
+    { '@type': 'City', name: 'Goa' },
+    { '@type': 'City', name: 'Mumbai' },
+    { '@type': 'Country', name: 'India' },
+  ],
   serviceType: [
     'Wedding Reel',
     'Cinematic Wedding Video',
@@ -102,11 +123,13 @@ const jsonLd = {
     'Wedding Page Management',
     'Live Reels',
     'Instant Reels',
+    'Destination Wedding Content',
   ],
   contactPoint: [
     {
       '@type': 'ContactPoint',
       telephone: '+91-9377150889',
+      email: 'shaadi.pitaraa@gmail.com',
       contactType: 'customer service',
       availableLanguage: ['English', 'Hindi', 'Gujarati'],
     },
@@ -121,9 +144,10 @@ const jsonLd = {
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': 'https://www.shaadipitara.in/#organization',
   name: 'Shaadi Pitara',
-  url: 'https://shaadipitara.vercel.app',
-  logo: 'https://shaadipitara.vercel.app/logo.jpg',
+  url: 'https://www.shaadipitara.in',
+  logo: 'https://www.shaadipitara.in/logo.jpg',
   sameAs: [
     'https://www.instagram.com/shaadi.pitara',
     'https://youtube.com/@shaadi.pitara',
@@ -132,6 +156,7 @@ const organizationJsonLd = {
   founder: {
     '@type': 'Person',
     name: 'Devarsh Jain',
+    url: 'https://www.instagram.com/shaadi.pitara',
   },
 };
 
@@ -147,8 +172,9 @@ export default function RootLayout({ children }) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#2E0A0D" />
-        <meta name="description" content="Shaadi Pitara crafts cinematic wedding reels, couple stories, live stories, and Instagram content from Ahmedabad. Premium wedding storytelling by Devarsh Jain." />
-        <link rel="canonical" href="https://shaadipitara.vercel.app" />
+        <link rel="preload" as="image" href="/herobg.png" media="(min-width: 1025px)" fetchPriority="high" />
+        <link rel="preload" as="image" href="/herobgtablet.png" media="(min-width: 641px) and (max-width: 1024px)" fetchPriority="high" />
+        <link rel="preload" as="image" href="/herobgphone.png" media="(max-width: 640px)" fetchPriority="high" />
         <link rel="manifest" href="/manifest.json" />
         <script
           type="application/ld+json"

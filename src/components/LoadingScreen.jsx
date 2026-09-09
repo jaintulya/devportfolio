@@ -73,7 +73,7 @@ export default function LoadingScreen({ onComplete }) {
         <div className="preloader-line" />
 
         {/* Brand name */}
-        <h1 className="preloader-text">SHAADI PITARA</h1>
+        <div className="preloader-text">SHAADI PITARA</div>
 
         {/* Sub-label */}
         <p className="preloader-sub">Wedding Content Studio</p>

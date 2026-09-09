@@ -183,7 +183,7 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
           >
             <img
               src={item.poster}
-              alt={item.title}
+              alt={`${item.title} — ${item.category} wedding reel for ${item.couple} (${item.location}) by Shaadi Pitara`}
               loading="lazy"
               decoding="async"
               draggable={false}
@@ -483,7 +483,7 @@ export default function WorkPage() {
                           overflow: "hidden", cursor: "pointer", border: "1px solid rgba(212,184,150,0.15)",
                         }}
                       >
-                        <img src={item.poster} alt={item.title} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <img src={item.poster} alt={`${item.title} — ${item.category} wedding reel for ${item.couple} by Shaadi Pitara`} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         {/* Play button */}
                         <button
                           type="button"

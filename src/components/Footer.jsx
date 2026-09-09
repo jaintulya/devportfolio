@@ -37,7 +37,7 @@ export default function Footer() {
           <div style={{ maxWidth: 400 }}>
             <div style={{ marginBottom: 18, display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ position: "relative", width: 38, height: 38, borderRadius: 8, overflow: "hidden" }}>
-                <Image src="/1.jpg" alt="Shaadi Pitara" fill sizes="38px" style={{ objectFit: "cover" }} />
+                <Image src="/1.jpg" alt="Shaadi Pitara — Cinematic Wedding Reels & Content Studio Logo" fill sizes="38px" style={{ objectFit: "cover" }} />
               </div>
               <span style={{
                 fontFamily: "var(--font-display, serif)",

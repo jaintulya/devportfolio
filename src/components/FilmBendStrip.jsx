@@ -63,7 +63,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
           >
             <img
               src={reel.poster}
-              alt={reel.title}
+              alt={`${reel.title} — ${reel.couple || 'Wedding'} reel by Shaadi Pitara`}
               loading="lazy"
               decoding="async"
               style={{
@@ -396,7 +396,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
                 transform: "translate(-50%,-50%) scale(0.5)", // shrink extra cards out of view
               }}
             >
-              <img src={reel.poster} alt="" loading="lazy" decoding="async" style={{
+              <img src={reel.poster} alt={`${reel.title} — ${reel.couple || 'Wedding'} reel by Shaadi Pitara`} loading="lazy" decoding="async" style={{
                 width: "100%", height: "100%", objectFit: "cover",
                 transition: "transform 0.7s cubic-bezier(.23,1,.32,1), filter 0.5s ease",
                 transform: isCenter ? "scale(1)" : "scale(1.06)",

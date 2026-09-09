@@ -412,7 +412,7 @@ export default function MobileMemoryStack() {
                   >
                     <img
                       src="/devimg.jpeg"
-                      alt="Devarsh Jain"
+                      alt="Devarsh Jain — Founder and Wedding Content Creator at Shaadi Pitara"
                       style={{
                         width: "100%",
                         height: "100%",

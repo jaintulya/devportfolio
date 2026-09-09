@@ -223,12 +223,12 @@ export default function StorySection() {
             }}>
               THE STORY BEHIND SHAADI PITARA
             </div>
-            <h1 className="c-heading" style={{
+            <h2 className="c-heading" style={{
               margin: "0 0 24px",
               lineHeight: 0.88,
             }}>
               How Shaadi<br /><i>Pitara started.</i>
-            </h1>
+            </h2>
             <p className="jreveal" style={{
               maxWidth: 440,
               color: "rgba(210,179,168,0.80)",
@@ -277,7 +277,7 @@ export default function StorySection() {
           >
             <img
               src="/beginningright.png"
-              alt="The Beginning"
+              alt="Wedding celebration moment on camera — Shaadi Pitara origin story"
               crossOrigin="anonymous"
               loading="lazy"
               decoding="async"
@@ -413,7 +413,7 @@ export default function StorySection() {
           }}>
             <img
               src="/storylastright.png"
-              alt="The Beginning - Capturing moments"
+              alt="Cinematic wedding storytelling frame — Shaadi Pitara"
               loading="lazy"
               decoding="async"
               style={{
@@ -871,7 +871,7 @@ export default function StorySection() {
               >
                 <img
                   src="/devimg.jpeg"
-                  alt="Devarsh Jain - Founder of Shaadi Pitara"
+                  alt="Devarsh Jain — Founder and Wedding Content Creator at Shaadi Pitara Ahmedabad"
                   loading="lazy"
                   decoding="async"
                   style={{
