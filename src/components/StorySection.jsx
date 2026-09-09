@@ -51,14 +51,13 @@ export default function StorySection() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   /* Story hero refs */
+  const rootRef           = useRef(null);
   const storyHeroRef      = useRef(null);
   const orbitRef          = useRef(null);
-  const orbitRaf          = useRef(null);
 
   /* Pinned scene refs */
   const headRef           = useRef(null);
   const sceneRef          = useRef(null);
-  const filmRef           = useRef(null);
   const note1Ref          = useRef(null);
   const note2Ref          = useRef(null);
 
@@ -77,28 +76,6 @@ export default function StorySection() {
     return () => mq.removeEventListener?.("change", handler);
   }, []);
 
-  /* ─── IntersectionObserver for .jreveal ─── */
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    document.querySelectorAll(".jreveal").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  /* ─── Mouse parallax tilt on orbit container removed to improve performance ─── */
-  useEffect(() => {
-    // Parallax tilt effect removed to prevent lag and excessive re-renders.
-  }, []);
-
   /* ══════════════════════════════════════════
      GSAP — SCROLL-DRIVEN ANIMATIONS
      ══════════════════════════════════════════ */
@@ -106,67 +83,56 @@ export default function StorySection() {
     const ctx = gsap.context(() => {
       /* ── Story hero heading reveal ── */
       if (storyHeroRef.current) {
-        gsap.from(storyHeroRef.current, {
-          y: 44, opacity: 0, duration: 1, ease: "power3.out",
-          scrollTrigger: { trigger: storyHeroRef.current, start: "top 80%" },
+        gsap.from(storyHeroRef.current.children, {
+          y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
+          stagger: 0.12,
+          scrollTrigger: { trigger: storyHeroRef.current, start: "top 85%" },
         });
       }
 
-      /* ── Film 3D travel on scroll ── */
-      if (filmRef.current && !reducedMotion) {
-        gsap.fromTo(filmRef.current,
-          { rotateY: -13, rotateX: 4, y: 0 },
-          {
-            rotateY: 8, rotateX: -8, y: -80,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sceneRef.current,
-              start: "top top",
-              end: "bottom top",
-              scrub: 1.5,
-            },
-          }
-        );
+      /* ── The Beginning reveal ── */
+      if (sceneRef.current) {
+        gsap.from(sceneRef.current.children, {
+          y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
+          stagger: 0.15,
+          scrollTrigger: { trigger: sceneRef.current, start: "top 85%" },
+        });
       }
 
-      /* ── Floating notes — independent depth parallax ── */
+      /* ── Floating notes subtle natural floating ── */
       [note1Ref, note2Ref].forEach((ref, i) => {
         if (!ref.current || reducedMotion) return;
-        const dir = i === 0 ? 1 : -1;
-        gsap.fromTo(ref.current,
-          { y: 0, x: 0, rotate: i === 0 ? 5 : -4 },
-          {
-            y: dir * -70, x: dir * 50,
-            rotate: i === 0 ? 14 : -12,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sceneRef.current,
-              start: "top top",
-              end: "bottom top",
-              scrub: 1.2,
-            },
-          }
-        );
+        gsap.to(ref.current, {
+          y: i === 0 ? -12 : 10,
+          rotation: i === 0 ? 8 : -7,
+          duration: 3 + i,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
       });
 
       /* ── Journey heading reveal ── */
       if (journeyHeadRef.current) {
         gsap.from(journeyHeadRef.current, {
-          y: 44, opacity: 0, duration: 1, ease: "power3.out",
-          scrollTrigger: { trigger: journeyHeadRef.current, start: "top 82%" },
+          y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
+          scrollTrigger: { trigger: journeyHeadRef.current, start: "top 85%" },
         });
       }
 
       /* ── Timeline stop staggered reveal ── */
-      document.querySelectorAll(".js-tstop").forEach((stop, i) => {
-        gsap.from(stop, {
-          y: 22, opacity: 0, duration: 0.7,
-          delay: i * 0.08,
-          ease: "power2.out",
-          scrollTrigger: { trigger: routeRef.current, start: "top 82%" },
-        });
-      });
-    }, headRef);
+      if (routeRef.current) {
+        const stops = routeRef.current.querySelectorAll(".js-tstop");
+        if (stops.length) {
+          gsap.from(stops, {
+            y: 20, opacity: 0, duration: 0.7,
+            stagger: 0.08,
+            ease: "power2.out",
+            scrollTrigger: { trigger: routeRef.current, start: "top 85%" },
+          });
+        }
+      }
+    }, rootRef);
 
     return () => ctx.revert();
   }, [reducedMotion]);
@@ -215,10 +181,15 @@ export default function StorySection() {
     <style>{`
       @media (max-width: 768px) { .desktop-story-section { display: none; } }
       @media (min-width: 769px) { .mobile-memory-stack { display: none; } }
+      .jreveal {
+        opacity: 1;
+        transform: none;
+      }
     `}</style>
     <div id="story">
     <div className="desktop-story-section">
     <section
+      ref={rootRef}
       className="journey-section"
       style={{ position: "relative", color: "var(--brand-maroon-dark)", overflow: "hidden" }}
     >
@@ -333,126 +304,120 @@ export default function StorySection() {
           PART 2 — THE BEGINNING  (pinned 3D scene)
           Solid dark background — cream text always readable
          ═══════════════════════════════════ */}
+      {/* ═══════════════════════════════════
+          PART 2 — THE BEGINNING
+          Solid dark background — cream text always readable
+         ═══════════════════════════════════ */}
       <div
         id="story-begin"
         ref={sceneRef}
         style={{
           position: "relative",
-          minHeight: "260vh",
           background: "#3A0B0E",
           color: "var(--brand-cream)",
-          overflow: "visible",   /* allow floating notes + Hindi text to breathe */
+          display: "grid",
+          placeItems: "center",
+          padding: "clamp(80px, 10vw, 140px) clamp(16px, 6vw, 80px)",
         }}
       >
-        {/* Sticky viewport */}
         <div style={{
-          position: "sticky", top: 0, height: "100vh",
-          display: "grid", placeItems: "center",
-          overflow: "visible",
-          padding: "clamp(24px, 5vh, 60px) 0",
+          width: "min(1180px, 88vw)",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "clamp(32px, 6vw, 80px)",
+          alignItems: "center",
+          perspective: "1600px",
         }}>
-          <div style={{
-            width: "min(1180px, 88vw)",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "clamp(32px, 6vw, 80px)",
-            alignItems: "start",
-            perspective: "1600px",
-            paddingBottom: "clamp(80px, 14vh, 180px)",  /* bottom gap — Hindi text + maroon space below */
-          }}>
-            {/* Left — narrative */}
-            <div
-              ref={headRef}
-              className="jreveal"
-              style={{
-                transformStyle: "flat",
-                position: "relative",
-                zIndex: 20,
-                paddingTop: "clamp(20px, 4vh, 40px)",
-              }}
-            >
-              <div className="jreveal" style={{
-                fontFamily: "var(--font-mono)", fontSize: 10,
-                letterSpacing: "0.14em", textTransform: "uppercase",
-                color: "#c9aa9e", display: "block", marginBottom: 16,
-              }}>THE BEGINNING</div>
-              <h2 style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontWeight: 500,
-                fontSize: "clamp(48px, 7vw, 105px)",
-                lineHeight: 0.84,
-                letterSpacing: "-0.04em",
-                margin: "0 0 24px",
-                color: "var(--brand-cream)",
-              }}>
-                Something done for fun became{" "}
-                <span style={{ color: "#d4b3a8", fontStyle: "italic" }}>something more.</span>
-              </h2>
-              <p style={{ maxWidth: 480, color: "#d2b3a8", fontSize: 15, lineHeight: 1.9, margin: "0 0 14px" }}>
-                I would shoot almost anything that caught my attention, put it together
-                on Snapchat, edit it and share it. Soon my friends started noticing.
-              </p>
-              <p style={{
-                maxWidth: 480, color: "#d2b3a8", fontSize: 18, lineHeight: 1.9,
-                margin: "0 0 clamp(40px, 8vh, 100px)",
-              }}>
-                Whenever something happened, I heard:{" "}
-                <span style={{
-                  color: "#fff6e7", fontWeight: 500, fontStyle: "italic",
-                  fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 21,
-                }}>
-                  "Tu hi story laga diya kar, tu achhe se edit karta hai."
-                </span>
-              </p>
-            </div>
-
-            {/* Right — devimg, smaller, right side */}
-            <div style={{
+          {/* Left — narrative */}
+          <div
+            ref={headRef}
+            style={{
               position: "relative",
-              width: "clamp(200px, 28vw, 360px)",
-              height: "clamp(300px, 50vh, 560px)",
-              marginLeft: "auto",
-              marginTop: 40,
-              transformStyle: "preserve-3d",
-              perspective: "1400px",
-              overflow: "visible",
+              zIndex: 20,
+            }}
+          >
+            <div style={{
+              fontFamily: "var(--font-mono)", fontSize: 10,
+              letterSpacing: "0.14em", textTransform: "uppercase",
+              color: "#c9aa9e", display: "block", marginBottom: 16,
+            }}>THE BEGINNING</div>
+            <h2 style={{
+              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontWeight: 500,
+              fontSize: "clamp(48px, 7vw, 105px)",
+              lineHeight: 0.84,
+              letterSpacing: "-0.04em",
+              margin: "0 0 24px",
+              color: "var(--brand-cream)",
             }}>
-              <img
-                src="/devimg.jpeg"
-                alt="The Beginning"
-                crossOrigin="anonymous"
-                style={{
-                  position:"absolute",inset:0,width:"100%",height:"100%",
-                  objectFit:"cover",display:"block",borderRadius:8,
-                }}
-              />
-              {/* Floating note 1 */}
-              <div
-                ref={note1Ref}
-                style={{
-                  position:"absolute",right:"-35px",top:"10px",
-                  padding:"13px 16px",
-                  background:"var(--brand-cream)",color:"var(--brand-maroon-dark)",
-                  boxShadow:"0 18px 45px rgba(0,0,0,0.25)",
-                  fontFamily:"'Cormorant Garamond',Georgia,serif",
-                  fontSize:20,lineHeight:1.2,fontWeight:500,
-                  maxWidth:170,whiteSpace:"nowrap",
-              }}>"I loved doing it."</div>
-              {/* Floating note 2 */}
-              <div
-                ref={note2Ref}
-                style={{
-                  position:"absolute",left:"-25px",bottom:"10px",
-                  padding:"13px 16px",
-                  background:"var(--brand-cream)",color:"var(--brand-maroon-dark)",
-                  boxShadow:"0 18px 45px rgba(0,0,0,0.25)",
-                  fontFamily:"'Cormorant Garamond',Georgia,serif",
-                  fontSize:20,lineHeight:1.2,fontWeight:500,
-                  whiteSpace:"nowrap",
-              }}>fun → passion</div>
-            </div>
+              Something done for fun became{" "}
+              <span style={{ color: "#d4b3a8", fontStyle: "italic" }}>something more.</span>
+            </h2>
+            <p style={{ maxWidth: 480, color: "#d2b3a8", fontSize: 15, lineHeight: 1.9, margin: "0 0 14px" }}>
+              I would shoot almost anything that caught my attention, put it together
+              on Snapchat, edit it and share it. Soon my friends started noticing.
+            </p>
+            <p style={{
+              maxWidth: 480, color: "#d2b3a8", fontSize: 18, lineHeight: 1.9,
+              margin: 0,
+            }}>
+              Whenever something happened, I heard:{" "}
+              <span style={{
+                color: "#fff6e7", fontWeight: 500, fontStyle: "italic",
+                fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 21,
+              }}>
+                "Tu hi story laga diya kar, tu achhe se edit karta hai."
+              </span>
+            </p>
+          </div>
+
+          {/* Right — devimg, right side */}
+          <div style={{
+            position: "relative",
+            width: "clamp(200px, 28vw, 360px)",
+            height: "clamp(300px, 50vh, 560px)",
+            marginLeft: "auto",
+            transformStyle: "preserve-3d",
+            perspective: "1400px",
+          }}>
+            <img
+              src="/devimg.jpeg"
+              alt="The Beginning"
+              crossOrigin="anonymous"
+              style={{
+                position:"absolute",inset:0,width:"100%",height:"100%",
+                objectFit:"cover",display:"block",borderRadius:8,
+              }}
+            />
+            {/* Floating note 1 */}
+            <div
+              ref={note1Ref}
+              style={{
+                position:"absolute",right:"-35px",top:"10px",
+                padding:"13px 16px",
+                background:"var(--brand-cream)",color:"var(--brand-maroon-dark)",
+                boxShadow:"0 18px 45px rgba(0,0,0,0.25)",
+                fontFamily:"'Cormorant Garamond',Georgia,serif",
+                fontSize:20,lineHeight:1.2,fontWeight:500,
+                maxWidth:170,whiteSpace:"nowrap",
+                zIndex: 10,
+            }}>"I loved doing it."</div>
+            {/* Floating note 2 */}
+            <div
+              ref={note2Ref}
+              style={{
+                position:"absolute",left:"-25px",bottom:"10px",
+                padding:"13px 16px",
+                background:"var(--brand-cream)",color:"var(--brand-maroon-dark)",
+                boxShadow:"0 18px 45px rgba(0,0,0,0.25)",
+                fontFamily:"'Cormorant Garamond',Georgia,serif",
+                fontSize:20,lineHeight:1.2,fontWeight:500,
+                whiteSpace:"nowrap",
+                zIndex: 10,
+            }}>fun → passion</div>
           </div>
         </div>
+      </div>
 
         {/* ═══════════════════════════════════
             PART 3 — THE JOURNEY  (timeline with tdha curved line)
@@ -960,7 +925,6 @@ export default function StorySection() {
             .mobile-story-section { display: none !important; }
           }
         ` }} />
-      </div>
     </section>
     </div>
 

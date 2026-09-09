@@ -105,6 +105,7 @@ export default function Footer() {
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 14 }}>
               {[
                 { label: "Home", href: "/" },
+                { label: "Work", href: "/work" },
                 { label: "Full Work Showcase", href: "/works" },
                 { label: "Services & Offerings", href: "/#services" },
                 { label: "Our Story", href: "/#story" },

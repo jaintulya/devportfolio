@@ -451,19 +451,57 @@ export default function WorkPage() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: isMobile ? 0 : 48,
+              gap: isMobile ? 0 : 44,
               width: "100%",
-              maxWidth: isMobile ? "min(340px, 92vw)" : 900,
+              maxWidth: isMobile ? "min(360px, 94vw)" : 880,
               maxHeight: isMobile ? "calc(100svh - 20px)" : "90vh",
               flexDirection: isMobile ? "column" : "row",
               overflow: "hidden",
-              background: isMobile ? "#120306" : "transparent",
-              borderRadius: 16,
-              border: isMobile ? "1px solid rgba(212,184,150,0.25)" : "none",
-              boxShadow: isMobile ? "0 24px 60px rgba(0,0,0,0.85), 0 0 0 1px rgba(212,184,150,0.1)" : "none",
+              background: "linear-gradient(145deg, #180306 0%, #0d0103 100%)",
+              borderRadius: isMobile ? 18 : 24,
+              border: "1.5px solid rgba(212,184,150,0.26)",
+              boxShadow: "0 35px 90px rgba(0,0,0,0.92), 0 0 0 1px rgba(212,184,150,0.12)",
               position: "relative",
+              padding: isMobile ? 0 : "36px 40px",
             }}
           >
+            {/* Desktop Top Right Close Button */}
+            {!isMobile && (
+              <button
+                onClick={closeModal}
+                aria-label="Close modal"
+                style={{
+                  position: "absolute",
+                  top: 20,
+                  right: 20,
+                  zIndex: 50,
+                  width: 38,
+                  height: 38,
+                  borderRadius: "50%",
+                  background: "rgba(212,184,150,0.08)",
+                  border: "1px solid rgba(212,184,150,0.22)",
+                  color: "var(--brand-cream)",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "all 0.25s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(212,184,150,0.2)";
+                  e.currentTarget.style.transform = "scale(1.06)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(212,184,150,0.08)";
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+
             {/* Mobile Top Bar */}
             {isMobile && (
               <div style={{
@@ -507,14 +545,15 @@ export default function WorkPage() {
             {/* Iframe panel */}
             <div style={{
               position: "relative", flexShrink: 0,
-              width: isMobile ? "100%" : "min(380px, 42vw)",
-              height: isMobile ? "clamp(220px, 44svh, 320px)" : "auto",
+              width: isMobile ? "100%" : "min(360px, 38vw)",
+              height: isMobile ? "clamp(340px, 58svh, 480px)" : "auto",
               aspectRatio: isMobile ? "auto" : "9/16",
-              maxHeight: isMobile ? "44svh" : "85vh",
+              maxHeight: isMobile ? "58svh" : "80vh",
               borderRadius: isMobile ? 0 : 16,
               overflow: "hidden", background: "#000",
               display: "flex", justifyContent: "center", alignItems: "center",
-              boxShadow: isMobile ? "none" : "0 40px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,184,150,0.12)",
+              border: isMobile ? "none" : "1px solid rgba(212,184,150,0.2)",
+              boxShadow: isMobile ? "none" : "0 24px 60px rgba(0,0,0,0.75)",
             }}>
               <div style={{
                 width: isMobile ? "auto" : "100%",
@@ -542,17 +581,6 @@ export default function WorkPage() {
               width: "100%",
               background: isMobile ? "rgba(18,3,6,0.95)" : "transparent",
             }}>
-              {!isMobile && (
-                <button onClick={closeModal} style={{
-                  alignSelf: "flex-end", marginBottom: 28,
-                  width: 38, height: 38, borderRadius: "50%",
-                  background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.18)",
-                  color: "var(--brand-cream)", cursor: "pointer",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 6L6 18M6 6l12 12" /></svg>
-                </button>
-              )}
 
               {!isMobile && (
                 <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.3em", color: "rgba(212,184,150,0.4)", marginBottom: 20, textTransform: "uppercase" }}>

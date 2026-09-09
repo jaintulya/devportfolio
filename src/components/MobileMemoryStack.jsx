@@ -189,14 +189,20 @@ export default function MobileMemoryStack() {
                   y: yOffset,
                   opacity: opacity,
                   rotate: isTop ? 0 : initialRotation,
-                  z: -depthIndex * 50
+                  z: -depthIndex * 50,
+                  transition: {
+                    type: "spring",
+                    stiffness: 280,
+                    damping: 30,
+                    mass: 0.8,
+                  }
                 }}
                 exit={{ 
                   x: exitDirection === "left" ? -400 : exitDirection === "right" ? 400 : 0, 
                   y: exitDirection === "top" ? -400 : exitDirection === "bottom" ? 400 : 0,
                   opacity: 0, 
                   rotate: exitDirection === "left" ? -15 : exitDirection === "right" ? 15 : exitDirection === "top" ? -5 : 5,
-                  transition: { duration: 0.35, ease: "easeOut" }
+                  transition: { duration: 0.3, ease: [0.23, 1, 0.32, 1] }
                 }}
                 whileDrag={{ scale: 0.98, rotate: exitDirection === "left" || exitDirection === "top" ? -3 : 3, cursor: "grabbing" }}
                 style={{

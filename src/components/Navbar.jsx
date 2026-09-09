@@ -349,7 +349,7 @@ export default function Navbar() {
           <div className="nav-desktop-cta" style={{ display: "flex", alignItems: "center" }}>
             <button
               className="btn-primary"
-              onClick={() => go("#contact")}
+              onClick={() => go("/contact")}
               style={{
                 padding: "8px 18px",
                 fontSize: 9,

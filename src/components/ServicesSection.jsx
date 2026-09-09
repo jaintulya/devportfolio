@@ -110,12 +110,31 @@ export default function ServicesSection() {
           </p>
         </div>
 
-        {/* Cards grid — 2-col on desktop, single on mobile */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-          gap: "clamp(16px, 2vw, 24px)",
-        }}>
+        {/* Cards grid — 2-col on desktop and mobile (2x2), larger on tablet+ */}
+        <style>{`
+          .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: clamp(16px, 2vw, 24px);
+          }
+          @media (max-width: 640px) {
+            .services-grid {
+              grid-template-columns: repeat(2, 1fr);
+              gap: 10px;
+            }
+            .services-grid .card-light {
+              padding: 16px 14px !important;
+              gap: 8px !important;
+            }
+            .services-grid .card-light h3 {
+              font-size: 14px !important;
+            }
+            .services-grid .card-light .svc-desc {
+              display: none;
+            }
+          }
+        `}</style>
+        <div className="services-grid">
           {services.map((svc, i) => (
             <article
               key={svc.id}
@@ -164,7 +183,7 @@ export default function ServicesSection() {
                 {svc.tagline}
               </p>
 
-              <p style={{
+              <p className="svc-desc" style={{
                 fontFamily: "var(--font-body)",
                 fontSize: 14,
                 color: "rgba(58,13,16,0.6)",

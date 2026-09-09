@@ -145,15 +145,10 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
 
   const getRel = useCallback(
     (i) => {
-      let r = i - activeIndex;
       const len = reels.length;
-      if (len <= 7) {
-        if (r > 3) r -= len;
-        if (r < -3) r += len;
-      } else {
-        if (r > len / 2) r -= len;
-        if (r < -len / 2) r += len;
-      }
+      if (len === 0) return 0;
+      let r = ((i - activeIndex) % len + len) % len;
+      if (r > len / 2) r -= len;
       return r;
     },
     [activeIndex, reels.length]
@@ -170,11 +165,15 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
-        let rel = getRel(i);
-        if (rel > 3) rel -= reels.length;
-        if (rel < -3) rel += reels.length;
-        const slot = slots[rel + 3];
-        if (!slot) return;
+        const rel = getRel(i);
+        const slotIndex = rel + 3;
+        const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
+        if (!slot) {
+          card.style.opacity = "0";
+          card.style.pointerEvents = "none";
+          card.style.transform = "translate(-50%,-50%) scale(0.4)";
+          return;
+        }
 
         card.style.transition = transition;
         card.style.transform =
@@ -194,11 +193,14 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
-        let rel = getRel(i);
-        if (rel > 3) rel -= reels.length;
-        if (rel < -3) rel += reels.length;
-        const slot = slots[rel + 3];
-        if (!slot) return;
+        const rel = getRel(i);
+        const slotIndex = rel + 3;
+        const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
+        if (!slot) {
+          card.style.opacity = "0";
+          card.style.pointerEvents = "none";
+          return;
+        }
 
         const factor = Math.max(0.08, 1 - Math.abs(rel) * 0.12);
         const x = slot.x + dx * factor;
@@ -221,10 +223,9 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
-        let rel = getRel(i);
-        if (rel > 3) rel -= reels.length;
-        if (rel < -3) rel += reels.length;
-        const slot = slots[rel + 3];
+        const rel = getRel(i);
+        const slotIndex = rel + 3;
+        const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
         if (!slot) return;
 
         const shove = direction * 20 * (rel === 0 ? -1 : 0.15);
@@ -234,7 +235,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       });
 
       setTimeout(() => {
-        const next = Math.max(0, Math.min(reels.length - 1, prevIndex + direction));
+        const next = (prevIndex + direction + reels.length) % reels.length;
         setActiveIndex(next);
         applySlots(true);
       }, 140);
@@ -273,15 +274,13 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
 
     if (Math.abs(delta) > SWIPE_THRESHOLD) {
       const dir = delta < 0 ? 1 : -1;
-      const next = Math.max(0, Math.min(reels.length - 1, activeIndex + dir));
-      if (next !== activeIndex) playTransition(dir);
-      else applySlots(true);
+      playTransition(dir);
     } else {
       applySlots(true);
     }
 
     setDragState({ dragging: false, startX: 0, delta: 0 });
-  }, [dragState, activeIndex, reels.length, playTransition, applySlots]);
+  }, [dragState, playTransition, applySlots]);
 
   const onPointerCancel = useCallback(() => {
     setDragState({ dragging: false, startX: 0, delta: 0 });
@@ -292,18 +291,16 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
     const onKey = (e) => {
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        const next = Math.max(0, activeIndex - 1);
-        if (next !== activeIndex) playTransition(-1);
+        playTransition(-1);
       }
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        const next = Math.min(reels.length - 1, activeIndex + 1);
-        if (next !== activeIndex) playTransition(1);
+        playTransition(1);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [activeIndex, reels.length, playTransition]);
+  }, [playTransition]);
 
   useEffect(() => { applySlots(true); }, [reels, applySlots]);
 
@@ -354,9 +351,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         paddingBottom: "115%",
       }}>
         {reels.map((reel, i) => {
-          let rel = getRel(i);
-          if (rel > 3) rel -= reels.length;
-          if (rel < -3) rel += reels.length;
+          const rel = getRel(i);
           const isCenter = rel === 0;
 
           return (
@@ -404,6 +399,12 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
               {/* Centered Play Triangle Button */}
               <button
                 type="button"
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                }}
+                onPointerUp={(e) => {
+                  e.stopPropagation();
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (!isCenter) {
