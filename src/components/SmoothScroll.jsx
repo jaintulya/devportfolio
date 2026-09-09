@@ -14,6 +14,7 @@ export default function SmoothScroll({ children, onScroll }) {
   useEffect(() => {
     const lenis = new Lenis({ duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
     lenisRef.current = lenis;
+    if (typeof window !== 'undefined') window.__lenis = lenis;
     lenis.on('scroll', ({ progress, scroll }) => {
       ScrollTrigger.update();
       // Write to a mutable ref — no React re-renders per scroll tick

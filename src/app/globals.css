@@ -33,7 +33,9 @@
   --brand-off-white:      #F7E6CC;
 
   /* ── Typography ── */
-  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-serif-luxury: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-script: 'Parisienne', cursive;
   --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    'Space Mono', 'SF Mono', monospace;
 
@@ -54,7 +56,7 @@ body {
   font-family: var(--font-body);
   background: var(--brand-maroon-dark);
   color: var(--brand-cream);
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
@@ -70,6 +72,12 @@ body {
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--brand-maroon-dark); }
 ::-webkit-scrollbar-thumb { background: var(--brand-gold); border-radius: 2px; }
+
+/* Suppress accidental scrollbar artifacts on mobile / touch viewports */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+  * { scrollbar-width: none !important; -ms-overflow-style: none !important; }
+}
 
 /* ═══════════════════════════════════════════════════════════════════════
    KEYFRAME ANIMATIONS
@@ -709,14 +717,89 @@ html.lenis, html.lenis body { height: auto; }
    (1024px = lg — matches Tailwind default, enforced here for reliability)
    ═══════════════════════════════════════════════════════════════════════ */
 
-@media (max-width: 1023px) {
+@media (max-width: 1024px) {
   .nav-desktop-links { display: none !important; }
   .nav-desktop-cta  { display: none !important; }
   .nav-hamburger    { display: flex !important; }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
   .nav-desktop-links { display: flex !important; }
   .nav-desktop-cta  { display: block !important; }
   .nav-hamburger    { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   HERO SECTION — CINEMATIC LUXURY STYLES
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-anim-eyebrow {
+  opacity: 0;
+  animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+.hero-anim-headline {
+  opacity: 0;
+  animation: heroFadeUp 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+.hero-anim-script {
+  opacity: 0;
+  animation: heroFadeUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+.hero-anim-subtext {
+  opacity: 0;
+  animation: heroFadeUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+}
+
+.hero-anim-buttons {
+  opacity: 0;
+  animation: heroFadeUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.88s forwards;
+}
+
+/* Luxury Hero CTA Buttons */
+.hero-btn-primary {
+  background: #F7E6CC;
+  color: #2E0A0D;
+  border: 1px solid #F7E6CC;
+  box-shadow: 0 4px 24px rgba(247, 230, 204, 0.18);
+  font-family: var(--font-body);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-btn-primary:hover {
+  background: #FFFDF8;
+  color: #1A0507;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(247, 230, 204, 0.35);
+}
+
+.hero-btn-secondary {
+  background: rgba(26, 5, 7, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #F7E6CC;
+  border: 1px solid rgba(212, 184, 150, 0.45);
+  font-family: var(--font-body);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-btn-secondary:hover {
+  background: rgba(212, 184, 150, 0.15);
+  border-color: rgba(212, 184, 150, 0.85);
+  color: #FFFDF8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
 }

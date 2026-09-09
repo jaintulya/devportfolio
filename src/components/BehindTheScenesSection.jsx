@@ -230,7 +230,7 @@ export default function BehindTheScenesSection() {
       </div>
 
       {/* Mobile: single column */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media (max-width: 768px) {
           section#moments > div {
             display: block !important;
@@ -243,7 +243,7 @@ export default function BehindTheScenesSection() {
             grid-template-columns: 1fr !important;
           }
         }
-      `}</style>
+      ` }} />
     </section>
   );
 }

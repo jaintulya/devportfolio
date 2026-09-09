@@ -13,9 +13,16 @@ export default function Navbar() {
   const linkRefs = useRef({});
   const [menuReady, setMenuReady] = useState(false);
 
+  const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
-    const onScroll = () => {};
-    window.addEventListener("scroll", () => {}, { passive: true });
+    const onScroll = () => {
+      // Stay transparent while in the hero section; transition only when content section covers the hero
+      const heroHeight = typeof window !== "undefined" ? window.innerHeight : 800;
+      setScrolled(window.scrollY >= heroHeight - 70);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -29,73 +36,108 @@ export default function Navbar() {
     return () => ctx.revert();
   }, []);
 
-  // Active section tracking — single observer with narrow top detection band
+  // Robust scroll-spy: probe which section straddles the 35% viewport mark
+  // Works correctly in BOTH scroll directions (top→bottom and bottom→top)
   useEffect(() => {
-    const sectionIds = ["hero", "reels", "services", "story", "behind-the-scenes", "testimonials", "faq", "contact"];
-    const intersecting = new Map(); // el → id
+    if (typeof window === "undefined") return;
+
+    // Ordered list of sections with their URL path
+    // Sections listed in page order (top → bottom)
+    const SECTIONS = [
+      { id: "hero",         path: "/" },
+      { id: "reels",        path: "/work" },
+      { id: "services",     path: "/services" },
+      { id: "story",        path: "/story" },
+      { id: "testimonials", path: "/story" },   // stays on /story
+      { id: "faq",          path: "/story" },   // stays on /story
+      { id: "contact",      path: "/contact" },
+    ];
+
     let rafId;
+    let lastPath = window.location.pathname;
 
-    const pickActive = () => {
-      let best = null;
-      let bestTop = Infinity;
-      intersecting.forEach((id, el) => {
-        const top = el.getBoundingClientRect().top;
-        if (top < bestTop) { bestTop = top; best = id; }
-      });
-      if (best) setActiveSection(best);
-    };
+    const probe = () => {
+      const scrollY  = window.scrollY || window.pageYOffset;
+      const vh       = window.innerHeight;
+      const fullH    = document.documentElement.scrollHeight;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            intersecting.set(entry.target, entry.target.id);
-          } else {
-            intersecting.delete(entry.target);
-          }
-        });
-        cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(pickActive);
-      },
-      {
-        rootMargin: "-80px 0px -92% 0px",
-        threshold: 0,
+      // At very top → hero
+      if (scrollY < vh * 0.45) {
+        if (lastPath !== "/") {
+          lastPath = "/";
+          window.history.replaceState(null, "", "/");
+        }
+        setActiveSection("hero");
+        return;
       }
-    );
 
-    const onResize = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(pickActive);
+      // At very bottom → contact
+      if (scrollY + vh >= fullH - 60) {
+        if (lastPath !== "/contact") {
+          lastPath = "/contact";
+          window.history.replaceState(null, "", "/contact");
+        }
+        setActiveSection("contact");
+        return;
+      }
+
+      // Probe Y: 35% down the viewport
+      const probeY = Math.min(vh * 0.35, 260);
+
+      // Walk sections from bottom to top so the lowest one wins
+      let matched = null;
+      for (let i = SECTIONS.length - 1; i >= 0; i--) {
+        const { id } = SECTIONS[i];
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        // Section rect straddles the probe line
+        if (rect.top <= probeY && rect.bottom > probeY) {
+          matched = SECTIONS[i];
+          break;
+        }
+      }
+
+      // Fallback: find the last section whose top is above probe
+      if (!matched) {
+        for (let i = SECTIONS.length - 1; i >= 0; i--) {
+          const { id } = SECTIONS[i];
+          const el = document.getElementById(id);
+          if (!el) continue;
+          if (el.getBoundingClientRect().top <= probeY) {
+            matched = SECTIONS[i];
+            break;
+          }
+        }
+      }
+
+      if (matched) {
+        setActiveSection(matched.id);
+        if (lastPath !== matched.path) {
+          lastPath = matched.path;
+          window.history.replaceState(null, "", matched.path);
+        }
+      }
     };
 
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    window.addEventListener("resize", onResize);
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(probe);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // Also hook into Lenis if present
+    const lenis = window.__lenis;
+    if (lenis) lenis.on("scroll", probe);
+
+    probe(); // run once on mount
 
     return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+      if (lenis) lenis.off("scroll", probe);
       cancelAnimationFrame(rafId);
     };
   }, []);
-
-  // Update URL as section changes (clean paths, no #)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const sectionToPath = {
-      hero: "/",
-      reels: "/work",
-      services: "/services",
-      story: "/story",
-      contact: "/contact",
-    };
-    const newUrl = sectionToPath[activeSection] ?? "/";
-    if (window.location.pathname !== newUrl) {
-      window.history.replaceState(null, "", newUrl);
-    }
-  }, [activeSection]);
 
   // Mobile menu open/close
   useEffect(() => {
@@ -157,7 +199,7 @@ export default function Navbar() {
 
   return (
     <>
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .main-navbar {
           position: fixed;
           top: 16px;
@@ -185,11 +227,12 @@ export default function Navbar() {
           border-color: transparent !important;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
           .main-navbar {
-            position: sticky !important;
+            position: fixed !important;
             top: 0 !important;
             left: 0 !important;
+            right: 0 !important;
             transform: none !important;
             width: 100% !important;
             max-width: 100% !important;
@@ -197,28 +240,39 @@ export default function Navbar() {
             border: none !important;
             box-shadow: none !important;
             margin: 0 !important;
-            background: rgba(26, 5, 7, 0.45) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
+            /* Subtle frosted glass — always slightly visible, not transparent, not dark */
+            background: rgba(18, 3, 5, 0.45) !important;
+            backdrop-filter: blur(14px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+            border-bottom: 1px solid rgba(212, 184, 150, 0.06) !important;
+            transition: background 0.4s ease, backdrop-filter 0.4s ease, border-bottom 0.4s ease, box-shadow 0.4s ease;
+          }
+          .main-navbar.nav-scrolled {
+            /* After hero: slightly more opaque but still translucent — not pitch black */
+            background: rgba(22, 4, 6, 0.72) !important;
+            backdrop-filter: blur(20px) saturate(1.3) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(1.3) !important;
+            border-bottom: 1px solid rgba(212, 184, 150, 0.10) !important;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.25) !important;
           }
           .main-navbar.nav-transparent {
-            background: transparent !important;
-            border-bottom: none !important;
+            background: rgba(18, 3, 5, 0.45) !important;
+            border-bottom: 1px solid rgba(212, 184, 150, 0.06) !important;
             box-shadow: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
+            backdrop-filter: blur(14px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
           }
         }
 
         body.hide-navbar .main-navbar {
           display: none !important;
         }
-      `}</style>
+      ` }} />
       {/* Responsive sticky/fixed navbar */}
       <nav
         ref={navRef}
         aria-label="Main navigation"
-        className="main-navbar"
+        className={`main-navbar ${scrolled ? "nav-scrolled" : ""}`}
       >
         <div style={{
           display: "flex",

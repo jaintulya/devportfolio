@@ -80,6 +80,31 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
               background: "linear-gradient(to top, rgba(20,4,6,0.88) 0%, rgba(20,4,6,0.35) 35%, transparent 65%)",
             }} />
 
+            {/* Centered Play Button */}
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onOpen?.(reel); }}
+              aria-label={`Play ${reel.title}`}
+              style={{
+                position: "absolute", top: "50%", left: "50%",
+                transform: "translate(-50%,-50%)", zIndex: 6,
+                width: 48, height: 48, borderRadius: "50%",
+                background: "rgba(18, 3, 5, 0.72)",
+                border: "1.5px solid rgba(212,184,150,0.7)",
+                backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+                boxShadow: "0 6px 24px rgba(0,0,0,0.6)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                cursor: "pointer",
+                transition: "transform 0.3s ease, border-color 0.3s ease",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translate(-50%,-50%) scale(1.1)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translate(-50%,-50%) scale(1)"; }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand-cream)" style={{ marginLeft: 2 }}>
+                <polygon points="6 3 20 12 6 21 6 3" />
+              </svg>
+            </button>
+
             <div style={{
               position: "absolute", top: 8, right: 8, zIndex: 4, pointerEvents: "none",
               padding: "2px 7px", background: "rgba(10,2,3,0.7)", backdropFilter: "blur(6px)",
@@ -375,6 +400,35 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
                 position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
                 background: "linear-gradient(to top, rgba(20,4,6,0.9) 0%, rgba(20,4,6,0.4) 35%, rgba(20,4,6,0.05) 65%, transparent 100%)",
               }} />
+
+              {/* Centered Play Triangle Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!isCenter) {
+                    setActiveIndex(i);
+                    setTimeout(() => applySlots(true), 50);
+                  }
+                  onOpen?.(reel);
+                }}
+                aria-label={`Play ${reel.title}`}
+                style={{
+                  position: "absolute", top: "50%", left: "50%",
+                  transform: "translate(-50%,-50%)", zIndex: 6,
+                  width: 44, height: 44, borderRadius: "50%",
+                  background: "rgba(18, 3, 5, 0.75)",
+                  border: "1.5px solid rgba(212,184,150,0.75)",
+                  backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)",
+                  boxShadow: "0 6px 20px rgba(0,0,0,0.6)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="var(--brand-cream)" style={{ marginLeft: 2 }}>
+                  <polygon points="6 3 20 12 6 21 6 3" />
+                </svg>
+              </button>
 
 
               <div style={{

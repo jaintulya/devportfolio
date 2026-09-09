@@ -51,6 +51,18 @@ export default function Home() {
     }
   }, []);
 
+  const [heroActive, setHeroActive] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+      setHeroActive(window.scrollY < vh * 0.98);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const showWebgl = tier !== null && tier !== "off";
 
   return (
@@ -59,16 +71,123 @@ export default function Home() {
         {showWebgl && <R3FCanvas tier={tier} />}
         <FilmGrain />
         <Navbar />
-        <main id="main-content" style={{ position: "relative", zIndex: 1 }}>
-          <HeroSection />
-          <ReelShowcase />
-          <ServicesSection />
-          <StorySection />
-          <TestimonialsSection />
-          <FAQSection />
-          <ContactSection />
+        <main id="main-content" style={{ position: "relative", zIndex: 1, overflow: "visible" }}>
+          {/* 1. Rock-solid Fixed Hero Layer: Hidden once scrolled past hero to never bleed into footer */}
+          <div
+            id="hero-fixed-container"
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100svh",
+              zIndex: 1,
+              visibility: heroActive ? "visible" : "hidden",
+              pointerEvents: heroActive ? "auto" : "none",
+              opacity: heroActive ? 1 : 0,
+              transition: "opacity 0.2s ease, visibility 0.2s ease",
+            }}
+          >
+            <HeroSection />
+          </div>
+
+          {/* 2. Scroll Spacer: Exactly 100svh so the page scrolls 1 viewport height while content rises */}
+          <div
+            id="hero-scroll-spacer"
+            aria-hidden="true"
+            style={{
+              width: "100%",
+              height: "100svh",
+              visibility: "hidden",
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* 3. Layered Sections: Normal natural scroll inside sections, luxury elevation transition as each new section arrives */}
+          <div
+            id="content-sections"
+            className="section-layer"
+            style={{
+              position: "relative",
+              zIndex: 10,
+              backgroundColor: "#1A0507",
+              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+            }}
+          >
+            <ReelShowcase />
+          </div>
+
+          <div
+            className="section-layer"
+            style={{
+              position: "relative",
+              zIndex: 20,
+              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+            }}
+          >
+            <ServicesSection />
+          </div>
+
+          <div
+            className="section-layer"
+            style={{
+              position: "relative",
+              zIndex: 30,
+              backgroundColor: "#1A0507",
+              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+            }}
+          >
+            <StorySection />
+          </div>
+
+          <div
+            className="section-layer"
+            style={{
+              position: "relative",
+              zIndex: 40,
+              backgroundColor: "#1A0507",
+              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+            }}
+          >
+            <TestimonialsSection />
+          </div>
+
+          <div
+            className="section-layer"
+            style={{
+              position: "relative",
+              zIndex: 50,
+              backgroundColor: "#1A0507",
+              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+            }}
+          >
+            <FAQSection />
+          </div>
+
+          <div
+            className="section-layer"
+            style={{
+              position: "relative",
+              zIndex: 60,
+              backgroundColor: "#1A0507",
+              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+            }}
+          >
+            <ContactSection />
+          </div>
+
+          <div
+            className="section-layer"
+            style={{
+              position: "relative",
+              zIndex: 70,
+              backgroundColor: "#1A0507",
+              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+            }}
+          >
+            <Footer />
+          </div>
         </main>
-        <Footer />
       </SmoothScroll>
       <BookCTA />
     </>

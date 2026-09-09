@@ -117,7 +117,7 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="contact-3d-section" ref={stageRef}>
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .contact-3d-section {
           width: 100%;
           min-height: 100vh;
@@ -165,8 +165,7 @@ export default function ContactSection() {
         .copy-col { position: relative; z-index: 4; padding: 12px 10px; }
         .copy-label { color: rgba(214, 180, 119, 0.7); font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; margin-bottom: 20px; text-transform: uppercase; }
         .copy-col h2 {
-          margin: 0; max-width: 460px;
-          font-family: var(--font-display);
+          color: var(--brand-cream); font-family: var(--font-display);
           font-weight: 500; font-size: clamp(32px, 5vw, 68px); line-height: 0.9; letter-spacing: -0.035em;
         }
         .copy-col h2 span { color: var(--brand-gold); font-style: italic; font-weight: 400; }
@@ -174,7 +173,7 @@ export default function ContactSection() {
         .handwritten { margin-top: 34px; color: var(--brand-gold); font-family: var(--font-display); font-style: italic; font-size: 24px; transform: rotate(-3deg); display: inline-block; }
 
         .card-wall {
-          height: 520px; position: relative; transform-style: preserve-3d; transition: transform 0.18s ease-out;
+          height: 680px; position: relative; transform-style: preserve-3d; transition: transform 0.18s ease-out;
         }
 
         .card-3d {
@@ -194,19 +193,19 @@ export default function ContactSection() {
         @media (hover: hover) and (pointer: fine) {
           .card-3d:hover::before { transform: translateX(130%); }
           .card-3d:hover {
-            transform: translateZ(120px) rotateX(0) rotateY(0) !important;
+            transform: translateZ(180px) rotateX(0) rotateY(0) !important;
             box-shadow: 25px 35px 65px rgba(5,1,2,0.55), 0 0 35px rgba(214,180,119,0.15);
-            filter: saturate(1.05); z-index: 20 !important;
+            filter: saturate(1.05); z-index: 50 !important;
           }
         }
 
         /* Default desktop positions */
         .c1 { left: 0; top: 35px; transform: translateZ(55px) rotate(-7deg); z-index: 5; }
         .c2 { right: 0; top: 8px; transform: translateZ(5px) rotate(6deg); z-index: 4; }
-        .c3 { left: 18px; top: 220px; transform: translateZ(20px) rotate(5deg); z-index: 3; }
-        .c4 { right: 12px; top: 205px; transform: translateZ(70px) rotate(-5deg); z-index: 6; }
-        .c5 { left: 30px; bottom: 15px; transform: translateZ(10px) rotate(-5deg); z-index: 2; }
-        .c6 { right: 20px; bottom: 5px; transform: translateZ(48px) rotate(6deg); z-index: 5; }
+        .c3 { left: 18px; top: 260px; transform: translateZ(20px) rotate(5deg); z-index: 3; }
+        .c4 { right: 12px; top: 245px; transform: translateZ(70px) rotate(-5deg); z-index: 6; }
+        .c5 { left: 30px; bottom: 25px; transform: translateZ(10px) rotate(-5deg); z-index: 2; }
+        .c6 { right: 20px; bottom: 10px; transform: translateZ(48px) rotate(6deg); z-index: 5; }
 
         .card-num { position: absolute; right: 18px; top: 17px; color: #a68474; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; }
         .card-icon {
@@ -248,8 +247,8 @@ export default function ContactSection() {
         @media (max-width: 1000px) {
           .c-stage { grid-template-columns: 0.8fr 1.2fr; gap: 10px; }
           .card-3d { width: 215px; height: 165px; padding: 18px; }
-          .card-wall { height: 500px; }
-          .c1 { left: 0; } .c2 { right: 0; } .c3 { left: 5px; } .c4 { right: 0; } .c5 { left: 40px; } .c6 { right: 25px; }
+          .card-wall { height: 600px; }
+          .c1 { left: 0; } .c2 { right: 0; } .c3 { left: 5px; top: 240px; } .c4 { right: 0; top: 220px; } .c5 { left: 40px; bottom: 15px; } .c6 { right: 25px; bottom: 5px; }
         }
         @media (max-width: 780px) {
           .contact-3d-section { padding: 60px 20px 40px; }
@@ -266,6 +265,7 @@ export default function ContactSection() {
             position: relative; width: 100%; max-width: 320px; height: auto; padding: 24px; 
             margin: 0; transform: none !important; 
             transition: transform 0.3s ease, box-shadow 0.3s ease; 
+            top: auto !important; bottom: auto !important; left: auto !important; right: auto !important;
           }
           .card-3d:last-child { margin-bottom: 0; }
           .card-3d:hover { transform: translateY(-5px) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important; z-index: 10 !important; }
@@ -275,7 +275,7 @@ export default function ContactSection() {
         @media (prefers-reduced-motion: reduce) {
           .card-3d, .card-wall, .c-spark { transition: none !important; animation: none !important; transform: none !important; }
         }
-      `}</style>
+      ` }} />
 
       <div className="c-top">
         <div className="c-kicker">LET&apos;S CONNECT</div>

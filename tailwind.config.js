@@ -5,7 +5,9 @@ module.exports = {
     extend: {
       fontFamily: {
         display: ["'Cormorant Garamond'", 'serif'],
-        body: ["'Jost'", 'sans-serif'],
+        serif: ["'Cormorant Garamond'", "'Playfair Display'", 'serif'],
+        script: ["'Parisienne'", 'cursive'],
+        body: ["'Jost'", "'Inter'", 'sans-serif'],
         mono: ["'Space Mono'", 'monospace'],
       },
     },

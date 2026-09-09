@@ -216,9 +216,9 @@ export default function StorySection() {
       @media (max-width: 768px) { .desktop-story-section { display: none; } }
       @media (min-width: 769px) { .mobile-memory-stack { display: none; } }
     `}</style>
+    <div id="story">
     <div className="desktop-story-section">
     <section
-      id="story"
       className="journey-section"
       style={{ position: "relative", color: "var(--brand-maroon-dark)", overflow: "hidden" }}
     >
@@ -904,7 +904,7 @@ export default function StorySection() {
         </div>
 
         {/* ─── Styles ─── */}
-        <style>{`
+        <style dangerouslySetInnerHTML={{ __html: `
           @keyframes scrollPulse {
             0%,100% { transform:scaleY(1); transform-origin:top; opacity:0.4; }
             50%     { transform:scaleY(1.5); opacity:1; }
@@ -959,13 +959,14 @@ export default function StorySection() {
           @media (min-width: 769px) {
             .mobile-story-section { display: none !important; }
           }
-      `}</style>
+        ` }} />
       </div>
     </section>
     </div>
 
     <div className="mobile-story-section">
       <MobileMemoryStack />
+    </div>
     </div>
     </>
   );
