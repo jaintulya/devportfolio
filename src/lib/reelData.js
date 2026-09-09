@@ -19,9 +19,9 @@ export const reelData = [
   { id: "e1", category: "editorial", title: "Editorial Elegance", couple: "Priya & Arjun", location: "Udaipur", embedUrl: "https://www.instagram.com/reel/DQRPhyWE66b/", poster: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=1067&fit=crop", duration: "0:58" },
   { id: "e2", category: "editorial", title: "Royal Frame", couple: "Riya & Karan", location: "Jaipur", embedUrl: "https://www.instagram.com/reel/DS454BZE4MW/", poster: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&h=1067&fit=crop", duration: "1:02" },
   { id: "e3", category: "editorial", title: "Bridal Portrait", couple: "Aisha & James", location: "Ahmedabad", embedUrl: "https://www.instagram.com/reel/Dc3dGgDzLtL/", poster: "https://images.unsplash.com/photo-1610173827043-9db50e0d8ef9?w=600&h=1067&fit=crop", duration: "0:45" },
-  { id: "e4", category: "editorial", title: "Fashion Forward", couple: "Meera & Dev", location: "Mumbai", embedUrl: "https://www.instagram.com/reel/DXrM_3EEwZ5/", poster: "https://images.unsplash.com/photo-1722952934708-749c22eb2e58?w=600&h=1067&fit=crop", duration: "1:12" },
+  { id: "e4", category: "editorial", title: "Fashion Forward", couple: "Meera & Dev", location: "Mumbai", embedUrl: "https://www.instagram.com/reel/DXrM_3EEwZ5/", poster: "/thumbnails/fashion_forward.jpg", duration: "1:12" },
   { id: "e5", category: "editorial", title: "Golden Glow", couple: "Sanjana & Rohan", location: "Goa", embedUrl: "https://www.instagram.com/reel/DUDBhpoj8uIHkq8_HEJcCi1dHHBv-poTQ7GiZg0/", poster: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=1067&fit=crop", duration: "0:52" },
-  { id: "e6", category: "editorial", title: "Styled Together", couple: "Pooja & Harsh", location: "Vadodara", embedUrl: "https://www.instagram.com/reel/DT9boCsDD91/", poster: "https://images.unsplash.com/photo-1722952934661-dde241aeb591?w=600&h=1067&fit=crop", duration: "0:38" },
+  { id: "e6", category: "editorial", title: "Styled Together", couple: "Pooja & Harsh", location: "Vadodara", embedUrl: "https://www.instagram.com/reel/DT9boCsDD91/", poster: "/thumbnails/styled_together.jpg", duration: "0:38" },
 
   // Emotional
   { id: "em1", category: "emotional", title: "Tears of Joy", couple: "Tanvi & Siddharth", location: "Jodhpur", embedUrl: "https://www.instagram.com/reel/DaAmOPWMy0B/", poster: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600&h=1067&fit=crop", duration: "1:24" },
@@ -41,9 +41,9 @@ export const reelData = [
   { id: "d4", category: "decor", title: "Table Stories", couple: "Priya & Arjun", location: "Udaipur", embedUrl: "https://www.instagram.com/reel/DUYeBu1kih4/", poster: "https://images.unsplash.com/photo-1520342868574-5fa3804e551c?w=600&h=1067&fit=crop", duration: "0:36" },
 
   // Transition
-  { id: "tr1", category: "transition", title: "Smooth Cut 01", couple: "Riya & Karan", location: "Jaipur", embedUrl: "https://www.instagram.com/reel/DSEpAgpky09/", poster: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=1067&fit=crop", duration: "0:18" },
+  { id: "tr1", category: "transition", title: "Smooth Cut 01", couple: "Riya & Karan", location: "Jaipur", embedUrl: "https://www.instagram.com/reel/DSEpAgpky09/", poster: "/thumbnails/smooth_cut.jpg", duration: "0:18" },
   { id: "tr2", category: "transition", title: "Smooth Cut 02", couple: "Aisha & James", location: "Goa", embedUrl: "https://www.instagram.com/reel/DUsshqZgdNq/", poster: "https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?w=600&h=1067&fit=crop", duration: "0:22" },
-  { id: "tr3", category: "transition", title: "Seamless Flow", couple: "Meera & Dev", location: "Ahmedabad", embedUrl: "https://www.instagram.com/reel/DUfan5WDGJE/", poster: "https://images.unsplash.com/photo-1600685890506-593fdf55949b?w=600&h=1067&fit=crop", duration: "0:15" },
+  { id: "tr3", category: "transition", title: "Seamless Flow", couple: "Meera & Dev", location: "Ahmedabad", embedUrl: "https://www.instagram.com/reel/DUfan5WDGJE/", poster: "/thumbnails/seamless_flow.jpg", duration: "0:15" },
   { id: "tr4", category: "transition", title: "Scene Shift", couple: "Sanjana & Rohan", location: "Surat", embedUrl: "https://www.instagram.com/reel/DUS6ILPj0741wBpBRuEbnzcGiqfsSmiA099n6o0/", poster: "https://images.unsplash.com/photo-1727430256509-0f897d6f4765?w=600&h=1067&fit=crop", duration: "0:20" },
   { id: "tr5", category: "transition", title: "Morph Magic", couple: "Pooja & Harsh", location: "Vadodara", embedUrl: "https://www.instagram.com/reel/DUGl0GnjLdn/", poster: "https://images.unsplash.com/photo-1619734089700-842e56497353?w=600&h=1067&fit=crop", duration: "0:17" },
 
@@ -64,8 +64,8 @@ export const reelData = [
   { id: "m2", category: "moment", title: "Tearful Hug", couple: "Riya & Karan", location: "Jaipur", embedUrl: "https://www.instagram.com/reel/Dc8oiUWzPDF/", poster: "https://images.unsplash.com/photo-1595769816263-9b910be24d5f?w=600&h=1067&fit=crop", duration: "0:40" },
   { id: "m3", category: "moment", title: "Ring Exchange", couple: "Tanvi & Siddharth", location: "Jodhpur", embedUrl: "https://www.instagram.com/reel/DaSe9fpzmwK/", poster: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=1067&fit=crop", duration: "0:35" },
   { id: "m4", category: "moment", title: "Walking Together", couple: "Nidhi & Varun", location: "Ahmedabad", embedUrl: "https://www.instagram.com/reel/DV0MIl1jL6a/", poster: "https://images.unsplash.com/photo-1641279676778-3c94588147fd?w=600&h=1067&fit=crop", duration: "0:45" },
-  { id: "m5", category: "moment", title: "Parent Blessing", couple: "Aisha & James", location: "Goa", embedUrl: "https://www.instagram.com/reel/DUVh3hyjA8b/", poster: "https://images.unsplash.com/photo-1681717075175-19feb7a6f664?w=600&h=1067&fit=crop", duration: "0:52" },
-  { id: "m6", category: "moment", title: "Farewell Tears", couple: "Pooja & Harsh", location: "Vadodara", embedUrl: "https://www.instagram.com/reel/DUFhLHFj3Km27IQuSxqbNUp8zZHfeCtKrqV98s0/", poster: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=600&h=1067&fit=crop", duration: "0:48" },
+  { id: "m5", category: "moment", title: "Parent Blessing", couple: "Aisha & James", location: "Goa", embedUrl: "https://www.instagram.com/reel/DUVh3hyjA8b/", poster: "/thumbnails/parent_blessing.jpg", duration: "0:52" },
+  { id: "m6", category: "moment", title: "Farewell Tears", couple: "Pooja & Harsh", location: "Vadodara", embedUrl: "https://www.instagram.com/reel/DUFhLHFj3Km27IQuSxqbNUp8zZHfeCtKrqV98s0/", poster: "/thumbnails/farewell_tears.jpg", duration: "0:48" },
 ];
 
 export const instagramProfileUrl = "https://www.instagram.com/shaadi.pitara";

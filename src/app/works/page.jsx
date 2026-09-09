@@ -18,6 +18,272 @@ function getEmbedUrl(url) {
   return url.replace(/\/$/, "") + "/embed/";
 }
 
+function DesktopDraggableRow({ cat, catReels, openModal }) {
+  const rowRef = useRef(null);
+  const isDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragDistance = useRef(0);
+
+  const handleMouseDown = (e) => {
+    if (e.button !== 0 || !rowRef.current) return;
+    isDown.current = true;
+    dragDistance.current = 0;
+    startX.current = e.pageX - rowRef.current.offsetLeft;
+    scrollLeft.current = rowRef.current.scrollLeft;
+
+    const onMouseMove = (moveEvent) => {
+      if (!isDown.current || !rowRef.current) return;
+      const x = moveEvent.pageX - rowRef.current.offsetLeft;
+      const walk = (x - startX.current) * 1.35;
+      dragDistance.current = Math.abs(walk);
+      if (Math.abs(walk) > 4) {
+        setIsDragging(true);
+        rowRef.current.scrollLeft = scrollLeft.current - walk;
+      }
+    };
+
+    const onMouseUp = () => {
+      isDown.current = false;
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      setTimeout(() => {
+        setIsDragging(false);
+        dragDistance.current = 0;
+      }, 60);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+  };
+
+  const handleCardClick = (item) => {
+    if (dragDistance.current > 5) return;
+    openModal(item);
+  };
+
+  const scrollByAmount = (direction) => {
+    if (rowRef.current) {
+      const scrollAmt = rowRef.current.clientWidth * 0.72;
+      rowRef.current.scrollBy({ left: direction * scrollAmt, behavior: "smooth" });
+    }
+  };
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20, padding: "0 clamp(16px, 4vw, 48px)" }}>
+        <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(32px, 3.5vw, 42px)", fontWeight: 400, fontStyle: "italic", margin: 0, color: "var(--brand-cream)", letterSpacing: "0.02em" }}>
+          {cat.label}
+        </h3>
+        <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(212,184,150,0.3) 0%, transparent 100%)" }} />
+        
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {catReels.length > 4 && (
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(212,184,150,0.45)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+              Drag to view all
+            </span>
+          )}
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "rgba(212,184,150,0.6)", textTransform: "uppercase", letterSpacing: "0.15em" }}>
+            {catReels.length} Reels
+          </span>
+          {catReels.length > 4 && (
+            <div style={{ display: "flex", gap: 6, marginLeft: 6 }}>
+              <button
+                type="button"
+                onClick={() => scrollByAmount(-1)}
+                aria-label="Previous reels"
+                style={{
+                  width: 32, height: 32, borderRadius: "50%",
+                  background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.2)",
+                  color: "var(--brand-cream)", display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer", transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.18)"; e.currentTarget.style.borderColor = "var(--brand-gold)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.06)"; e.currentTarget.style.borderColor = "rgba(212,184,150,0.2)"; }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollByAmount(1)}
+                aria-label="Next reels"
+                style={{
+                  width: 32, height: 32, borderRadius: "50%",
+                  background: "rgba(212,184,150,0.06)", border: "1px solid rgba(212,184,150,0.2)",
+                  color: "var(--brand-cream)", display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer", transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.18)"; e.currentTarget.style.borderColor = "var(--brand-gold)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(212,184,150,0.06)"; e.currentTarget.style.borderColor = "rgba(212,184,150,0.2)"; }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Drag Strip Container */}
+      <div
+        ref={rowRef}
+        onMouseDown={handleMouseDown}
+        className="reel-drag-strip"
+        style={{
+          display: "flex",
+          gap: 20,
+          overflowX: "auto",
+          overflowY: "hidden",
+          padding: "8px clamp(16px, 4vw, 48px) 24px",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
+          cursor: isDragging ? "grabbing" : "grab",
+          userSelect: "none",
+          WebkitUserSelect: "none",
+        }}
+      >
+        <style>{`.reel-drag-strip::-webkit-scrollbar { display: none; }`}</style>
+        {catReels.map((item) => (
+          <article
+            key={item.id}
+            className="work-card"
+            onClick={() => handleCardClick(item)}
+            role="button"
+            tabIndex={0}
+            aria-label={`Watch ${item.title}`}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(item); } }}
+            style={{
+              flex: "0 0 calc((100% - 60px) / 4)",
+              minWidth: 240,
+              maxWidth: 285,
+              position: "relative",
+              aspectRatio: "9/16",
+              borderRadius: 12,
+              overflow: "hidden",
+              cursor: isDragging ? "grabbing" : "pointer",
+              background: "var(--brand-maroon-dark)",
+              border: "1px solid rgba(212,184,150,0.08)",
+              transition: isDragging ? "none" : "transform 0.5s cubic-bezier(0.23,1,0.32,1), border-color 0.5s ease, box-shadow 0.5s ease",
+            }}
+            onMouseEnter={(e) => {
+              if (isDragging) return;
+              e.currentTarget.style.transform = "scale(1.02)";
+              e.currentTarget.style.borderColor = "rgba(212,184,150,0.3)";
+              e.currentTarget.style.boxShadow = "0 24px 56px rgba(0,0,0,0.35)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.borderColor = "rgba(212,184,150,0.08)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            <img
+              src={item.poster}
+              alt={item.title}
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+              style={{
+                width: "100%", height: "100%",
+                objectFit: "cover",
+                pointerEvents: "none",
+                userSelect: "none",
+                WebkitUserDrag: "none",
+                transition: "transform 0.7s cubic-bezier(0.23,1,0.32,1)",
+              }}
+            />
+            <div style={{
+              position: "absolute", inset: 0,
+              background: "linear-gradient(to top, rgba(46,10,13,0.95) 0%, rgba(46,10,13,0.35) 45%, rgba(46,10,13,0.02) 100%)",
+              zIndex: 2, pointerEvents: "none",
+            }} />
+            
+            {/* Duration */}
+            <div style={{
+              position: "absolute", top: 14, right: 14,
+              zIndex: 5, pointerEvents: "none",
+              fontFamily: "var(--font-mono)", fontSize: 10,
+              letterSpacing: "0.15em",
+              color: "rgba(245,230,204,0.7)",
+              background: "rgba(46,10,13,0.6)",
+              backdropFilter: "blur(6px)",
+              padding: "4px 10px",
+              borderRadius: 4,
+              border: "1px solid rgba(212,184,150,0.15)",
+            }}>
+              {item.duration}
+            </div>
+
+            {/* Centered Play Triangle Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (dragDistance.current > 5) return;
+                openModal(item);
+              }}
+              aria-label={`Play ${item.title}`}
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 52,
+                height: 52,
+                borderRadius: "50%",
+                background: "rgba(10, 2, 3, 0.7)",
+                border: "1.5px solid rgba(212, 184, 150, 0.65)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 6,
+                cursor: "pointer",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.55)",
+                transition: "transform 0.3s ease, border-color 0.3s ease, background 0.3s ease",
+              }}
+              className="card-play-btn"
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translate(-50%, -50%) scale(1.1)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translate(-50%, -50%) scale(1)"; }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand-cream)" style={{ marginLeft: 2 }}>
+                <polygon points="6 3 20 12 6 21 6 3" />
+              </svg>
+            </button>
+
+            {/* Title + category */}
+            <div style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              padding: 24, zIndex: 3, pointerEvents: "none",
+            }}>
+              <div style={{
+                fontFamily: "var(--font-mono)", fontSize: 10,
+                letterSpacing: "0.25em", textTransform: "uppercase",
+                color: "var(--brand-gold)", marginBottom: 8,
+              }}>
+                {cat.label}
+              </div>
+              <div style={{
+                fontFamily: "var(--font-display)", fontSize: 20,
+                fontWeight: 600, color: "var(--brand-cream)", lineHeight: 1.2,
+              }}>
+                {item.title}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function WorkPage() {
   const [activeTab, setActiveTab] = useState("all");
   const [activeReel, setActiveReel] = useState(null);
@@ -167,7 +433,7 @@ export default function WorkPage() {
           Full Showcase
         </div>
         <h1 className="c-heading" style={{ margin: "14px 0 12px" }}>
-          Selected <i>Works</i>
+          Our <i>Works</i>
         </h1>
         <p style={{
           fontFamily: "var(--font-body)",
@@ -257,145 +523,12 @@ export default function WorkPage() {
               const catReels = reelData.filter((r) => r.category === cat.id);
               if (catReels.length === 0) return null;
               return (
-                <div key={cat.id}>
-                  {/* Header */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24, padding: "0 clamp(16px, 4vw, 48px)" }}>
-                    <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(32px, 3.5vw, 42px)", fontWeight: 400, fontStyle: "italic", margin: 0, color: "var(--brand-cream)", letterSpacing: "0.02em" }}>
-                      {cat.label}
-                    </h3>
-                    <div style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(212,184,150,0.3) 0%, transparent 100%)" }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "rgba(212,184,150,0.5)", textTransform: "uppercase", letterSpacing: "0.15em" }}>
-                      {catReels.length} Reels
-                    </span>
-                  </div>
-                  {/* Desktop Grid Wrapper */}
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                      gap: 24,
-                      padding: "0 clamp(16px, 4vw, 48px)"
-                    }}
-                  >
-                    {catReels.map((item) => (
-                      <article
-                        key={item.id}
-                        className="work-card"
-                        onClick={() => openModal(item)}
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Watch ${item.title}`}
-                        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(item); } }}
-                        style={{
-                          position: "relative",
-                          aspectRatio: "9/16",
-                          borderRadius: 12,
-                          overflow: "hidden",
-                          cursor: "pointer",
-                          background: "var(--brand-maroon-dark)",
-                          border: "1px solid rgba(212,184,150,0.08)",
-                          transition: "all 0.5s cubic-bezier(0.23,1,0.32,1)",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = "scale(1.02)";
-                          e.currentTarget.style.borderColor = "rgba(212,184,150,0.3)";
-                          e.currentTarget.style.boxShadow = "0 24px 56px rgba(0,0,0,0.35)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = "scale(1)";
-                          e.currentTarget.style.borderColor = "rgba(212,184,150,0.08)";
-                          e.currentTarget.style.boxShadow = "none";
-                        }}
-                      >
-                        <img
-                          src={item.poster}
-                          alt={item.title}
-                          loading="lazy"
-                          decoding="async"
-                          style={{
-                            width: "100%", height: "100%",
-                            objectFit: "cover",
-                            transition: "transform 0.7s cubic-bezier(0.23,1,0.32,1)",
-                          }}
-                        />
-                        <div style={{
-                          position: "absolute", inset: 0,
-                          background: "linear-gradient(to top, rgba(46,10,13,0.95) 0%, rgba(46,10,13,0.35) 45%, rgba(46,10,13,0.02) 100%)",
-                          zIndex: 2, pointerEvents: "none",
-                        }} />
-                        {/* Duration */}
-                        <div style={{
-                          position: "absolute", top: 14, right: 14,
-                          zIndex: 5, pointerEvents: "none",
-                          fontFamily: "var(--font-mono)", fontSize: 10,
-                          letterSpacing: "0.15em",
-                          color: "rgba(245,230,204,0.7)",
-                          background: "rgba(46,10,13,0.6)",
-                          backdropFilter: "blur(6px)",
-                          padding: "4px 10px",
-                          borderRadius: 4,
-                          border: "1px solid rgba(212,184,150,0.15)",
-                        }}>
-                          {item.duration}
-                        </div>
-
-                        {/* Centered Play Triangle Button */}
-                        <button
-                          type="button"
-                          onClick={(e) => { e.stopPropagation(); openModal(item); }}
-                          aria-label={`Play ${item.title}`}
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            width: 52,
-                            height: 52,
-                            borderRadius: "50%",
-                            background: "rgba(10, 2, 3, 0.7)",
-                            border: "1.5px solid rgba(212, 184, 150, 0.65)",
-                            backdropFilter: "blur(8px)",
-                            WebkitBackdropFilter: "blur(8px)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            zIndex: 6,
-                            cursor: "pointer",
-                            boxShadow: "0 8px 24px rgba(0,0,0,0.55)",
-                            transition: "transform 0.3s ease, border-color 0.3s ease, background 0.3s ease",
-                          }}
-                          className="card-play-btn"
-                          onMouseEnter={(e) => { e.currentTarget.style.transform = "translate(-50%, -50%) scale(1.1)"; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.transform = "translate(-50%, -50%) scale(1)"; }}
-                        >
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand-cream)" style={{ marginLeft: 2 }}>
-                            <polygon points="6 3 20 12 6 21 6 3" />
-                          </svg>
-                        </button>
-
-                        {/* Title + category */}
-                        <div style={{
-                          position: "absolute", bottom: 0, left: 0, right: 0,
-                          padding: 24, zIndex: 3, pointerEvents: "none",
-                        }}>
-                          <div style={{
-                            fontFamily: "var(--font-mono)", fontSize: 10,
-                            letterSpacing: "0.25em", textTransform: "uppercase",
-                            color: "var(--brand-gold)", marginBottom: 8,
-                          }}>
-                            {cat.label}
-                          </div>
-                          <div style={{
-                            fontFamily: "var(--font-display)", fontSize: 20,
-                            fontWeight: 600, color: "var(--brand-cream)", lineHeight: 1.2,
-                          }}>
-                            {item.title}
-                          </div>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
-                </div>
+                <DesktopDraggableRow
+                  key={cat.id}
+                  cat={cat}
+                  catReels={catReels}
+                  openModal={openModal}
+                />
               );
             })}
           </div>
