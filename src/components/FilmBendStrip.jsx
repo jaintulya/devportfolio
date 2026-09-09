@@ -318,7 +318,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       style={{
         position: "relative",
         width: "100%",
-        height: "520px",
+        height: "560px",
         overflow: "hidden",
         touchAction: "none",
         overscrollBehavior: "contain",
@@ -335,9 +335,20 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       aria-label="Reel gallery — swipe to browse"
       aria-roledescription="carousel"
     >
+      {/* Top Drag hint — mobile only */}
+      <div style={{
+        position: "absolute", top: 12, left: "50%",
+        transform: "translateX(-50%)", zIndex: 20,
+        textAlign: "center", width: "100%", pointerEvents: "none",
+        fontSize: 10, color: "rgba(247,230,204,0.55)", letterSpacing: "0.2em",
+        fontFamily: "var(--font-mono)", textTransform: "uppercase",
+      }}>
+        &larr; Drag or swipe to explore &rarr;
+      </div>
+
       {/* Center glow */}
       <div aria-hidden="true" style={{
-        position: "absolute", left: "50%", top: "50%",
+        position: "absolute", left: "50%", top: "44%",
         width: 200, height: 200, transform: "translate(-50%,-50%)",
         borderRadius: "50%",
         background: "radial-gradient(circle, rgba(94,24,28,0.10), transparent 66%)",
@@ -346,7 +357,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
 
       {/* Strip origin */}
       <div style={{
-        position: "absolute", left: "50%", top: "50%",
+        position: "absolute", left: "50%", top: "44%",
         width: 0, height: 0, zIndex: 1,
         paddingBottom: "115%",
       }}>
@@ -378,7 +389,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
                 cursor: "pointer",
                 background: "linear-gradient(180deg, #1A0507 0%, #140406 100%)",
                 border: isCenter ? "1.5px solid rgba(212,184,150,0.22)" : "1px solid rgba(212,184,150,0.08)",
-                boxShadow: isCenter ? "0 28px 60px rgba(0,0,0,0.5)" : "0 12px 32px rgba(0,0,0,0.3)",
+                boxShadow: isCenter ? "0 20px 45px rgba(0,0,0,0.45)" : "0 8px 24px rgba(0,0,0,0.25)",
                 willChange: "transform, opacity, filter",
                 pointerEvents: "auto",
                 opacity: 0, // hide extra cards by default
@@ -451,14 +462,11 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         transform: "translateX(-50%)", zIndex: 20,
         textAlign: "center", width: "100%", pointerEvents: "none",
       }}>
-        <div style={{ fontSize: 10, color: "var(--brand-gold)", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 4, fontFamily: "var(--font-mono)" }}>
+        <div style={{ fontSize: 10, color: "var(--brand-gold)", textTransform: "uppercase", letterSpacing: "0.18em", marginBottom: 4, fontFamily: "var(--font-mono)" }}>
           {reels[activeIndex]?.category}
         </div>
-        <div style={{ fontSize: 18, color: "var(--brand-cream)", fontStyle: "italic", fontFamily: "'Playfair Display', Georgia, serif" }}>
+        <div style={{ fontSize: 19, color: "var(--brand-cream)", fontStyle: "italic", fontFamily: "'Playfair Display', Georgia, serif", lineHeight: 1.2 }}>
           {reels[activeIndex]?.title}
-        </div>
-        <div style={{ fontSize: 9, color: "rgba(247,230,204,0.4)", letterSpacing: "0.1em", marginTop: 8, fontFamily: "var(--font-body)", fontStyle: "italic" }}>
-          &larr; Drag or swipe to explore &rarr;
         </div>
       </div>
 
@@ -469,7 +477,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
           target={typeof onSeeMore === "string" && onSeeMore.startsWith("http") ? "_blank" : undefined}
           rel={typeof onSeeMore === "string" && onSeeMore.startsWith("http") ? "noopener noreferrer" : undefined}
           style={{
-            position: "absolute", bottom: 10, left: "50%",
+            position: "absolute", bottom: 12, left: "50%",
             transform: "translateX(-50%)", zIndex: 20,
             padding: "8px 22px",
             display: "inline-flex", alignItems: "center", gap: 6,

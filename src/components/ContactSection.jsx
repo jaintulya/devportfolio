@@ -293,26 +293,34 @@ export default function ContactSection() {
           .c1 { left: 0; } .c2 { right: 0; } .c3 { left: 5px; top: 240px; } .c4 { right: 0; top: 220px; } .c5 { left: 40px; bottom: 15px; } .c6 { right: 25px; bottom: 5px; }
         }
         @media (max-width: 780px) {
-          .contact-3d-section { padding: 60px 20px 40px; }
-          .c-stage { display: block; min-height: auto; margin-top: 45px; perspective: none; }
+          .contact-3d-section { padding: 60px 16px 40px; }
+          .c-stage { display: block; min-height: auto; margin-top: 36px; perspective: none; }
           .copy-col { text-align: center; padding: 0 8px; }
           .copy-col p { margin-left: auto; margin-right: auto; }
           .handwritten { margin-top: 18px; }
           .card-wall {
-            height: auto; width: 100%; margin: 40px auto 0;
-            transform: none !important; perspective: none; padding-bottom: 20px;
-            display: flex; flex-direction: column; gap: 24px; align-items: center;
+            height: auto; width: 100%; max-width: 500px; margin: 32px auto 0;
+            transform: none !important; perspective: none; padding-bottom: 10px;
+            display: grid !important; grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
           }
           .card-3d { 
-            position: relative; width: 100%; max-width: 320px; height: auto; padding: 24px; 
-            margin: 0; transform: none !important; 
+            position: relative !important; width: 100% !important; max-width: 100% !important;
+            height: auto !important; min-height: 148px !important; padding: 14px 12px !important; 
+            margin: 0 !important; transform: none !important; 
             transition: transform 0.3s ease, box-shadow 0.3s ease; 
             top: auto !important; bottom: auto !important; left: auto !important; right: auto !important;
+            box-sizing: border-box !important;
+            border-radius: 8px !important;
           }
-          .card-3d:last-child { margin-bottom: 0; }
-          .card-3d:hover { transform: translateY(-5px) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important; z-index: 10 !important; }
+          .card-3d h3 { font-size: 16px !important; margin: 0 0 4px !important; }
+          .card-3d p { font-size: 9px !important; line-height: 1.4 !important; max-width: 100% !important; }
+          .card-icon { width: 32px !important; height: 32px !important; font-size: 15px !important; margin-bottom: 8px !important; }
+          .card-num { right: 10px !important; top: 10px !important; font-size: 8px !important; }
+          .card-go { font-size: 8px !important; margin-top: 8px !important; }
+          .card-3d:hover { transform: translateY(-3px) !important; box-shadow: 0 12px 28px rgba(0,0,0,0.5) !important; z-index: 10 !important; }
           .c-ribbon, .c-spark { display: none; }
-          .c-bottom { display: block; text-align: center; line-height: 2.2; margin-top: 40px; }
+          .c-bottom { display: block; text-align: center; line-height: 2.2; margin-top: 36px; }
         }
         @media (prefers-reduced-motion: reduce) {
           .card-3d, .card-wall, .c-spark { transition: none !important; animation: none !important; transform: none !important; }

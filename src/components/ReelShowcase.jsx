@@ -58,9 +58,9 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
       card.style.opacity = String(Math.max(0, 1 - 0.12 * distance) * edge);
       card.style.zIndex = String(100 - Math.round(distance));
       if (Math.round(distance) === 0) {
-        card.style.boxShadow = "0 32px 80px rgba(0,0,0,0.6), 0 0 0 2px rgba(212,184,150,0.3)";
+        card.style.boxShadow = "0 0 0 1.5px rgba(212,184,150,0.35)";
       } else {
-        card.style.boxShadow = "0 16px 40px rgba(0,0,0,0.4)";
+        card.style.boxShadow = "none";
       }
     });
   }, [count]);

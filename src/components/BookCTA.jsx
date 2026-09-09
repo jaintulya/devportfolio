@@ -29,9 +29,30 @@ export default function BookCTA() {
       aria-hidden={!visible}
       tabIndex={visible ? 0 : -1}
       style={{
+        position: "fixed",
+        bottom: 24,
+        left: "50%",
+        zIndex: 90,
+        display: visible ? "inline-flex" : "none",
+        alignItems: "center",
+        gap: 8,
+        padding: "12px 24px",
+        borderRadius: 100,
+        background: "rgba(26, 5, 7, 0.85)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        border: "1px solid rgba(212,184,150,0.3)",
+        color: "var(--brand-cream)",
+        fontFamily: "var(--font-mono)",
+        fontSize: 10,
+        letterSpacing: "0.18em",
+        textTransform: "uppercase",
+        textDecoration: "none",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? "auto" : "none",
         transform: visible ? "translate(-50%, 0)" : "translate(-50%, 16px)",
+        transition: "all 0.3s cubic-bezier(0.23,1,0.32,1)",
       }}
     >
       Let&apos;s Talk

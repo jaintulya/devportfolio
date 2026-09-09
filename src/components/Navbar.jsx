@@ -240,27 +240,27 @@ export default function Navbar() {
             border: none !important;
             box-shadow: none !important;
             margin: 0 !important;
-            /* Subtle frosted glass — always slightly visible, not transparent, not dark */
-            background: rgba(18, 3, 5, 0.45) !important;
-            backdrop-filter: blur(14px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
-            border-bottom: 1px solid rgba(212, 184, 150, 0.06) !important;
+            /* Transparent in hero section */
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-bottom: none !important;
             transition: background 0.4s ease, backdrop-filter 0.4s ease, border-bottom 0.4s ease, box-shadow 0.4s ease;
           }
           .main-navbar.nav-scrolled {
-            /* After hero: slightly more opaque but still translucent — not pitch black */
-            background: rgba(22, 4, 6, 0.72) !important;
-            backdrop-filter: blur(20px) saturate(1.3) !important;
-            -webkit-backdrop-filter: blur(20px) saturate(1.3) !important;
-            border-bottom: 1px solid rgba(212, 184, 150, 0.10) !important;
-            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.25) !important;
+            /* In other sections: transparent with backdrop blur so background color is visible through the blur */
+            background: rgba(18, 3, 5, 0.28) !important;
+            backdrop-filter: blur(18px) saturate(1.25) !important;
+            -webkit-backdrop-filter: blur(18px) saturate(1.25) !important;
+            border-bottom: 1px solid rgba(212, 184, 150, 0.08) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
           }
           .main-navbar.nav-transparent {
-            background: rgba(18, 3, 5, 0.45) !important;
-            border-bottom: 1px solid rgba(212, 184, 150, 0.06) !important;
+            background: transparent !important;
+            border-bottom: none !important;
             box-shadow: none !important;
-            backdrop-filter: blur(14px) saturate(1.2) !important;
-            -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
           }
         }
 

@@ -14,6 +14,7 @@ export default function Footer() {
         borderTop: "1px solid rgba(200, 155, 93, 0.12)",
         position: "relative",
         zIndex: 70,
+        margin: 0,
       }}
     >
       {/* Texture */}
