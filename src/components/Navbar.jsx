@@ -197,6 +197,8 @@ export default function Navbar() {
     { l: "Contact",  path: "/contact",  sectionId: "contact" },
   ];
 
+  const isHero = pathname === "/" && !scrolled;
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
@@ -209,14 +211,35 @@ export default function Navbar() {
           width: auto;
           max-width: calc(100vw - 32px);
           border-radius: 100px;
-          background: rgba(26, 5, 7, 0.72);
-          backdrop-filter: blur(24px) saturate(1.1);
-          -webkit-backdrop-filter: blur(24px) saturate(1.1);
+          background: rgba(18, 3, 5, 0.38);
+          backdrop-filter: blur(18px) saturate(1.25);
+          -webkit-backdrop-filter: blur(18px) saturate(1.25);
           border: 1px solid rgba(212,184,150,0.14);
-          box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.2);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.25);
           padding-left: env(safe-area-inset-left);
           padding-right: env(safe-area-inset-right);
-          transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+          transition: opacity 0.45s cubic-bezier(0.23, 1, 0.32, 1), transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        /* On Web (Desktop > 1024px): Do not show navbar in Hero section; appear only starting from Work section */
+        @media (min-width: 1025px) {
+          .main-navbar.nav-in-hero {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translate(-50%, -30px) !important;
+            visibility: hidden;
+          }
+          .main-navbar.nav-scrolled {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            transform: translate(-50%, 0) !important;
+            visibility: visible;
+            background: rgba(18, 3, 5, 0.38) !important;
+            backdrop-filter: blur(18px) saturate(1.25) !important;
+            -webkit-backdrop-filter: blur(18px) saturate(1.25) !important;
+            border: 1px solid rgba(212, 184, 150, 0.14) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
+          }
         }
 
         .nav-transparent {
@@ -272,7 +295,7 @@ export default function Navbar() {
       <nav
         ref={navRef}
         aria-label="Main navigation"
-        className={`main-navbar ${scrolled ? "nav-scrolled" : ""}`}
+        className={`main-navbar ${scrolled ? "nav-scrolled" : ""} ${isHero ? "nav-in-hero" : ""}`}
       >
         <div style={{
           display: "flex",
@@ -345,21 +368,26 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Desktop CTA */}
+          {/* Desktop CTA — Redirects directly to WhatsApp */}
           <div className="nav-desktop-cta" style={{ display: "flex", alignItems: "center" }}>
-            <button
+            <a
+              href="https://wa.me/919377150889"
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-primary"
-              onClick={() => go("/contact")}
               style={{
                 padding: "8px 18px",
                 fontSize: 9,
                 borderRadius: 100,
                 letterSpacing: "0.18em",
                 margin: "0 6px",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
               }}
             >
               Let&apos;s Connect
-            </button>
+            </a>
           </div>
 
           {/* Mobile hamburger */}
@@ -463,15 +491,19 @@ export default function Navbar() {
               transform: menuReady ? "translateY(0)" : "translateY(20px)",
               transition: "all 0.55s cubic-bezier(0.23,1,0.32,1) 0.24s",
             }}>
-              <button
+              <a
+                href="https://wa.me/919377150889"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-primary-gold"
-                onClick={() => go("/contact")}
                 style={{
                   padding: "14px 40px",
+                  textDecoration: "none",
+                  display: "inline-block",
                 }}
               >
                 Let&apos;s Connect
-              </button>
+              </a>
             </div>
           </div>
         </div>

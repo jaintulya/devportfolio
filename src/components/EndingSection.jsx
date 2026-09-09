@@ -97,7 +97,7 @@ export default function EndingSection() {
           <span className="end-line" style={{ display: "block", overflow: "hidden" }}>
             <span className="end-inner" style={{ display: "block" }}>
               became{" "}
-              <span style={{ color: "#d5b3a8", fontStyle: "italic" }}>Shadi Pitara.</span>
+              <span style={{ color: "var(--brand-gold)", fontStyle: "italic" }}>Shaadi Pitara.</span>
             </span>
           </span>
         </h2>
@@ -139,7 +139,7 @@ export default function EndingSection() {
         color: "#b99186",
       }}>
         <span>EVERY WEDDING HAS A STORY.</span>
-        <span>SHADI PITARA · WEDDING SOCIAL MEDIA</span>
+        <span>SHAADI PITARA · WEDDING SOCIAL MEDIA</span>
       </div>
     </section>
   );

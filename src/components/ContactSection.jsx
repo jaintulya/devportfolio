@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -108,6 +108,44 @@ export default function ContactSection() {
   const stageRef = useRef(null);
   const wallRef = useRef(null);
   const cardsRef = useRef([]);
+  const [toast, setToast] = useState(null);
+
+  const handleEmailAction = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const email = "shaadi.pitaraa@gmail.com";
+    const subject = encodeURIComponent("Wedding Inquiry — Shaadi Pitara");
+    const body = encodeURIComponent(
+      "Hi Devarsh,\n\nWe love your cinematic storytelling and would like to discuss covering our wedding.\n\nEvent Dates:\nCity / Venue:\nEstimated Guests:\n\nLooking forward to speaking with you!"
+    );
+
+    // 1. Copy email directly to clipboard
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(email).catch(() => {});
+    }
+
+    // 2. Open Gmail Web Compose in a new tab (failsafe across all modern browsers)
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+    window.open(gmailUrl, "_blank", "noopener,noreferrer");
+
+    // 3. Trigger native mail client via hidden iframe
+    try {
+      const mailtoUrl = `mailto:${email}?subject=${subject}&body=${body}`;
+      const iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      iframe.src = mailtoUrl;
+      document.body.appendChild(iframe);
+      setTimeout(() => {
+        try { document.body.removeChild(iframe); } catch {}
+      }, 1200);
+    } catch {}
+
+    // 4. Show on-screen toast
+    setToast("Email address copied: shaadi.pitaraa@gmail.com · Opening composer...");
+    setTimeout(() => {
+      setToast(null);
+    }, 4500);
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -265,15 +303,13 @@ export default function ContactSection() {
         .c-ribbon {
           position: absolute; left: 45%; top: 9%; width: 95px; height: 25px; background: #641c21; opacity: 0.75;
           transform: rotate(-18deg) translateZ(80px); box-shadow: 0 10px 20px rgba(9,2,3,0.3); z-index: 8;
-        }
-        .c-ribbon::after {
-          content: ""; position: absolute; right: -17px; top: 0; border-top: 12.5px solid transparent; border-bottom: 12.5px solid transparent; border-left: 17px solid #641c21;
+          pointer-events: none !important;
         }
         .c-ribbon::after {
           content: ""; position: absolute; right: -17px; top: 0; border-top: 12.5px solid transparent; border-bottom: 12.5px solid transparent; border-left: 17px solid #641c21;
         }
         
-        .c-spark { position: absolute; color: var(--brand-gold); font-size: 12px; z-index: 9; animation: sparkAnim 3.5s ease-in-out infinite; }
+        .c-spark { position: absolute; color: var(--brand-gold); font-size: 12px; z-index: 9; animation: sparkAnim 3.5s ease-in-out infinite; pointer-events: none !important; }
         .s1 { left: 4%; top: 14%; } .s2 { right: 5%; top: 37%; animation-delay: 1s; } .s3 { left: 43%; bottom: 4%; animation-delay: 1.8s; }
 
         @keyframes sparkAnim { 50% { transform: translateY(-9px); opacity: 0.3; } }
@@ -355,26 +391,31 @@ export default function ContactSection() {
           <div className="c-ribbon"></div>
           <div className="c-spark s1">✦</div><div className="c-spark s2">✧</div><div className="c-spark s3">✦</div>
 
-          {contactMethods.map((method, i) => (
-            <a
-              key={method.id}
-              href={method.link}
-              target={method.link.startsWith("mailto") || method.link.startsWith("tel") ? "_self" : "_blank"}
-              rel="noopener noreferrer"
-              className={`card-3d ${method.className}`}
-              ref={(el) => { cardsRef.current[i] = el; }}
-              onPointerMove={(e) => handleCardMove(e, i)}
-              onPointerLeave={() => handleCardLeave(i)}
-            >
-              <span className="card-num">0{i + 1}</span>
-              <div className="card-icon">
-                {(() => { const Icon = method.IconComponent; return <Icon />; })()}
-              </div>
-              <h3>{method.title}</h3>
-              <p>{method.description}</p>
-              <span className="card-go">{method.ctaText}</span>
-            </a>
-          ))}
+          {contactMethods.map((method, i) => {
+            const isMail = method.id === "email";
+            const isTel = method.id === "call";
+            return (
+              <a
+                key={method.id}
+                href={method.link}
+                target={isMail || isTel ? undefined : "_blank"}
+                rel={isMail || isTel ? undefined : "noopener noreferrer"}
+                className={`card-3d ${method.className}`}
+                ref={(el) => { cardsRef.current[i] = el; }}
+                onPointerMove={(e) => handleCardMove(e, i)}
+                onPointerLeave={() => handleCardLeave(i)}
+                onClick={isMail ? handleEmailAction : undefined}
+              >
+                <span className="card-num">0{i + 1}</span>
+                <div className="card-icon">
+                  {(() => { const Icon = method.IconComponent; return <Icon />; })()}
+                </div>
+                <h3>{method.title}</h3>
+                <p>{method.description}</p>
+                <span className="card-go">{method.ctaText}</span>
+              </a>
+            );
+          })}
         </div>
       </div>
 
@@ -382,6 +423,37 @@ export default function ContactSection() {
         <span>WEDDING STORIES · CINEMATIC FILMS · REAL MOMENTS</span>
         <strong>YOUR DAY · YOUR PEOPLE · YOUR STORY</strong>
       </div>
+
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            position: "fixed",
+            bottom: 32,
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 99999,
+            background: "rgba(36, 5, 8, 0.95)",
+            border: "1px solid var(--brand-gold)",
+            borderRadius: 100,
+            padding: "12px 24px",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            color: "var(--brand-cream)",
+            fontFamily: "var(--font-mono)",
+            fontSize: 12,
+            letterSpacing: "0.06em",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(212,184,150,0.2)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+          }}
+        >
+          <span style={{ color: "#4ade80", fontSize: 16 }}>✓</span>
+          <span>{toast}</span>
+        </div>
+      )}
     </section>
   );
 }

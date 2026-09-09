@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: "#1A0507",
+        background: "var(--brand-maroon-dark)",
         padding: "clamp(64px, 8vw, 100px) clamp(16px, 4vw, 48px) 40px",
         color: "var(--brand-cream)",
         borderTop: "1px solid rgba(200, 155, 93, 0.12)",
@@ -62,14 +62,25 @@ export default function Footer() {
                 { href: "https://youtube.com/@shaadi.pitara", label: "YouTube", icon: <svg key="yt" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg> },
                 { href: "mailto:shaadi.pitaraa@gmail.com", label: "Email", icon: <svg key="em" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> },
                 { href: WHATSAPP_URL, label: "WhatsApp", icon: <svg key="wa" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg> },
-              ].map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={"Shaadi Pitara on " + social.label}
-                  className="focus-sq"
+              ].map((social) => {
+                const isMail = social.label === "Email";
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target={isMail ? undefined : "_blank"}
+                    rel={isMail ? undefined : "noopener noreferrer"}
+                    onClick={isMail ? (e) => {
+                      e.preventDefault();
+                      const email = "shaadi.pitaraa@gmail.com";
+                      if (navigator?.clipboard?.writeText) {
+                        navigator.clipboard.writeText(email).catch(() => {});
+                      }
+                      window.open("https://mail.google.com/mail/?view=cm&fs=1&to=shaadi.pitaraa@gmail.com&su=Wedding%20Inquiry%20-%20Shaadi%20Pitara", "_blank", "noopener,noreferrer");
+                      window.location.href = "mailto:shaadi.pitaraa@gmail.com?subject=Wedding%20Inquiry%20-%20Shaadi%20Pitara";
+                    } : undefined}
+                    aria-label={"Shaadi Pitara on " + social.label}
+                    className="focus-sq"
                   style={{
                     width: 42, height: 42,
                     display: "flex", alignItems: "center", justifyContent: "center",
@@ -90,11 +101,12 @@ export default function Footer() {
                 >
                   {social.icon}
                 </a>
-              ))}
-            </div>
+              );
+            })}
           </div>
+        </div>
 
-          {/* Explore column */}
+        {/* Explore column */}
           <div>
             <span style={{
               fontFamily: "var(--font-mono)", fontSize: 10,
@@ -111,7 +123,6 @@ export default function Footer() {
                 { label: "Services & Offerings", href: "/#services" },
                 { label: "Our Story", href: "/#story" },
                 { label: "Client Love", href: "/#testimonials" },
-                { label: "Behind the Scenes", href: "/#behind-the-scenes" },
                 { label: "Frequently Asked", href: "/#faq" },
                 { label: "Get In Touch", href: "/#contact" },
               ].map(({ label, href }) => (
@@ -144,11 +155,22 @@ export default function Footer() {
             </span>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 16 }}>
                <li>
-                 <a href="mailto:shaadi.pitaraa@gmail.com" style={{
-                   fontFamily: "var(--font-body)", fontSize: 14,
-                   color: "var(--brand-cream)", textDecoration: "none",
-                   opacity: 0.85, transition: "all 0.25s ease", display: "inline-flex", alignItems: "center", gap: 10,
-                 }}
+                 <a
+                   href="mailto:shaadi.pitaraa@gmail.com"
+                   onClick={(e) => {
+                     e.preventDefault();
+                     const email = "shaadi.pitaraa@gmail.com";
+                     if (navigator?.clipboard?.writeText) {
+                       navigator.clipboard.writeText(email).catch(() => {});
+                     }
+                     window.open("https://mail.google.com/mail/?view=cm&fs=1&to=shaadi.pitaraa@gmail.com&su=Wedding%20Inquiry%20-%20Shaadi%20Pitara", "_blank", "noopener,noreferrer");
+                     window.location.href = "mailto:shaadi.pitaraa@gmail.com?subject=Wedding%20Inquiry%20-%20Shaadi%20Pitara";
+                   }}
+                   style={{
+                     fontFamily: "var(--font-body)", fontSize: 14,
+                     color: "var(--brand-cream)", textDecoration: "none",
+                     opacity: 0.85, transition: "all 0.25s ease", display: "inline-flex", alignItems: "center", gap: 10,
+                   }}
                    onMouseEnter={(e) => { e.currentTarget.style.color = "var(--brand-gold)"; }}
                    onMouseLeave={(e) => { e.currentTarget.style.color = "var(--brand-cream)"; }}>
                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>

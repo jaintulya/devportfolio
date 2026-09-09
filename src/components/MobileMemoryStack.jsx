@@ -197,17 +197,14 @@ export default function MobileMemoryStack() {
         </div>
 
         <h2
+          className="c-heading"
           style={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontSize: "clamp(24px, 6.5vw, 30px)",
-            fontWeight: 500,
-            fontStyle: "italic",
-            marginBottom: "6px",
-            color: "var(--brand-cream)",
+            fontSize: "clamp(26px, 7vw, 34px)",
+            margin: "0 0 6px",
             lineHeight: 1.15,
           }}
         >
-          Our Story
+          Our <i>Story</i>
         </h2>
 
         {/* 1. Cards Numbering */}
@@ -670,7 +667,9 @@ export default function MobileMemoryStack() {
 
                     {card.isDevarsh ? (
                       <a
-                        href="/contact"
+                        href="https://wa.me/919377150889"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         style={{
                           fontSize: "9px",
                           fontFamily: "var(--font-mono)",

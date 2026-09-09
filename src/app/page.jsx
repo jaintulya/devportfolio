@@ -133,7 +133,7 @@ export default function Home() {
             style={{
               position: "relative",
               zIndex: 30,
-              backgroundColor: "#1A0507",
+              backgroundColor: "var(--brand-maroon-dark)",
               boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
             }}
           >
@@ -145,7 +145,7 @@ export default function Home() {
             style={{
               position: "relative",
               zIndex: 40,
-              backgroundColor: "#1A0507",
+              backgroundColor: "var(--brand-maroon-dark)",
               boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
             }}
           >
@@ -169,7 +169,7 @@ export default function Home() {
             style={{
               position: "relative",
               zIndex: 60,
-              backgroundColor: "#1A0507",
+              backgroundColor: "var(--brand-maroon-dark)",
               boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
             }}
           >
@@ -181,7 +181,7 @@ export default function Home() {
             style={{
               position: "relative",
               zIndex: 70,
-              backgroundColor: "#1A0507",
+              backgroundColor: "var(--brand-maroon-dark)",
               boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
             }}
           >

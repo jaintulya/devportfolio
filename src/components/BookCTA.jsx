@@ -24,7 +24,9 @@ export default function BookCTA() {
 
   return (
     <a
-      href="#contact"
+      href="https://wa.me/919377150889"
+      target="_blank"
+      rel="noopener noreferrer"
       className="book-cta"
       aria-hidden={!visible}
       tabIndex={visible ? 0 : -1}

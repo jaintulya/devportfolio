@@ -95,12 +95,12 @@ export default function WhyItMattersSection() {
           }}>
             <span className="wh-line" style={{ display: "block", overflow: "hidden" }}>
               <span className="wh-inner" style={{ display: "block" }}>
-                Not just how it <span style={{ color: "#7C292D", fontStyle: "italic" }}>looked.</span>
+                Not just how it <span style={{ color: "var(--brand-gold)", fontStyle: "italic" }}>looked.</span>
               </span>
             </span>
             <span className="wh-line" style={{ display: "block", overflow: "hidden" }}>
               <span className="wh-inner" style={{ display: "block" }}>
-                How it <em style={{ color: "#7C292D" }}>felt.</em>
+                How it <em style={{ color: "var(--brand-gold)", fontStyle: "italic" }}>felt.</em>
               </span>
             </span>
           </h2>
@@ -117,7 +117,7 @@ export default function WhyItMattersSection() {
           >
             Months or even years later, you can go back to those stories and relive
             the wedding exactly as it felt — not just how it looked. That thought
-            became the foundation of Shadi Pitara.
+            became the foundation of Shaadi Pitara.
           </p>
         </div>
       </div>

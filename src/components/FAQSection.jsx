@@ -195,17 +195,8 @@ export default function FAQSection() {
             Need Clarity?
             <span style={{ width: 28, height: 1, background: "var(--brand-maroon)", display: "block" }} />
           </div>
-          <h2
-            style={{
-              fontFamily: "var(--font-display, serif)",
-              fontSize: "clamp(34px, 5.5vw, 56px)",
-              fontWeight: 300,
-              lineHeight: 1.15,
-              color: "var(--brand-maroon-dark)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Frequently Asked Questions
+          <h2 className="c-heading on-light" style={{ margin: "16px 0 12px" }}>
+            Frequently Asked <i>Questions</i>
           </h2>
           <p
             style={{

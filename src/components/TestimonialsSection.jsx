@@ -112,7 +112,7 @@ export default function TestimonialsSection() {
       aria-label="Testimonials"
       style={{
         padding: "clamp(80px, 10vw, 140px) clamp(16px, 4vw, 48px)",
-        background: "linear-gradient(175deg, var(--brand-maroon) 0%, var(--brand-maroon-dark) 100%)",
+        background: "var(--brand-maroon-dark)",
         position: "relative",
         overflow: "hidden",
       }}
@@ -129,7 +129,9 @@ export default function TestimonialsSection() {
           <div className="eyebrow-label" style={{ justifyContent: "center" }}>
             Client Love
           </div>
-          <h2 className="section-heading">What Our Couples Say</h2>
+          <h2 className="c-heading" style={{ margin: "16px 0 12px" }}>
+            What Our <i>Couples Say</i>
+          </h2>
         </div>
 
         <div

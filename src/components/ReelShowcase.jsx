@@ -454,8 +454,8 @@ export default function ReelShowcase() {
           marginBottom: "clamp(32px, 4vw, 48px)",
         }}
       >
-        <h2 className="section-heading" style={{ fontStyle: "italic" }}>
-          Our Work
+        <h2 className="c-heading" style={{ margin: "14px 0 12px" }}>
+          Selected <i>Works</i>
         </h2>
         <p style={{
           fontFamily: "var(--font-body)",

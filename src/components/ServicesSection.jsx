@@ -94,8 +94,8 @@ export default function ServicesSection() {
             What We Offer
             <span style={{ background: "var(--brand-maroon)", display: "block" }} />
           </div>
-          <h2 className="section-heading section-heading-light">
-            Services &amp; Offerings
+          <h2 className="c-heading on-light" style={{ margin: "16px 0 12px" }}>
+            Services &amp; <i>Offerings</i>
           </h2>
           <p style={{
             fontFamily: "var(--font-body)",

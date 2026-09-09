@@ -81,41 +81,29 @@ export default function HeroSection() {
           </span>
         </div>
 
-        {/* Main Headline */}
-        <h1 className="hero-anim-headline mb-2 sm:mb-3 font-normal tracking-tight text-[#F7E6CC]">
+        {/* Main Headline — Signature Editorial Style Matching Co-create Your Story */}
+        <h1 className="hero-anim-headline mb-5 sm:mb-7 tracking-[-0.04em]">
           <span
-            className="block text-[38px] sm:text-[60px] md:text-[76px] lg:text-[84px] leading-[1.06]"
+            className="block text-[36px] sm:text-[56px] md:text-[72px] lg:text-[84px] leading-[0.95] font-medium"
             style={{
-              fontFamily: "var(--font-serif-luxury)",
+              fontFamily: "var(--font-display)",
+              color: "var(--brand-cream)",
               textShadow: "0 4px 24px rgba(0, 0, 0, 0.7)",
             }}
           >
-            We Don&apos;t Just
+            We Don&apos;t Just Film
           </span>
           <span
-            className="block text-[38px] sm:text-[60px] md:text-[76px] lg:text-[84px] leading-[1.06]"
+            className="block text-[34px] sm:text-[52px] md:text-[68px] lg:text-[80px] leading-[1.0] italic font-normal mt-1"
             style={{
-              fontFamily: "var(--font-serif-luxury)",
-              textShadow: "0 4px 24px rgba(0, 0, 0, 0.7)",
+              fontFamily: "var(--font-display)",
+              color: "var(--brand-gold)",
+              textShadow: "0 0 25px rgba(212, 184, 150, 0.45), 0 2px 14px rgba(0, 0, 0, 0.8)",
             }}
           >
-            Film Weddings.
+            Weddings. <i>We Tell Yours.</i>
           </span>
         </h1>
-
-        {/* Calligraphic Script Line — Rich Golden Tone */}
-        <div className="hero-anim-script mb-5 sm:mb-6">
-          <span
-            className="block text-[36px] sm:text-[50px] md:text-[62px] lg:text-[72px] leading-[1.1] italic font-normal"
-            style={{
-              fontFamily: "var(--font-script)",
-              color: "#DFB15B",
-              textShadow: "0 0 25px rgba(223, 177, 91, 0.5), 0 2px 14px rgba(0, 0, 0, 0.8)",
-            }}
-          >
-            We Tell Yours.
-          </span>
-        </div>
 
         {/* Cinematic Subtext */}
         <p
@@ -142,11 +130,9 @@ export default function HeroSection() {
             WATCH OUR WORK
           </a>
           <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNav("contact", "/contact");
-            }}
+            href="https://wa.me/919377150889"
+            target="_blank"
+            rel="noopener noreferrer"
             className="hero-btn-secondary flex-1 inline-flex items-center justify-center px-3 py-3.5 sm:px-8 sm:py-4 rounded-full text-[10.5px] sm:text-[12px] tracking-[0.14em] sm:tracking-[0.2em] font-semibold uppercase text-center whitespace-nowrap cursor-pointer select-none"
           >
             LET&apos;S CONNECT

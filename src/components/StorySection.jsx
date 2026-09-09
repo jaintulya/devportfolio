@@ -27,7 +27,7 @@ const moments = [
   { key: "happy",   label: "The happiness",   detail: "All the little pieces together — the feeling that makes a wedding a wedding." },
 ];
 
-/* ─── Orbit removed — Shadi Pitara logo centered in story hero ─── */
+/* ─── Orbit removed — Shaadi Pitara logo centered in story hero ─── */
 
 /* ─── SVG path: clearly curved ("tdha") line passing through all 5 dot centers ─── */
 // viewBox 0 0 1000 62, Y center = 31
@@ -221,20 +221,15 @@ export default function StorySection() {
           <div className="jreveal" style={{
             fontFamily: "var(--font-mono)", fontSize: 10,
             letterSpacing: "0.18em", textTransform: "uppercase",
-            color: "#c9aa9e", marginBottom: 22,
+            color: "var(--brand-gold)", marginBottom: 22,
           }}>
-            THE STORY BEHIND SHADI PITARA
+            THE STORY BEHIND SHAADI PITARA
           </div>
-          <h1 style={{
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontWeight: 500,
-            fontSize: "clamp(52px, 7.5vw, 130px)",
-            lineHeight: 0.82,
-            letterSpacing: "-0.045em",
+          <h1 className="c-heading" style={{
             margin: "0 0 24px",
-            color: "var(--brand-cream)",
+            lineHeight: 0.88,
           }}>
-            How Shadi<br />Pitara started.
+            How Shaadi<br /><i>Pitara started.</i>
           </h1>
           <p className="jreveal" style={{
             maxWidth: 440,
@@ -454,6 +449,7 @@ export default function StorySection() {
                   lineHeight:0.84,
                   letterSpacing:"-0.04em",
                   margin:0,
+                  color:"#3A0B0E",
                 }}>Learning by<br />making.</h2>
               </div>
               <p className="jreveal" style={{
@@ -515,7 +511,8 @@ export default function StorySection() {
                     display:"block",
                     fontFamily:"var(--font-mono)",fontSize:9,
                     letterSpacing:".14em",
-                    color:"rgba(94,24,28,0.40)",
+                    color:"#3A0B0E",
+                    opacity:0.75,
                     marginBottom:14,textTransform:"uppercase",
                   }}>
                     {String(i+1).padStart(2,"0")}
@@ -567,7 +564,7 @@ export default function StorySection() {
               <div style={{
                 fontFamily:"var(--font-mono)",fontSize:10,
                 letterSpacing:".14em",textTransform:"uppercase",
-                color:"#9E776A",marginBottom:20,
+                color:"#3A0B0E",marginBottom:20,
               }}>THE MOMENTS BETWEEN</div>
               <h2 style={{
                 fontFamily:"'Cormorant Garamond',Georgia,serif",
@@ -582,8 +579,8 @@ export default function StorySection() {
                 <span style={{color:"#3A0B0E",fontStyle:"italic"}}>feel like a wedding.</span>
               </h2>
               <p style={{
-                color:"#9E776A",fontSize:14,lineHeight:1.9,
-                maxWidth:360,margin:0,
+                color:"#3A0B0E",fontSize:14,lineHeight:1.9,
+                maxWidth:360,margin:0,opacity:0.85,
               }}>
                 The chaos behind the scenes. The laughter, nerves, parents, cousins,
                 tiny conversations, madness and happiness — all the things that may
@@ -667,7 +664,7 @@ export default function StorySection() {
                 <p
                   ref={detailTextRef}
                   style={{
-                    color:"#9E776A",fontSize:15,lineHeight:1.8,margin:0,
+                    color:"#3A0B0E",fontSize:15,lineHeight:1.8,margin:0,opacity:0.9,
                   }}
                 >
                   {moments.find((m) => m.key === activeMoment)?.detail}
@@ -692,7 +689,7 @@ export default function StorySection() {
             <div style={{
               fontFamily:"var(--font-mono)",fontSize:10,
               letterSpacing:".14em",textTransform:"uppercase",
-              color:"#9E776A",marginBottom:28,
+              color:"#3A0B0E",marginBottom:28,
             }}>THE IDEA</div>
 
             <h2 style={{
@@ -723,8 +720,8 @@ export default function StorySection() {
             </h2>
 
             <p className="jreveal" style={{
-              maxWidth:680,color:"#9E776A",
-              fontSize:15,lineHeight:1.9,margin:"0 auto",
+              maxWidth:680,color:"#3A0B0E",
+              fontSize:15,lineHeight:1.9,margin:"0 auto",opacity:0.85,
             }}>
               Our content is raw, real, spontaneous and alive — the emotional, fun and
               candid side that might never make the final wedding album, but is often
@@ -750,7 +747,7 @@ export default function StorySection() {
             <div style={{
               fontFamily:"var(--font-mono)",fontSize:10,
               letterSpacing:".14em",textTransform:"uppercase",
-              color:"#9E776A",paddingTop:6,
+              color:"#3A0B0E",paddingTop:6,
             }}>WHY IT MATTERS</div>
             <div>
               <h2 style={{
@@ -774,12 +771,12 @@ export default function StorySection() {
                 </span>
               </h2>
               <p className="jreveal" style={{
-                maxWidth:700,color:"#9E776A",
-                fontSize:15,lineHeight:1.9,margin:0,
+                maxWidth:700,color:"#3A0B0E",
+                fontSize:15,lineHeight:1.9,margin:0,opacity:0.85,
               }}>
                 Months or even years later, you can go back to those stories and relive
                 the wedding exactly as it felt — not just how it looked. That thought
-                became the foundation of Shadi Pitara.
+                became the foundation of Shaadi Pitara.
               </p>
             </div>
           </div>
@@ -829,7 +826,7 @@ export default function StorySection() {
               <span style={{display:"block",overflow:"hidden"}}>
                 <span className="jreveal" style={{display:"block"}}>
                   became{" "}
-                  <span style={{color:"#d5b3a8",fontStyle:"italic"}}>Shadi Pitara.</span>
+                  <span style={{color:"var(--brand-gold)",fontStyle:"italic"}}>Shaadi Pitara.</span>
                 </span>
               </span>
             </h2>
@@ -864,7 +861,7 @@ export default function StorySection() {
             color:"#b99186",
           }}>
             <span>EVERY WEDDING HAS A STORY.</span>
-            <span>SHADI PITARA · WEDDING SOCIAL MEDIA</span>
+            <span>SHAADI PITARA · WEDDING SOCIAL MEDIA</span>
           </div>
         </div>
 

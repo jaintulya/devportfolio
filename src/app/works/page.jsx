@@ -126,6 +126,7 @@ export default function WorkPage() {
       className="work-section"
       style={{
         minHeight: "100vh",
+        background: "var(--brand-maroon-dark)",
         color: "var(--brand-cream)",
         paddingTop: 1,
       }}
@@ -158,8 +159,8 @@ export default function WorkPage() {
         <div className="eyebrow-label" style={{ justifyContent: "center" }}>
           Full Showcase
         </div>
-        <h1 className="section-heading" style={{ marginTop: 12, fontStyle: "italic" }}>
-          Our Work
+        <h1 className="c-heading" style={{ margin: "14px 0 12px" }}>
+          Selected <i>Works</i>
         </h1>
         <p style={{
           fontFamily: "var(--font-body)",

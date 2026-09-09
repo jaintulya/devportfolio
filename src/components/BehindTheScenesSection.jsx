@@ -119,7 +119,7 @@ export default function BehindTheScenesSection() {
             color: "var(--brand-maroon-dark)",
           }}>
             What makes a wedding{" "}
-            <span style={{ color: "#7C292D", fontStyle: "italic" }}>feel like a wedding.</span>
+            <span style={{ color: "var(--brand-gold)", fontStyle: "italic" }}>feel like a wedding.</span>
           </h2>
           <p style={{
             color: "#9E776A",
