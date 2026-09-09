@@ -136,7 +136,7 @@ export default function Home() {
             }}
           />
 
-          {/* 3. Layered Sections: Normal natural scroll inside sections, luxury elevation transition as each new section arrives */}
+          {/* 3. Layered Sections: Normal natural scroll inside sections */}
           <div
             id="content-sections"
             className="section-layer"
@@ -144,7 +144,7 @@ export default function Home() {
               position: "relative",
               zIndex: 10,
               backgroundColor: "#1A0507",
-              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+              boxShadow: "none",
             }}
           >
             <ReelShowcase />
@@ -155,7 +155,7 @@ export default function Home() {
             style={{
               position: "relative",
               zIndex: 20,
-              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+              boxShadow: "none",
             }}
           >
             <ServicesSection />
@@ -167,7 +167,7 @@ export default function Home() {
               position: "relative",
               zIndex: 30,
               backgroundColor: "var(--brand-maroon-dark)",
-              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+              boxShadow: "none",
             }}
           >
             <StorySection />
@@ -179,7 +179,7 @@ export default function Home() {
               position: "relative",
               zIndex: 40,
               backgroundColor: "var(--brand-maroon-dark)",
-              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+              boxShadow: "none",
             }}
           >
             <TestimonialsSection />
@@ -191,7 +191,7 @@ export default function Home() {
               position: "relative",
               zIndex: 50,
               backgroundColor: "#1A0507",
-              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+              boxShadow: "none",
             }}
           >
             <FAQSection />
@@ -203,7 +203,7 @@ export default function Home() {
               position: "relative",
               zIndex: 60,
               backgroundColor: "var(--brand-maroon-dark)",
-              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+              boxShadow: "none",
             }}
           >
             <ContactSection />

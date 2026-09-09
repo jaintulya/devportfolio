@@ -301,38 +301,9 @@ export default function WorkPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Dynamic browser title & active category tab on scroll
+  // Keep browser tab title as Our Works
   useEffect(() => {
-    const onScroll = () => {
-      const scrollY = window.scrollY || window.pageYOffset;
-      if (scrollY < 180) {
-        document.title = "Our Works — Shaadi Pitara | Cinematic Wedding Reels";
-        return;
-      }
-
-      let currentCat = null;
-      for (const cat of reelCategories) {
-        const el = document.getElementById(`cat-${cat.id}`) || document.getElementById(`cat-mobile-${cat.id}`);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= 80) {
-            currentCat = cat;
-          }
-        }
-      }
-
-      if (currentCat) {
-        setActiveTab(currentCat.id);
-        const newTitle = `${currentCat.label} — Our Works | Shaadi Pitara`;
-        if (document.title !== newTitle) {
-          document.title = newTitle;
-        }
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    document.title = "Our Works — Shaadi Pitara | Cinematic Wedding Reels";
   }, []);
 
   useEffect(() => {
@@ -474,65 +445,6 @@ export default function WorkPage() {
         }}>
           Every reel is a love story, a celebration, a memory frozen in motion. Browse by category and click to watch.
         </p>
-      </div>
-
-      {/* Sticky Category Tabs Bar */}
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 45,
-          background: "rgba(26, 5, 7, 0.88)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(212,184,150,0.12)",
-          padding: "10px clamp(12px, 3vw, 24px)",
-          display: "flex",
-          justifyContent: "center",
-          overflowX: "auto",
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-        }}
-        className="cat-tabs-bar"
-      >
-        <style>{`.cat-tabs-bar::-webkit-scrollbar { display: none; }`}</style>
-        <div style={{ display: "flex", gap: 8, alignItems: "center", maxWidth: 1200, width: "100%", justifyContent: isMobile ? "flex-start" : "center" }}>
-          {reelCategories.map((cat) => {
-            const isActive = activeTab === cat.id;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => {
-                  setActiveTab(cat.id);
-                  const targetId = isMobile ? `cat-mobile-${cat.id}` : `cat-${cat.id}`;
-                  const el = document.getElementById(targetId);
-                  if (el) {
-                    const y = el.getBoundingClientRect().top + window.pageYOffset - 65;
-                    window.scrollTo({ top: y, behavior: "smooth" });
-                  }
-                }}
-                style={{
-                  background: isActive ? "rgba(212,184,150,0.18)" : "transparent",
-                  color: isActive ? "var(--brand-gold)" : "rgba(245,230,204,0.65)",
-                  border: isActive ? "1px solid rgba(212,184,150,0.4)" : "1px solid transparent",
-                  borderRadius: 100,
-                  padding: "6px 14px",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 10.5,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                  transition: "all 0.25s ease",
-                  flexShrink: 0,
-                }}
-              >
-                {cat.label}
-              </button>
-            );
-          })}
-        </div>
       </div>
 
       {/* Work grid */}

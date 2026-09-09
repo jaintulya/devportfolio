@@ -276,12 +276,12 @@ export default function Navbar() {
             pointer-events: auto !important;
             transform: translateY(0) !important;
             visibility: visible !important;
-            /* In other sections: subtle dark backdrop blur with high legibility */
-            background: rgba(26, 5, 7, 0.85) !important;
-            backdrop-filter: blur(20px) saturate(1.3) !important;
-            -webkit-backdrop-filter: blur(20px) saturate(1.3) !important;
-            border-bottom: 1px solid rgba(212, 184, 150, 0.16) !important;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35) !important;
+            /* In other sections: subtle transparent dark backdrop blur for phone */
+            background: rgba(26, 5, 7, 0.55) !important;
+            backdrop-filter: blur(16px) saturate(1.2) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(1.2) !important;
+            border-bottom: 1px solid rgba(212, 184, 150, 0.12) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
           }
           .main-navbar.nav-transparent {
             background: transparent !important;
