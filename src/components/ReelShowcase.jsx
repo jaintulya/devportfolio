@@ -211,12 +211,6 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
                 draggable={false}
                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
               />
-              {/* Gradient overlay */}
-              <div style={{
-                position: "absolute", inset: 0,
-                background: "linear-gradient(to top, rgba(26,4,8,0.9) 0%, rgba(26,4,8,0.2) 50%, transparent 100%)",
-                pointerEvents: "none",
-              }} />
               {/* Play button */}
               <button
                 type="button"

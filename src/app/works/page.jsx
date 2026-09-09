@@ -71,7 +71,7 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
   };
 
   return (
-    <div>
+    <div id={`cat-${cat.id}`} data-cat-id={cat.id} data-cat-label={cat.label}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20, padding: "0 clamp(16px, 4vw, 48px)" }}>
         <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(32px, 3.5vw, 42px)", fontWeight: 400, fontStyle: "italic", margin: 0, color: "var(--brand-cream)", letterSpacing: "0.02em" }}>
@@ -168,19 +168,17 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
               overflow: "hidden",
               cursor: isDragging ? "grabbing" : "pointer",
               background: "var(--brand-maroon-dark)",
-              border: "1px solid rgba(212,184,150,0.08)",
-              transition: isDragging ? "none" : "transform 0.5s cubic-bezier(0.23,1,0.32,1), border-color 0.5s ease, box-shadow 0.5s ease",
+              border: "1px solid rgba(212,184,150,0.12)",
+              transition: isDragging ? "none" : "transform 0.5s cubic-bezier(0.23,1,0.32,1), border-color 0.5s ease",
             }}
             onMouseEnter={(e) => {
               if (isDragging) return;
               e.currentTarget.style.transform = "scale(1.02)";
-              e.currentTarget.style.borderColor = "rgba(212,184,150,0.3)";
-              e.currentTarget.style.boxShadow = "0 24px 56px rgba(0,0,0,0.35)";
+              e.currentTarget.style.borderColor = "rgba(212,184,150,0.35)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.borderColor = "rgba(212,184,150,0.08)";
-              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.borderColor = "rgba(212,184,150,0.12)";
             }}
           >
             <img
@@ -198,11 +196,6 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
                 transition: "transform 0.7s cubic-bezier(0.23,1,0.32,1)",
               }}
             />
-            <div style={{
-              position: "absolute", inset: 0,
-              background: "linear-gradient(to top, rgba(46,10,13,0.95) 0%, rgba(46,10,13,0.35) 45%, rgba(46,10,13,0.02) 100%)",
-              zIndex: 2, pointerEvents: "none",
-            }} />
             
             {/* Duration */}
             <div style={{
@@ -210,12 +203,12 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
               zIndex: 5, pointerEvents: "none",
               fontFamily: "var(--font-mono)", fontSize: 10,
               letterSpacing: "0.15em",
-              color: "rgba(245,230,204,0.7)",
-              background: "rgba(46,10,13,0.6)",
+              color: "rgba(245,230,204,0.85)",
+              background: "rgba(26,5,7,0.72)",
               backdropFilter: "blur(6px)",
               padding: "4px 10px",
               borderRadius: 4,
-              border: "1px solid rgba(212,184,150,0.15)",
+              border: "1px solid rgba(212,184,150,0.2)",
             }}>
               {item.duration}
             </div>
@@ -237,8 +230,8 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
                 width: 52,
                 height: 52,
                 borderRadius: "50%",
-                background: "rgba(10, 2, 3, 0.7)",
-                border: "1.5px solid rgba(212, 184, 150, 0.65)",
+                background: "rgba(10, 2, 3, 0.65)",
+                border: "1.5px solid rgba(212, 184, 150, 0.7)",
                 backdropFilter: "blur(8px)",
                 WebkitBackdropFilter: "blur(8px)",
                 display: "flex",
@@ -246,7 +239,6 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
                 justifyContent: "center",
                 zIndex: 6,
                 cursor: "pointer",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.55)",
                 transition: "transform 0.3s ease, border-color 0.3s ease, background 0.3s ease",
               }}
               className="card-play-btn"
@@ -266,13 +258,15 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
               <div style={{
                 fontFamily: "var(--font-mono)", fontSize: 10,
                 letterSpacing: "0.25em", textTransform: "uppercase",
-                color: "var(--brand-gold)", marginBottom: 8,
+                color: "var(--brand-gold)", marginBottom: 6,
+                textShadow: "0 2px 8px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,0.95)",
               }}>
                 {cat.label}
               </div>
               <div style={{
                 fontFamily: "var(--font-display)", fontSize: 20,
                 fontWeight: 600, color: "var(--brand-cream)", lineHeight: 1.2,
+                textShadow: "0 2px 10px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,1)",
               }}>
                 {item.title}
               </div>
@@ -305,6 +299,40 @@ export default function WorkPage() {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Dynamic browser title & active category tab on scroll
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      if (scrollY < 180) {
+        document.title = "Our Works — Shaadi Pitara | Cinematic Wedding Reels";
+        return;
+      }
+
+      let currentCat = null;
+      for (const cat of reelCategories) {
+        const el = document.getElementById(`cat-${cat.id}`) || document.getElementById(`cat-mobile-${cat.id}`);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= 80) {
+            currentCat = cat;
+          }
+        }
+      }
+
+      if (currentCat) {
+        setActiveTab(currentCat.id);
+        const newTitle = `${currentCat.label} — Our Works | Shaadi Pitara`;
+        if (document.title !== newTitle) {
+          document.title = newTitle;
+        }
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
@@ -448,6 +476,65 @@ export default function WorkPage() {
         </p>
       </div>
 
+      {/* Sticky Category Tabs Bar */}
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 45,
+          background: "rgba(26, 5, 7, 0.88)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(212,184,150,0.12)",
+          padding: "10px clamp(12px, 3vw, 24px)",
+          display: "flex",
+          justifyContent: "center",
+          overflowX: "auto",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
+        className="cat-tabs-bar"
+      >
+        <style>{`.cat-tabs-bar::-webkit-scrollbar { display: none; }`}</style>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", maxWidth: 1200, width: "100%", justifyContent: isMobile ? "flex-start" : "center" }}>
+          {reelCategories.map((cat) => {
+            const isActive = activeTab === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => {
+                  setActiveTab(cat.id);
+                  const targetId = isMobile ? `cat-mobile-${cat.id}` : `cat-${cat.id}`;
+                  const el = document.getElementById(targetId);
+                  if (el) {
+                    const y = el.getBoundingClientRect().top + window.pageYOffset - 65;
+                    window.scrollTo({ top: y, behavior: "smooth" });
+                  }
+                }}
+                style={{
+                  background: isActive ? "rgba(212,184,150,0.18)" : "transparent",
+                  color: isActive ? "var(--brand-gold)" : "rgba(245,230,204,0.65)",
+                  border: isActive ? "1px solid rgba(212,184,150,0.4)" : "1px solid transparent",
+                  borderRadius: 100,
+                  padding: "6px 14px",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10.5,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                  transition: "all 0.25s ease",
+                  flexShrink: 0,
+                }}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Work grid */}
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(32px, 5vw, 56px) 0" }}>
         {isMobile ? (
@@ -457,7 +544,7 @@ export default function WorkPage() {
               const catReels = reelData.filter((r) => r.category === cat.id);
               if (catReels.length === 0) return null;
               return (
-                <div key={cat.id}>
+                <div key={cat.id} id={`cat-mobile-${cat.id}`} data-cat-id={cat.id} data-cat-label={cat.label}>
                   {/* Header */}
                   <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, padding: "0 16px" }}>
                     <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(24px, 6vw, 32px)", fontWeight: 400, fontStyle: "italic", margin: 0, color: "var(--brand-cream)", letterSpacing: "0.02em" }}>
@@ -485,11 +572,6 @@ export default function WorkPage() {
                         }}
                       >
                         <img src={item.poster} alt={item.title} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                        <div style={{
-                          position: "absolute", inset: 0,
-                          background: "linear-gradient(to top, rgba(46,10,13,0.7) 0%, transparent 50%)",
-                          zIndex: 2, pointerEvents: "none",
-                        }} />
                         {/* Play button */}
                         <button
                           type="button"
@@ -503,7 +585,6 @@ export default function WorkPage() {
                             border: "1.5px solid rgba(212,184,150,0.6)",
                             display: "flex", alignItems: "center", justifyContent: "center",
                             cursor: "pointer",
-                            boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
                           }}
                         >
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--brand-cream)" style={{ marginLeft: 1 }}>

@@ -63,6 +63,39 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Update browser tab title dynamically as sections scroll into view
+  useEffect(() => {
+    const SECTIONS = [
+      { id: "hero-fixed-container", title: "Shaadi Pitara — Cinematic Wedding Reels & Content | Ahmedabad" },
+      { id: "content-sections", title: "Selected Works — Shaadi Pitara" },
+      { id: "services", title: "Services — Shaadi Pitara" },
+      { id: "story", title: "Our Story — Shaadi Pitara" },
+      { id: "testimonials", title: "Kind Words & Reviews — Shaadi Pitara" },
+      { id: "faq", title: "FAQ — Shaadi Pitara" },
+      { id: "contact", title: "Contact Us — Shaadi Pitara" },
+    ];
+
+    const handleTitleScroll = () => {
+      let activeTitle = SECTIONS[0].title;
+      for (const sec of SECTIONS) {
+        const el = document.getElementById(sec.id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= 50) {
+            activeTitle = sec.title;
+          }
+        }
+      }
+      if (document.title !== activeTitle) {
+        document.title = activeTitle;
+      }
+    };
+
+    window.addEventListener("scroll", handleTitleScroll, { passive: true });
+    handleTitleScroll();
+    return () => window.removeEventListener("scroll", handleTitleScroll);
+  }, []);
+
   const showWebgl = tier !== null && tier !== "off";
 
   return (
@@ -182,7 +215,7 @@ export default function Home() {
               position: "relative",
               zIndex: 70,
               backgroundColor: "var(--brand-maroon-dark)",
-              boxShadow: "0 -35px 80px rgba(0, 0, 0, 0.85), 0 -1px 0 rgba(212, 184, 150, 0.15)",
+              boxShadow: "none",
             }}
           >
             <Footer />
