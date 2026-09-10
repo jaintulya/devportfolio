@@ -53,17 +53,21 @@ export default function Home() {
 
   const [heroActive, setHeroActive] = useState(true);
 
+  // Monitor hero visibility efficiently using IntersectionObserver (zero scroll lag)
   useEffect(() => {
-    const handleScroll = () => {
-      const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-      setHeroActive(window.scrollY < vh * 0.98);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    const spacer = document.getElementById("hero-scroll-spacer");
+    if (!spacer) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHeroActive(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(spacer);
+    return () => observer.disconnect();
   }, []);
 
-  // Update browser tab title dynamically as sections scroll into view
+  // Update browser tab title dynamically using IntersectionObserver (eliminates synchronous getBoundingClientRect layout thrashing)
   useEffect(() => {
     const SECTIONS = [
       { id: "hero-fixed-container", title: "Shaadi Pitara — Cinematic Wedding Reels & Content | Ahmedabad" },
@@ -75,28 +79,30 @@ export default function Home() {
       { id: "contact", title: "Contact Us — Shaadi Pitara" },
     ];
 
-    const handleTitleScroll = () => {
-      let activeTitle = SECTIONS[0].title;
-      for (const sec of SECTIONS) {
-        const el = document.getElementById(sec.id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= 50) {
-            activeTitle = sec.title;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const found = SECTIONS.find((s) => s.id === entry.target.id);
+            if (found && document.title !== found.title) {
+              document.title = found.title;
+            }
           }
-        }
-      }
-      if (document.title !== activeTitle) {
-        document.title = activeTitle;
-      }
-    };
+        });
+      },
+      { rootMargin: "-30% 0px -50% 0px", threshold: 0 }
+    );
 
-    window.addEventListener("scroll", handleTitleScroll, { passive: true });
-    handleTitleScroll();
-    return () => window.removeEventListener("scroll", handleTitleScroll);
+    SECTIONS.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
-  const showWebgl = tier !== null && tier !== "off";
+  // All homepage sections have 100% solid opaque backgrounds; disable hidden background WebGL loop to free GPU/CPU
+  const showWebgl = false;
 
   const faqSchema = {
     '@context': 'https://schema.org',

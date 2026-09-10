@@ -25,6 +25,7 @@ const FEATURED_REELS = getFeaturedReels();
 // ── Custom Coverflow for Desktop ─────────────────────────────────────────────
 function ReelCoverflow({ reels, onOpen, getCatLabel }) {
   const count = reels.length;
+  const containerRef = useRef(null);
   const frameRef = useRef(null);
   const cardRefs = useRef([]);
   const posRef = useRef(0);
@@ -153,8 +154,52 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
 
   useEffect(() => () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); }, []);
 
+  // ── Horizontal Side-Scroll (trackpad two-finger swipe, horizontal mouse wheel, Shift+wheel) ──
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let accumulatedDeltaX = 0;
+    let lastTriggerTime = 0;
+    let resetTimer = null;
+    const THRESHOLD = 35;
+    const COOLDOWN = 260;
+
+    const handleWheel = (e) => {
+      if (dragRef.current?.isDragging) return;
+      const dx = e.deltaX !== 0 ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+      const absX = Math.abs(dx);
+      const absY = Math.abs(e.deltaY);
+
+      if (absX > absY && absX > 2) {
+        e.preventDefault();
+        const now = performance.now();
+        if (now - lastTriggerTime < COOLDOWN) return;
+
+        accumulatedDeltaX += dx;
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+          accumulatedDeltaX = 0;
+        }, 140);
+
+        if (Math.abs(accumulatedDeltaX) >= THRESHOLD) {
+          const dir = accumulatedDeltaX > 0 ? 1 : -1;
+          nudge(dir);
+          lastTriggerTime = now;
+          accumulatedDeltaX = 0;
+        }
+      }
+    };
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+      clearTimeout(resetTimer);
+    };
+  }, [nudge]);
+
   return (
-    <div style={{ width: "100%", userSelect: "none" }}>
+    <div ref={containerRef} style={{ width: "100%", userSelect: "none" }}>
       {/* Coverflow track */}
       <div
         ref={frameRef}
@@ -241,23 +286,80 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand-cream)"><polygon points="6 3 20 12 6 21 6 3" /></svg>
               </button>
-              {/* Bottom info */}
-              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 14px 14px", pointerEvents: "none" }}>
-                <div style={{
-                  fontFamily: "'Playfair Display', Georgia, serif",
-                  fontSize: "clamp(13px, 1.4vw, 17px)",
-                  fontStyle: "italic", fontWeight: 500,
-                  color: "var(--brand-cream)", lineHeight: 1.2,
-                  marginBottom: 4, whiteSpace: "nowrap",
-                  overflow: "hidden", textOverflow: "ellipsis",
-                }}>
+              {/* Dark protective gradient for crystal-clear readability */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  zIndex: 3,
+                  pointerEvents: "none",
+                  background:
+                    "linear-gradient(to top, rgba(14, 2, 4, 0.96) 0%, rgba(14, 2, 4, 0.75) 28%, rgba(14, 2, 4, 0.25) 55%, transparent 75%)",
+                }}
+              />
+
+              {/* Bottom info — clean luxury typography */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: "0 16px 14px",
+                  pointerEvents: "none",
+                  zIndex: 4,
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "'Playfair Display', Georgia, serif",
+                    fontSize: "clamp(14px, 1.5vw, 18px)",
+                    fontStyle: "italic",
+                    fontWeight: 500,
+                    color: "#FFFDF8",
+                    lineHeight: 1.25,
+                    marginBottom: 5,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    textShadow: "0 2px 8px rgba(0,0,0,0.9)",
+                  }}
+                >
                   {reel.title}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--brand-gold)" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {/* Clean radiant golden category without box */}
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 9.5,
+                      letterSpacing: "0.22em",
+                      textTransform: "uppercase",
+                      color: "#F5C87A",
+                      fontWeight: 600,
+                      textShadow: "0 1px 4px rgba(0,0,0,0.85)",
+                    }}
+                  >
                     {getCatLabel(reel.category)}
                   </span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(212,184,150,0.55)", letterSpacing: "0.05em" }}>
+
+                  {/* Clean duration text */}
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 10,
+                      letterSpacing: "0.08em",
+                      color: "rgba(247, 230, 204, 0.75)",
+                      textShadow: "0 1px 4px rgba(0,0,0,0.85)",
+                    }}
+                  >
                     {reel.duration}
                   </span>
                 </div>
@@ -485,7 +587,7 @@ export default function ReelShowcase() {
                 letterSpacing: "0.25em", textTransform: "uppercase",
                 color: "var(--brand-cream)",
               }}>
-                Drag or swipe to explore
+                Drag to explore
               </span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand-cream)" strokeWidth={1.5}><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </div>

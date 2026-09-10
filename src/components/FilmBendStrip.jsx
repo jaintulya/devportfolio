@@ -302,6 +302,49 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [playTransition]);
 
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    let accumulatedDeltaX = 0;
+    let lastTriggerTime = 0;
+    let resetTimer = null;
+    const THRESHOLD = 35;
+    const COOLDOWN = 260;
+
+    const handleWheel = (e) => {
+      if (dragState.dragging) return;
+      const dx = e.deltaX !== 0 ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+      const absX = Math.abs(dx);
+      const absY = Math.abs(e.deltaY);
+
+      if (absX > absY && absX > 2) {
+        e.preventDefault();
+        const now = performance.now();
+        if (now - lastTriggerTime < COOLDOWN) return;
+
+        accumulatedDeltaX += dx;
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+          accumulatedDeltaX = 0;
+        }, 140);
+
+        if (Math.abs(accumulatedDeltaX) >= THRESHOLD) {
+          const dir = accumulatedDeltaX > 0 ? 1 : -1;
+          playTransition(dir);
+          lastTriggerTime = now;
+          accumulatedDeltaX = 0;
+        }
+      }
+    };
+
+    stage.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      stage.removeEventListener("wheel", handleWheel);
+      clearTimeout(resetTimer);
+    };
+  }, [playTransition, dragState.dragging]);
+
   useEffect(() => { applySlots(true); }, [reels, applySlots]);
 
   useEffect(() => {
@@ -343,7 +386,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         fontSize: 10, color: "rgba(247,230,204,0.55)", letterSpacing: "0.2em",
         fontFamily: "var(--font-mono)", textTransform: "uppercase",
       }}>
-        &larr; Drag or swipe to explore &rarr;
+        &larr; Drag to explore &rarr;
       </div>
 
       {/* Center glow */}

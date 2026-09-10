@@ -12,7 +12,7 @@ export const lenisRef = { current: null };
 
 export default function SmoothScroll({ children, onScroll }) {
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    const lenis = new Lenis({ duration: 1.05, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
     lenisRef.current = lenis;
     if (typeof window !== 'undefined') window.__lenis = lenis;
     lenis.on('scroll', ({ progress, scroll }) => {
@@ -25,7 +25,7 @@ export default function SmoothScroll({ children, onScroll }) {
       }
     });
     gsap.ticker.add(time => lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     const handleDocClick = (e) => {
       const anchor = e.target.closest('a[href^="#"]');
@@ -39,8 +39,14 @@ export default function SmoothScroll({ children, onScroll }) {
     document.addEventListener('click', handleDocClick);
 
     let resizeObserver;
+    let refreshTimeout;
     if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
-      resizeObserver = new ResizeObserver(() => ScrollTrigger.refresh());
+      resizeObserver = new ResizeObserver(() => {
+        clearTimeout(refreshTimeout);
+        refreshTimeout = setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 150);
+      });
       resizeObserver.observe(document.body);
     }
     const intervals = [100, 300, 600, 1000, 1500, 2000, 3000].map(delay =>

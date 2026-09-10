@@ -71,6 +71,12 @@ function LightStreakCurve() {
     // Fade based on story section being in view (scroll progress 0.05–0.4)
     const progress = scrollRef.current.progress;
     const visibility = Math.max(0, Math.min(1, (progress - 0.05) / 0.08)) * Math.max(0, Math.min(1, 1 - (progress - 0.3) / 0.1));
+    if (visibility <= 0.001) {
+      if (lineRef.current.visible) lineRef.current.visible = false;
+      return;
+    }
+    lineRef.current.visible = true;
+
     const geo = lineRef.current.geometry;
     const total = geo.attributes.position.count;
     const drawCount = Math.floor(total * Math.max(0, Math.min(1, visibility * 1.5)));
@@ -165,13 +171,19 @@ function CtaBokeh({ count }) {
 
   useFrame((_state, delta) => {
     if (!ref.current) return;
+    // Visible in the last 12% of scroll
+    const progress = scrollRef.current.progress;
+    const ctaOpacity = Math.max(0, Math.min(1, (progress - 0.85) / 0.05)) * Math.max(0, Math.min(1, 1 - (progress - 0.95) / 0.05)) * 0.5;
+    if (ctaOpacity <= 0.001) {
+      if (ref.current.visible) ref.current.visible = false;
+      return;
+    }
+    ref.current.visible = true;
+
     noiseTime.current += delta * 0.12;
     const pts = ref.current;
     const pos = pts.geometry.attributes.position.array;
     const t = noiseTime.current;
-    // Visible in the last 12% of scroll
-    const progress = scrollRef.current.progress;
-    const ctaOpacity = Math.max(0, Math.min(1, (progress - 0.85) / 0.05)) * Math.max(0, Math.min(1, 1 - (progress - 0.95) / 0.05)) * 0.5;
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
       const bx = basePositions[i3], by = basePositions[i3 + 1], bz = basePositions[i3 + 2];

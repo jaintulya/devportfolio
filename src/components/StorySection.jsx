@@ -49,6 +49,14 @@ export default function StorySection() {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [activeMoment, setActiveMoment] = useState("chaos");
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   /* Story hero refs */
   const rootRef           = useRef(null);
@@ -86,7 +94,7 @@ export default function StorySection() {
         gsap.from(storyHeroRef.current.children, {
           y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
           stagger: 0.12,
-          scrollTrigger: { trigger: storyHeroRef.current, start: "top 85%" },
+          scrollTrigger: { trigger: storyHeroRef.current, start: "top 85%", once: true },
         });
       }
 
@@ -95,7 +103,7 @@ export default function StorySection() {
         gsap.from(headRef.current.children, {
           y: 20, opacity: 0, duration: 0.7, ease: "power2.out",
           stagger: 0.1,
-          scrollTrigger: { trigger: sceneRef.current, start: "top 80%" },
+          scrollTrigger: { trigger: sceneRef.current, start: "top 80%", once: true },
         });
       }
 
@@ -103,7 +111,7 @@ export default function StorySection() {
       if (journeyHeadRef.current) {
         gsap.from(journeyHeadRef.current, {
           y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
-          scrollTrigger: { trigger: journeyHeadRef.current, start: "top 85%" },
+          scrollTrigger: { trigger: journeyHeadRef.current, start: "top 85%", once: true },
         });
       }
 
@@ -115,7 +123,7 @@ export default function StorySection() {
             y: 20, opacity: 0, duration: 0.7,
             stagger: 0.08,
             ease: "power2.out",
-            scrollTrigger: { trigger: routeRef.current, start: "top 85%" },
+            scrollTrigger: { trigger: routeRef.current, start: "top 85%", once: true },
           });
         }
       }
@@ -135,10 +143,10 @@ export default function StorySection() {
       return;
     }
 
-    /* Step 1 — fade OUT old text (GSAP drives it) */
+    /* Step 1 — fade OUT old text */
     gsap.to(detailTextRef.current, {
-      opacity: 0, y: -10, filter: "blur(3px)",
-      duration: 0.28, ease: "power2.in",
+      opacity: 0, y: -8,
+      duration: 0.22, ease: "power2.in",
       onComplete: () => {
         /* Step 2 — swap text content, update React state */
         setActiveMoment(key);
@@ -149,10 +157,10 @@ export default function StorySection() {
 
         /* Step 3 — fade IN new text */
         gsap.fromTo(detailTextRef.current,
-          { opacity: 0, y: 8, filter: "blur(3px)" },
+          { opacity: 0, y: 8 },
           {
-            opacity: 1, y: 0, filter: "blur(0px)",
-            duration: 0.45, ease: "power2.out",
+            opacity: 1, y: 0,
+            duration: 0.35, ease: "power2.out",
             onComplete: () => setIsTransitioning(false),
           }
         );
@@ -178,7 +186,11 @@ export default function StorySection() {
     <section
       ref={rootRef}
       className="journey-section"
-      style={{ position: "relative", color: "var(--brand-maroon-dark)", overflow: "hidden" }}
+      style={{
+        position: "relative",
+        color: "var(--brand-maroon-dark)",
+        overflow: "hidden",
+      }}
     >
 
       {/* ═══════════════════════════════════
@@ -194,11 +206,7 @@ export default function StorySection() {
           color: "var(--brand-cream)",
         }}
       >
-        {/* Texture overlay matching Contact, Review & Footer */}
-        <div aria-hidden="true" style={{
-          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }} />
+
 
         <div
           ref={storyHeroRef}
@@ -279,7 +287,9 @@ export default function StorySection() {
               src="/beginningright.png"
               alt="Wedding celebration moment on camera — Shaadi Pitara origin story"
               crossOrigin="anonymous"
-              loading="lazy"
+              width={1372}
+              height={1147}
+              loading="eager"
               decoding="async"
               style={{
                 position:"relative",
@@ -341,11 +351,7 @@ export default function StorySection() {
           overflow: "hidden",
         }}
       >
-        {/* Texture overlay matching Contact, Review & Footer */}
-        <div aria-hidden="true" style={{
-          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }} />
+
 
         <div style={{
           maxWidth: 1180,
@@ -414,14 +420,15 @@ export default function StorySection() {
             <img
               src="/storylastright.png"
               alt="Cinematic wedding storytelling frame — Shaadi Pitara"
-              loading="lazy"
+              width={1371}
+              height={1148}
+              loading="eager"
               decoding="async"
               style={{
                 width: "100%",
                 height: "100%",
                 objectFit: "contain",
                 display: "block",
-                filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.5))",
               }}
             />
           </div>
@@ -700,6 +707,8 @@ export default function StorySection() {
           textAlign:"center",
           padding:"clamp(80px,11vw,160px) clamp(16px,4vw,48px)",
           overflow:"hidden",
+          contentVisibility: "auto",
+          containIntrinsicSize: "auto 700px",
         }}>
           <div style={{ maxWidth:1100,margin:"auto" }}>
             <div style={{
@@ -752,6 +761,8 @@ export default function StorySection() {
         <div style={{
           background:"var(--brand-ivory)",
           padding:"clamp(80px,11vw,160px) clamp(16px,4vw,48px)",
+          contentVisibility: "auto",
+          containIntrinsicSize: "auto 500px",
         }}>
           <div style={{
             maxWidth:1180,margin:"0 auto",
@@ -806,12 +817,10 @@ export default function StorySection() {
           color:"var(--brand-cream)",
           padding:"clamp(80px,12vw,180px) clamp(16px,4vw,48px)",
           position:"relative",overflow:"hidden",
+          contentVisibility: "auto",
+          containIntrinsicSize: "auto 600px",
         }}>
-          {/* Texture overlay matching Contact, Review & Footer */}
-          <div aria-hidden="true" style={{
-            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-          }} />
+
 
           {/* Radial glow */}
           <div aria-hidden="true" style={{
@@ -872,6 +881,8 @@ export default function StorySection() {
                 <img
                   src="/devimg.jpeg"
                   alt="Devarsh Jain — Founder and Wedding Content Creator at Shaadi Pitara Ahmedabad"
+                  width={540}
+                  height={700}
                   loading="lazy"
                   decoding="async"
                   style={{
@@ -987,10 +998,7 @@ export default function StorySection() {
             animation: floatNote2 4.8s ease-in-out infinite;
             will-change: transform;
           }
-          @keyframes scrollPulse {
-            0%,100% { transform:scaleY(1); transform-origin:top; opacity:0.4; }
-            50%     { transform:scaleY(1.5); opacity:1; }
-          }
+
           /* Story hero responsive */
           @media (max-width: 768px) {
             section.journey-section > div:first-child {
@@ -1027,14 +1035,7 @@ export default function StorySection() {
               grid-template-columns: 1fr !important;
             }
           }
-          @keyframes orbitSpinOuter {
-            from { transform: translate(-50%,-50%) rotateX(70deg) rotateZ(0deg); }
-            to   { transform: translate(-50%,-50%) rotateX(70deg) rotateZ(360deg); }
-          }
-          @keyframes orbitSpinInner {
-            from { transform: translate(-50%,-50%) rotateX(68deg) rotateZ(20deg); }
-            to   { transform: translate(-50%,-50%) rotateX(68deg) rotateZ(380deg); }
-          }
+
           @media (max-width: 768px) {
             .desktop-story-section { display: none !important; }
           }
@@ -1046,7 +1047,7 @@ export default function StorySection() {
     </div>
 
     <div className="mobile-story-section">
-      <MobileMemoryStack />
+      {isMobile && <MobileMemoryStack />}
     </div>
     </div>
     </>

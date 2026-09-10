@@ -120,21 +120,31 @@ export default function Navbar() {
       }
     };
 
+    let lastProbe = 0;
+    let throttleTimer = null;
+
+    const throttledProbe = () => {
+      const now = performance.now();
+      if (now - lastProbe < 140) {
+        clearTimeout(throttleTimer);
+        throttleTimer = setTimeout(probe, 140);
+        return;
+      }
+      lastProbe = now;
+      probe();
+    };
+
     const onScroll = () => {
       cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(probe);
+      rafId = requestAnimationFrame(throttledProbe);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    // Also hook into Lenis if present
-    const lenis = window.__lenis;
-    if (lenis) lenis.on("scroll", probe);
-
     probe(); // run once on mount
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      if (lenis) lenis.off("scroll", probe);
+      clearTimeout(throttleTimer);
       cancelAnimationFrame(rafId);
     };
   }, []);
