@@ -229,8 +229,9 @@ export default function ContactSection() {
           font-family: var(--font-display);
           font-size: clamp(42px, 7vw, 94px);
           font-weight: 500;
-          line-height: 0.84;
+          line-height: 1.06;
           letter-spacing: -0.04em;
+          padding-bottom: 0.06em;
         }
         .c-heading i { font-weight: 400; font-style: italic; color: var(--brand-gold); }
         .c-intro {
@@ -246,7 +247,8 @@ export default function ContactSection() {
         .copy-label { color: rgba(214, 180, 119, 0.7); font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; margin-bottom: 20px; text-transform: uppercase; }
         .copy-col h2 {
           color: var(--brand-cream); font-family: var(--font-display);
-          font-weight: 500; font-size: clamp(32px, 5vw, 68px); line-height: 0.9; letter-spacing: -0.035em;
+          font-weight: 500; font-size: clamp(32px, 5vw, 68px); line-height: 1.06; letter-spacing: -0.035em;
+          padding-bottom: 0.06em;
         }
         .copy-col h2 span { color: var(--brand-gold); font-style: italic; font-weight: 400; }
         .copy-col p { max-width: 430px; color: rgba(245, 230, 204, 0.5); font-size: 13px; line-height: 1.85; margin: 22px 0 0; }

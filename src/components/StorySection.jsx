@@ -236,7 +236,8 @@ export default function StorySection() {
             </div>
             <h2 className="c-heading on-light" style={{
               margin: "0 0 24px",
-              lineHeight: 0.88,
+              lineHeight: 1.06,
+              paddingBottom: 4,
               color: "var(--brand-maroon-dark)",
             }}>
               How Shaadi<br /><i style={{ color: "#A86F3E" }}>Pitara started.</i>
@@ -358,7 +359,8 @@ export default function StorySection() {
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontWeight: 500,
               fontSize: "clamp(48px, 7vw, 105px)",
-              lineHeight: 0.84,
+              lineHeight: 1.06,
+              paddingBottom: 4,
               letterSpacing: "-0.04em",
               margin: "0 0 24px",
               color: "var(--brand-cream)",
@@ -444,7 +446,8 @@ export default function StorySection() {
                   fontFamily:"'Cormorant Garamond',Georgia,serif",
                   fontWeight:500,
                   fontSize:"clamp(52px,7.5vw,105px)",
-                  lineHeight:0.84,
+                  lineHeight:1.06,
+                  paddingBottom:4,
                   letterSpacing:"-0.04em",
                   margin:0,
                   color:"#3A0B0E",
@@ -527,7 +530,8 @@ export default function StorySection() {
                   }} />
                   <h3 style={{
                     fontFamily:"'Cormorant Garamond',Georgia,serif",
-                    fontWeight:700,fontSize:33,lineHeight:0.95,
+                    fontWeight:700,fontSize:33,lineHeight:1.1,
+                    paddingBottom:2,
                     margin:"0 0 8px",color:"#280508",
                   }}>{stop.title}</h3>
                   <p style={{
@@ -570,7 +574,8 @@ export default function StorySection() {
                 fontFamily:"'Cormorant Garamond',Georgia,serif",
                 fontWeight:500,
                 fontSize:"clamp(48px,7vw,100px)",
-                lineHeight:0.86,
+                lineHeight:1.06,
+                paddingBottom:4,
                 letterSpacing:"-0.04em",
                 margin:"0 0 20px",
                 color:"var(--brand-maroon-dark)",
@@ -639,7 +644,8 @@ export default function StorySection() {
                       }} />
                       <span style={{
                         fontFamily:"'Cormorant Garamond',Georgia,serif",
-                        fontWeight:500,fontSize:32,lineHeight:0.92,
+                        fontWeight:500,fontSize:32,lineHeight:1.1,
+                        paddingBottom:2,
                         position:"relative",zIndex:2,
                         transition:"color 0.4s ease",
                       }}>{m.label}</span>
@@ -696,23 +702,24 @@ export default function StorySection() {
               fontFamily:"'Cormorant Garamond',Georgia,serif",
               fontWeight:500,
               fontSize:"clamp(52px,8vw,116px)",
-              lineHeight:0.86,
+              lineHeight:1.06,
+              paddingBottom:6,
               letterSpacing:"-0.045em",
               margin:"0 0 36px",
               color:"var(--brand-maroon-dark)",
             }}>
-              <span style={{display:"block",overflow:"hidden"}}>
+              <span style={{display:"block",paddingBottom:"0.06em"}}>
                 <span className="jreveal" style={{display:"block"}}>
                   We don&apos;t just capture the{" "}
                   <span style={{fontStyle:"italic",color:"#3A0B0E"}}>moment.</span>
                 </span>
               </span>
-              <span style={{display:"block",overflow:"hidden"}}>
+              <span style={{display:"block",paddingBottom:"0.06em"}}>
                 <span className="jreveal" style={{display:"block"}}>
                   We capture the
                 </span>
               </span>
-              <span style={{display:"block",overflow:"hidden"}}>
+              <span style={{display:"block",paddingBottom:"0.06em"}}>
                 <span className="jreveal" style={{display:"block"}}>
                   <span style={{fontStyle:"italic",color:"#3A0B0E"}}>story behind</span> it.
                 </span>
@@ -754,17 +761,18 @@ export default function StorySection() {
                 fontFamily:"'Cormorant Garamond',Georgia,serif",
                 fontWeight:500,
                 fontSize:"clamp(48px,7vw,100px)",
-                lineHeight:0.86,
+                lineHeight:1.06,
+                paddingBottom:6,
                 letterSpacing:"-0.04em",
                 margin:"0 0 28px",
                 color:"var(--brand-maroon-dark)",
               }}>
-                <span style={{display:"block",overflow:"hidden"}}>
+                <span style={{display:"block",paddingBottom:"0.06em"}}>
                   <span className="jreveal" style={{display:"block"}}>
                     Not just how it <span style={{color:"#3A0B0E",fontStyle:"italic"}}>looked.</span>
                   </span>
                 </span>
-                <span style={{display:"block",overflow:"hidden"}}>
+                <span style={{display:"block",paddingBottom:"0.06em"}}>
                   <span className="jreveal" style={{display:"block"}}>
                     How it <em style={{color:"#3A0B0E"}}>felt.</em>
                   </span>
@@ -816,17 +824,18 @@ export default function StorySection() {
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontWeight: 500,
               fontSize: "clamp(46px, 7vw, 105px)",
-              lineHeight: 0.88,
+              lineHeight: 1.06,
+              paddingBottom: 6,
               letterSpacing: "-0.045em",
               margin: 0,
               color: "var(--brand-cream)",
             }}>
-              <span style={{ display: "block", overflow: "hidden" }}>
+              <span style={{ display: "block", paddingBottom: "0.06em" }}>
                 <span className="jreveal" style={{ display: "block" }}>
                   A love for capturing moments
                 </span>
               </span>
-              <span style={{ display: "block", overflow: "hidden" }}>
+              <span style={{ display: "block", paddingBottom: "0.06em" }}>
                 <span className="jreveal" style={{ display: "block" }}>
                   became{" "}
                   <span style={{ color: "var(--brand-gold)", fontStyle: "italic" }}>Shaadi Pitara.</span>

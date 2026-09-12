@@ -155,10 +155,11 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display, 'Cormorant Garamond', 'Playfair Display', Georgia, serif);
   font-size: clamp(40px, 6.8vw, 88px);
   font-weight: 500;
-  line-height: 0.88;
+  line-height: 1.06;
   letter-spacing: -0.04em;
   color: var(--brand-cream);
   margin: 18px 0 12px;
+  padding-bottom: 0.06em;
 }
 
 .c-heading i,
@@ -190,9 +191,10 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-size: clamp(38px, 6vw, 76px);
   font-weight: 500;
-  line-height: 0.9;
+  line-height: 1.06;
   letter-spacing: -0.035em;
   color: var(--brand-cream);
+  padding-bottom: 0.06em;
 }
 
 .section-heading i,

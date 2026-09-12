@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
@@ -316,7 +316,11 @@ export default function WorkPage() {
     }
   }, [activeTab]);
 
-  const openModal = (reel) => {
+  const isExpandingRef = useRef(false);
+  const touchStartPos = useRef({ x: 0, y: 0 });
+  const touchMovedRef = useRef(false);
+
+  const openModal = useCallback((reel) => {
     const idx = filteredItems.findIndex((r) => r.id === reel.id);
     setActiveReelIndex(idx >= 0 ? idx : 0);
     setActiveReel(reel);
@@ -327,7 +331,87 @@ export default function WorkPage() {
     document.body.classList.add("hide-navbar");
     if (typeof window !== "undefined") window.__lenis?.stop();
     lenisRef.current?.stop();
-  };
+  }, [filteredItems]);
+
+  // ── Tap-to-expand animation on mobile (same as FilmBendStrip) ──
+  const expandCardAndOpenModal = useCallback(
+    (cardElement, reel) => {
+      if (!reel) return;
+      if (!cardElement || isExpandingRef.current) {
+        openModal(reel);
+        return;
+      }
+
+      isExpandingRef.current = true;
+
+      const rect = cardElement.getBoundingClientRect();
+      const viewportW = window.innerWidth;
+      const viewportH = window.innerHeight;
+
+      // Create backdrop
+      const backdrop = document.createElement("div");
+      backdrop.style.cssText = `
+        position:fixed;inset:0;z-index:99990;
+        background:rgba(5,1,2,0);
+        transition:background .4s ease;
+        pointer-events:none;
+      `;
+      document.body.appendChild(backdrop);
+
+      // Create clone of the card
+      const clone = cardElement.cloneNode(true);
+      clone.style.cssText = `
+        position:fixed;
+        left:${rect.left}px;
+        top:${rect.top}px;
+        width:${rect.width}px;
+        height:${rect.height}px;
+        border-radius:12px;
+        overflow:hidden;
+        z-index:99991;
+        pointer-events:none;
+        will-change:transform,opacity;
+        transform-origin:center center;
+        transition:none;
+        box-shadow:0 20px 60px rgba(0,0,0,0.6);
+        border:1.5px solid rgba(212,184,150,0.22);
+      `;
+      document.body.appendChild(clone);
+
+      // Hide original card temporarily
+      cardElement.style.opacity = "0";
+
+      // Calculate target: center of viewport, scaled up
+      const targetW = Math.min(viewportW * 0.78, 300);
+      const targetH = targetW * (16 / 9);
+      const targetLeft = (viewportW - targetW) / 2;
+      const targetTop = (viewportH - targetH) / 2;
+
+      // Force reflow then animate
+      clone.offsetHeight; // eslint-disable-line no-unused-expressions
+      requestAnimationFrame(() => {
+        backdrop.style.background = "rgba(5,1,2,0.92)";
+        clone.style.transition =
+          "left .4s cubic-bezier(.22,.8,.2,1), top .4s cubic-bezier(.22,.8,.2,1), width .4s cubic-bezier(.22,.8,.2,1), height .4s cubic-bezier(.22,.8,.2,1), border-radius .4s ease, box-shadow .4s ease";
+        clone.style.left = `${targetLeft}px`;
+        clone.style.top = `${targetTop}px`;
+        clone.style.width = `${targetW}px`;
+        clone.style.height = `${targetH}px`;
+        clone.style.borderRadius = "18px";
+        clone.style.boxShadow = "0 40px 100px rgba(0,0,0,0.9)";
+      });
+
+      // After animation completes, open modal and clean up
+      setTimeout(() => {
+        clone.remove();
+        backdrop.remove();
+        cardElement.style.opacity = "";
+        isExpandingRef.current = false;
+        openModal(reel);
+      }, 420);
+    },
+    [openModal]
+  );
 
   const navigateModal = (dir) => {
     const next = (activeReelIndex + dir + filteredItems.length) % filteredItems.length;
@@ -468,15 +552,33 @@ export default function WorkPage() {
                     </span>
                   </div>
                   {/* Strip */}
-                  <div style={{
-                    display: "flex", gap: 8, overflowX: "auto", padding: "0 16px",
-                    scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch",
-                  }} className="cat-scroll">
+                  <div
+                    style={{
+                      display: "flex", gap: 8, overflowX: "auto", padding: "0 16px",
+                      scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch",
+                    }}
+                    className="cat-scroll"
+                    onTouchStart={(e) => {
+                      touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                      touchMovedRef.current = false;
+                    }}
+                    onTouchMove={(e) => {
+                      const dist = Math.hypot(
+                        e.touches[0].clientX - touchStartPos.current.x,
+                        e.touches[0].clientY - touchStartPos.current.y
+                      );
+                      if (dist > 8) touchMovedRef.current = true;
+                    }}
+                  >
                     <style>{`.cat-scroll::-webkit-scrollbar { display: none; }`}</style>
                     {catReels.map((item) => (
                       <div
                         key={item.id}
-                        onClick={() => openModal(item)}
+                        className="work-card-mobile"
+                        onClick={(e) => {
+                          if (touchMovedRef.current) return;
+                          expandCardAndOpenModal(e.currentTarget, item);
+                        }}
                         style={{
                           flexShrink: 0, width: 80, aspectRatio: "9/16", borderRadius: 8,
                           background: "var(--brand-maroon-dark)", position: "relative",
@@ -487,7 +589,12 @@ export default function WorkPage() {
                         {/* Play button */}
                         <button
                           type="button"
-                          onClick={(e) => { e.stopPropagation(); openModal(item); }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (touchMovedRef.current) return;
+                            const card = e.currentTarget.closest(".work-card-mobile");
+                            expandCardAndOpenModal(card, item);
+                          }}
                           aria-label={`Play ${item.title}`}
                           style={{
                             position: "absolute", top: "50%", left: "50%",

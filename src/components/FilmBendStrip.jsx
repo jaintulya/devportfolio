@@ -123,10 +123,22 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
   const stageRef = useRef(null);
   const cardRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [dragState, setDragState] = useState({ dragging: false, startX: 0, delta: 0 });
+
+  // Ref-based touch state (no React re-renders during touch)
+  const touchRef = useRef({
+    active: false,
+    startX: 0,
+    startY: 0,
+    startTime: 0,
+    gestureDecided: false,
+    gestureType: null, // "horizontal" | "vertical" | null
+    currentDX: 0,
+  });
+
+  const activeIndexRef = useRef(0);
+  useEffect(() => { activeIndexRef.current = activeIndex; }, [activeIndex]);
 
   const getSlots = useCallback(() => {
-    const mobile = true;
     const spread = 68;
     const far = 130;
     const sideFade = 0.18;
@@ -142,16 +154,24 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
   }, []);
 
   const SWIPE_THRESHOLD = 45;
+  const TAP_MOVE_LIMIT = 8;
+  const TAP_DURATION_LIMIT = 300;
+  const GESTURE_LOCK_THRESHOLD = 8;
 
-  const getRel = useCallback(
-    (i) => {
+  const getRelFor = useCallback(
+    (i, aIdx) => {
       const len = reels.length;
       if (len === 0) return 0;
-      let r = ((i - activeIndex) % len + len) % len;
+      let r = ((i - aIdx) % len + len) % len;
       if (r > len / 2) r -= len;
       return r;
     },
-    [activeIndex, reels.length]
+    [reels.length]
+  );
+
+  const getRel = useCallback(
+    (i) => getRelFor(i, activeIndexRef.current),
+    [getRelFor]
   );
 
   const applySlots = useCallback(
@@ -165,7 +185,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
-        const rel = getRel(i);
+        const rel = getRelFor(i, activeIndexRef.current);
         const slotIndex = rel + 3;
         const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
         if (!slot) {
@@ -178,130 +198,343 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         card.style.transition = transition;
         card.style.transform =
           `translate(-50%,-50%) translate3d(${slot.x}px,${slot.y}px,0) rotate(${slot.r}deg) scale(${slot.s})`;
-        card.style.opacity = slot.o;
+        card.style.opacity = String(slot.o);
         card.style.filter = rel === 0 ? "none" : "saturate(.65) brightness(.8)";
-        card.style.zIndex = slot.z;
-        card.style.pointerEvents = rel === 0 ? "auto" : "none";
+        card.style.zIndex = String(slot.z);
+        // Allow tapping on the 3 central visible cards (slots 2, 3, 4 = rel -1, 0, 1)
+        card.style.pointerEvents = (Math.abs(rel) <= 1) ? "auto" : "none";
       });
     },
-    [getSlots, getRel, reels.length]
+    [getSlots, getRelFor, reels.length]
   );
 
-  const applyDragPreview = useCallback(
+  // Only move the top card during horizontal drag
+  const applyTopCardDrag = useCallback(
     (dx) => {
       const slots = getSlots();
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
-        const rel = getRel(i);
+        const rel = getRelFor(i, activeIndexRef.current);
         const slotIndex = rel + 3;
         const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
-        if (!slot) {
-          card.style.opacity = "0";
-          card.style.pointerEvents = "none";
-          return;
+
+        if (rel === 0 && slot) {
+          // Top card follows finger
+          const rotation = slot.r + dx * 0.03;
+          card.style.transition = "none";
+          card.style.transform =
+            `translate(-50%,-50%) translate3d(${slot.x + dx}px,${slot.y}px,0) rotate(${rotation}deg) scale(${slot.s})`;
         }
-
-        const factor = Math.max(0.08, 1 - Math.abs(rel) * 0.12);
-        const x = slot.x + dx * factor;
-        const y = slot.y + Math.abs(dx) * 0.015 * Math.abs(rel);
-        const r = slot.r + dx * 0.02 * (rel === 0 ? 0.3 : 0.12);
-
-        card.style.transition = "none";
-        card.style.transform =
-          `translate(-50%,-50%) translate3d(${x}px,${y}px,0) rotate(${r}deg) scale(${slot.s})`;
+        // Other cards: do nothing, stay at their slot positions
       });
     },
-    [getSlots, getRel, reels.length]
+    [getSlots, getRelFor, reels.length]
   );
 
-  const playTransition = useCallback(
-    (direction) => {
-      const prevIndex = activeIndex;
+  const playSwipeExit = useCallback(
+    (exitDirection, indexDelta) => {
+      const prevIndex = activeIndexRef.current;
       const slots = getSlots();
 
+      // Animate top card flying off in the swipe direction (exitDirection: +1 right, -1 left)
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
-        const rel = getRel(i);
+        const rel = getRelFor(i, prevIndex);
+        if (rel !== 0) return;
         const slotIndex = rel + 3;
-        const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
+        const slot = slots[slotIndex];
         if (!slot) return;
 
-        const shove = direction * 20 * (rel === 0 ? -1 : 0.15);
-        card.style.transition = "transform .15s ease-out, opacity .14s ease";
+        const exitX = exitDirection * 340;
+        const exitRotation = exitDirection * 18;
+        card.style.transition = "transform .32s cubic-bezier(.22,.8,.2,1), opacity .28s ease";
         card.style.transform =
-          `translate(-50%,-50%) translate3d(${slot.x + shove}px,${slot.y}px,0) rotate(${slot.r + direction * 1.5}deg) scale(${slot.s})`;
+          `translate(-50%,-50%) translate3d(${exitX}px,${slot.y - 10}px,0) rotate(${exitRotation}deg) scale(${slot.s * 0.9})`;
+        card.style.opacity = "0";
       });
 
+      // After exit animation, update active index and arrange cards
       setTimeout(() => {
-        const next = (prevIndex + direction + reels.length) % reels.length;
+        const next = (prevIndex + indexDelta + reels.length) % reels.length;
+        activeIndexRef.current = next;
         setActiveIndex(next);
-        applySlots(true);
-      }, 140);
-    },
-    [activeIndex, getSlots, getRel, reels.length, applySlots]
-  );
 
-  const onPointerDown = useCallback((e) => {
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-    setDragState({ dragging: true, startX: e.clientX, delta: 0 });
-    stageRef.current?.setPointerCapture?.(e.pointerId);
-  }, []);
+        // Pre-position the exited card at its new slot with opacity 0 so it doesn't boomerang across
+        const exitedCard = cardRefs.current[prevIndex];
+        if (exitedCard) {
+          const newRel = getRelFor(prevIndex, next);
+          const newSlot = slots[newRel + 3];
+          if (newSlot) {
+            exitedCard.style.transition = "none";
+            exitedCard.style.transform =
+              `translate(-50%,-50%) translate3d(${newSlot.x}px,${newSlot.y}px,0) rotate(${newSlot.r}deg) scale(${newSlot.s})`;
+            exitedCard.style.opacity = "0";
+          }
+        }
 
-  const onPointerMove = useCallback(
-    (e) => {
-      if (!dragState.dragging) return;
-      const dx = e.clientX - dragState.startX;
-      setDragState((prev) => ({ ...prev, delta: dx }));
-      applyDragPreview(dx);
-    },
-    [dragState.dragging, dragState.startX, applyDragPreview]
-  );
-
-  const onPointerUp = useCallback(() => {
-    if (!dragState.dragging) return;
-    const { delta } = dragState;
-
-    if (stageRef.current) {
-      stageRef.current
-        .querySelectorAll(".film-card")
-        .forEach((c) => {
-          c.style.transition =
-            "transform .5s cubic-bezier(.22,.8,.2,1), opacity .4s ease, filter .4s ease";
+        requestAnimationFrame(() => {
+          applySlots(true);
         });
-    }
+      }, 200);
+    },
+    [getSlots, getRelFor, reels.length, applySlots]
+  );
 
-    if (Math.abs(delta) > SWIPE_THRESHOLD) {
-      const dir = delta < 0 ? 1 : -1;
-      playTransition(dir);
-    } else {
-      applySlots(true);
-    }
+  // ── Tap-to-expand animation ──
+  const expandCardAndOpenModal = useCallback(
+    (reelIndex) => {
+      const reel = reels[reelIndex];
+      if (!reel) return;
+      const card = cardRefs.current[reelIndex];
+      if (!card) { onOpen?.(reel); return; }
 
-    setDragState({ dragging: false, startX: 0, delta: 0 });
-  }, [dragState, playTransition, applySlots]);
+      const rect = card.getBoundingClientRect();
+      const viewportW = window.innerWidth;
+      const viewportH = window.innerHeight;
 
-  const onPointerCancel = useCallback(() => {
-    setDragState({ dragging: false, startX: 0, delta: 0 });
-    applySlots(true);
-  }, [applySlots]);
+      // Create backdrop
+      const backdrop = document.createElement("div");
+      backdrop.style.cssText = `
+        position:fixed;inset:0;z-index:99990;
+        background:rgba(5,1,2,0);
+        transition:background .4s ease;
+        pointer-events:none;
+      `;
+      document.body.appendChild(backdrop);
 
+      // Create clone of the card
+      const clone = card.cloneNode(true);
+      clone.style.cssText = `
+        position:fixed;
+        left:${rect.left}px;
+        top:${rect.top}px;
+        width:${rect.width}px;
+        height:${rect.height}px;
+        border-radius:14px;
+        overflow:hidden;
+        z-index:99991;
+        pointer-events:none;
+        will-change:transform,opacity;
+        transform-origin:center center;
+        transition:none;
+        box-shadow:0 20px 60px rgba(0,0,0,0.6);
+        border:1.5px solid rgba(212,184,150,0.22);
+      `;
+      document.body.appendChild(clone);
+
+      // Hide original card temporarily
+      card.style.opacity = "0";
+
+      // Calculate target: center of viewport, scaled up
+      const targetW = Math.min(viewportW * 0.75, 300);
+      const targetH = targetW * (16 / 9);
+      const targetLeft = (viewportW - targetW) / 2;
+      const targetTop = (viewportH - targetH) / 2;
+
+      // Force reflow then animate
+      clone.offsetHeight; // eslint-disable-line no-unused-expressions
+      requestAnimationFrame(() => {
+        backdrop.style.background = "rgba(5,1,2,0.92)";
+        clone.style.transition = "left .4s cubic-bezier(.22,.8,.2,1), top .4s cubic-bezier(.22,.8,.2,1), width .4s cubic-bezier(.22,.8,.2,1), height .4s cubic-bezier(.22,.8,.2,1), border-radius .4s ease, box-shadow .4s ease";
+        clone.style.left = `${targetLeft}px`;
+        clone.style.top = `${targetTop}px`;
+        clone.style.width = `${targetW}px`;
+        clone.style.height = `${targetH}px`;
+        clone.style.borderRadius = "18px";
+        clone.style.boxShadow = "0 40px 100px rgba(0,0,0,0.9)";
+      });
+
+      // After animation completes, open modal and clean up
+      setTimeout(() => {
+        clone.remove();
+        backdrop.remove();
+        // Restore original card opacity
+        card.style.opacity = "";
+        applySlots(true);
+        onOpen?.(reel);
+      }, 420);
+    },
+    [reels, onOpen, applySlots]
+  );
+
+  // ── Raw touch event handling via useEffect ──
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const handleTouchStart = (e) => {
+      // Don't interfere with SEE MORE or other interactive links
+      if (e.target.closest("a[href]")) return;
+
+      // ONLY start swipe/tap tracking if touch started directly on a film card
+      const cardEl = e.target.closest(".film-card");
+      if (!cardEl) return;
+
+      const touch = e.touches[0];
+      touchRef.current = {
+        active: true,
+        startX: touch.clientX,
+        startY: touch.clientY,
+        startTime: performance.now(),
+        gestureDecided: false,
+        gestureType: null,
+        currentDX: 0,
+      };
+    };
+
+    const handleTouchMove = (e) => {
+      const t = touchRef.current;
+      if (!t.active) return;
+
+      const touch = e.touches[0];
+      const dx = touch.clientX - t.startX;
+      const dy = touch.clientY - t.startY;
+      const absDX = Math.abs(dx);
+      const absDY = Math.abs(dy);
+
+      if (!t.gestureDecided) {
+        const totalMove = Math.sqrt(dx * dx + dy * dy);
+        if (totalMove > GESTURE_LOCK_THRESHOLD) {
+          t.gestureDecided = true;
+          if (absDY > absDX) {
+            // Vertical gesture → let browser handle normal page scroll
+            t.gestureType = "vertical";
+            t.active = false;
+            return;
+          } else {
+            // Horizontal gesture on card → we handle it
+            t.gestureType = "horizontal";
+            e.preventDefault();
+          }
+        }
+        return; // Not enough movement yet
+      }
+
+      if (t.gestureType === "horizontal") {
+        e.preventDefault();
+        t.currentDX = dx;
+        applyTopCardDrag(dx);
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      const t = touchRef.current;
+      if (!t.active) return;
+      t.active = false;
+
+      const duration = performance.now() - t.startTime;
+      const dx = t.currentDX;
+      const absDX = Math.abs(dx);
+
+      if (t.gestureType === "horizontal") {
+        // Complete or cancel swipe
+        if (absDX > SWIPE_THRESHOLD) {
+          if (dx > 0) {
+            // Swiped right -> exit to right (+1), show previous card (-1)
+            playSwipeExit(1, -1);
+          } else {
+            // Swiped left -> exit to left (-1), show next card (+1)
+            playSwipeExit(-1, 1);
+          }
+        } else {
+          // Snap back
+          applySlots(true);
+        }
+      } else if (!t.gestureDecided || t.gestureType === null) {
+        // Movement stayed below threshold — tap on card
+        const touch = e.changedTouches[0];
+        const totalDX = Math.abs(touch.clientX - t.startX);
+        const totalDY = Math.abs(touch.clientY - t.startY);
+
+        if (totalDX < TAP_MOVE_LIMIT && totalDY < TAP_MOVE_LIMIT && duration < TAP_DURATION_LIMIT) {
+          const tapX = touch.clientX;
+          const tapY = touch.clientY;
+
+          let tappedIndex = -1;
+          const currentActive = activeIndexRef.current;
+          const checkOrder = [currentActive];
+          const len = reels.length;
+          const prevIdx = (currentActive - 1 + len) % len;
+          const nextIdx = (currentActive + 1) % len;
+          checkOrder.push(prevIdx, nextIdx);
+
+          for (const idx of checkOrder) {
+            const card = cardRefs.current[idx];
+            if (!card) continue;
+            const rect = card.getBoundingClientRect();
+            if (tapX >= rect.left && tapX <= rect.right && tapY >= rect.top && tapY <= rect.bottom) {
+              tappedIndex = idx;
+              break;
+            }
+          }
+
+          if (tappedIndex >= 0) {
+            e.preventDefault();
+            expandCardAndOpenModal(tappedIndex);
+          }
+        }
+      }
+
+      // Reset
+      touchRef.current = {
+        active: false,
+        startX: 0,
+        startY: 0,
+        startTime: 0,
+        gestureDecided: false,
+        gestureType: null,
+        currentDX: 0,
+      };
+    };
+
+    const handleTouchCancel = () => {
+      const t = touchRef.current;
+      if (t.active && t.gestureType === "horizontal") {
+        applySlots(true);
+      }
+      touchRef.current = {
+        active: false,
+        startX: 0,
+        startY: 0,
+        startTime: 0,
+        gestureDecided: false,
+        gestureType: null,
+        currentDX: 0,
+      };
+    };
+
+    stage.addEventListener("touchstart", handleTouchStart, { passive: true });
+    stage.addEventListener("touchmove", handleTouchMove, { passive: false });
+    stage.addEventListener("touchend", handleTouchEnd, { passive: false });
+    stage.addEventListener("touchcancel", handleTouchCancel, { passive: true });
+
+    return () => {
+      stage.removeEventListener("touchstart", handleTouchStart);
+      stage.removeEventListener("touchmove", handleTouchMove);
+      stage.removeEventListener("touchend", handleTouchEnd);
+      stage.removeEventListener("touchcancel", handleTouchCancel);
+    };
+  }, [applyTopCardDrag, applySlots, playSwipeExit, expandCardAndOpenModal, reels.length]);
+
+  // ── Keyboard navigation ──
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        playTransition(-1);
+        playSwipeExit(1, -1);
       }
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        playTransition(1);
+        playSwipeExit(-1, 1);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [playTransition]);
+  }, [playSwipeExit]);
 
+  // ── Horizontal wheel (trackpad / Shift+wheel) — kept for non-touch ──
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
@@ -313,7 +546,6 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
     const COOLDOWN = 260;
 
     const handleWheel = (e) => {
-      if (dragState.dragging) return;
       const dx = e.deltaX !== 0 ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
       const absX = Math.abs(dx);
       const absY = Math.abs(e.deltaY);
@@ -330,8 +562,11 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         }, 140);
 
         if (Math.abs(accumulatedDeltaX) >= THRESHOLD) {
-          const dir = accumulatedDeltaX > 0 ? 1 : -1;
-          playTransition(dir);
+          if (accumulatedDeltaX > 0) {
+            playSwipeExit(-1, 1);
+          } else {
+            playSwipeExit(1, -1);
+          }
           lastTriggerTime = now;
           accumulatedDeltaX = 0;
         }
@@ -343,7 +578,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       stage.removeEventListener("wheel", handleWheel);
       clearTimeout(resetTimer);
     };
-  }, [playTransition, dragState.dragging]);
+  }, [playSwipeExit]);
 
   useEffect(() => { applySlots(true); }, [reels, applySlots]);
 
@@ -363,17 +598,11 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         width: "100%",
         height: "560px",
         overflow: "hidden",
-        touchAction: "none",
+        touchAction: "pan-y",
         overscrollBehavior: "contain",
-        cursor: dragState.dragging ? "grabbing" : "grab",
         userSelect: "none",
         WebkitUserSelect: "none",
       }}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerCancel}
-      onPointerLeave={onPointerCancel}
       role="region"
       aria-label="Reel gallery — swipe to browse"
       aria-roledescription="carousel"
@@ -413,18 +642,10 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
               key={reel.id}
               ref={(el) => { cardRefs.current[i] = el; }}
               className="film-card"
-              onClick={() => {
-                if (!isCenter) {
-                  setActiveIndex(i);
-                  // Give it a tiny delay to start sliding before modal covers it
-                  setTimeout(() => applySlots(true), 50);
-                }
-                onOpen?.(reel);
-              }}
               role="button"
               tabIndex={0}
               aria-label={`${reel.title} — click to play`}
-              onKeyDown={(e) => { if (e.key === "Enter") onOpen?.(reel); }}
+              onKeyDown={(e) => { if (e.key === "Enter") expandCardAndOpenModal(i); }}
               style={{
                 position: "absolute", left: 0, top: 0,
                 width: "clamp(145px, 44vw, 195px)",
@@ -435,8 +656,8 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
                 boxShadow: isCenter ? "0 20px 45px rgba(0,0,0,0.45)" : "0 8px 24px rgba(0,0,0,0.25)",
                 willChange: "transform, opacity, filter",
                 pointerEvents: "auto",
-                opacity: 0, // hide extra cards by default
-                transform: "translate(-50%,-50%) scale(0.5)", // shrink extra cards out of view
+                opacity: 0,
+                transform: "translate(-50%,-50%) scale(0.5)",
               }}
             >
               <img src={reel.poster} alt={`${reel.title} — ${reel.couple || 'Wedding'} reel by Shaadi Pitara`} loading="lazy" decoding="async" style={{
@@ -453,19 +674,9 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
               {/* Centered Play Triangle Button */}
               <button
                 type="button"
-                onPointerDown={(e) => {
-                  e.stopPropagation();
-                }}
-                onPointerUp={(e) => {
-                  e.stopPropagation();
-                }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (!isCenter) {
-                    setActiveIndex(i);
-                    setTimeout(() => applySlots(true), 50);
-                  }
-                  onOpen?.(reel);
+                  expandCardAndOpenModal(i);
                 }}
                 aria-label={`Play ${reel.title}`}
                 style={{
@@ -519,6 +730,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
           href={typeof onSeeMore === "string" ? onSeeMore : "/works"}
           target={typeof onSeeMore === "string" && onSeeMore.startsWith("http") ? "_blank" : undefined}
           rel={typeof onSeeMore === "string" && onSeeMore.startsWith("http") ? "noopener noreferrer" : undefined}
+          onTouchStart={(e) => e.stopPropagation()}
           style={{
             position: "absolute", bottom: 12, left: "50%",
             transform: "translateX(-50%)", zIndex: 20,
