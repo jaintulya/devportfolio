@@ -54,7 +54,7 @@ const contactMethods = [
     description: "Chat directly about your wedding date, plans and vision.",
     IconComponent: WhatsAppIcon,
     ctaText: "START A CHAT ↗",
-    link: "https://wa.me/919377150889",
+    link: `https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I would like to enquire about your wedding services. Please share more details. Thank you!")}`,
     className: "c1",
   },
   {
@@ -151,7 +151,7 @@ export default function ContactSection() {
     const ctx = gsap.context(() => {
       gsap.from(".c-top > *", {
         y: 20, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
-        scrollTrigger: { trigger: "#contact", start: "top 80%" }
+        scrollTrigger: { trigger: stageRef.current, start: "top 80%" }
       });
       gsap.from(".copy-col > *, .handwritten", {
         y: 30, opacity: 0, duration: 0.9, ease: "power3.out", stagger: 0.1,
@@ -409,7 +409,7 @@ export default function ContactSection() {
           <h2>Every beautiful<br/>story starts with<br/><span>one little hello.</span></h2>
           <p>
             Whether you&apos;re planning your wedding, exploring our films,
-            or simply want to say hello — we&apos;re only a click away.
+            or simply want to say hello, we&apos;re only a click away.
           </p>
           <div className="handwritten">See you on the other side ✦</div>
         </div>

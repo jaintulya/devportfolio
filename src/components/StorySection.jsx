@@ -18,13 +18,13 @@ const timelineStops = [
 /* ─── Moments data ─── */
 const moments = [
   { key: "chaos",   label: "The chaos",       detail: "The behind-the-scenes rush and imperfect little moments nobody planned." },
-  { key: "laugh",   label: "The laughter",    detail: "Friends laughing between shots — the real moments behind the posed ones." },
+  { key: "laugh",   label: "The laughter",    detail: "Friends laughing between shots, the real moments behind the posed ones." },
   { key: "nerves",  label: "The nervousness", detail: "That quiet nervousness before an entry, a ritual, or a life-changing moment." },
   { key: "parents", label: "The parents",     detail: "Parents getting emotional, proud and overwhelmed outside the perfect frame." },
   { key: "cousins", label: "The cousins",     detail: "Cousins dancing when nobody is watching and making memories of their own." },
   { key: "talks",   label: "The conversations", detail: "Tiny conversations that feel ordinary then, but become priceless later." },
   { key: "madness", label: "The madness",     detail: "The beautiful madness that makes a wedding feel alive." },
-  { key: "happy",   label: "The happiness",   detail: "All the little pieces together — the feeling that makes a wedding a wedding." },
+  { key: "happy",   label: "The happiness",   detail: "All the little pieces together, the feeling that makes a wedding a wedding." },
 ];
 
 /* ─── Orbit removed — Shaadi Pitara logo centered in story hero ─── */
@@ -189,7 +189,7 @@ export default function StorySection() {
       style={{
         position: "relative",
         color: "var(--brand-maroon-dark)",
-        overflow: "hidden",
+        overflow: "clip",
       }}
     >
 
@@ -200,10 +200,10 @@ export default function StorySection() {
         className="jreveal"
         style={{
           position: "relative",
-          background: "#3A0B0E",
+          background: "#FDF4E5",
           padding: "clamp(60px, 7vw, 100px) clamp(16px, 4vw, 48px) clamp(40px, 5.5vw, 75px)",
           overflow: "hidden",
-          color: "var(--brand-cream)",
+          color: "var(--brand-maroon-dark)",
         }}
       >
 
@@ -227,112 +227,89 @@ export default function StorySection() {
             <div className="jreveal" style={{
               fontFamily: "var(--font-mono)", fontSize: 10,
               letterSpacing: "0.18em", textTransform: "uppercase",
-              color: "var(--brand-gold)", marginBottom: 22,
+              color: "var(--brand-maroon-dark)",
+              opacity: 0.85,
+              marginBottom: 22,
+              fontWeight: 500,
             }}>
               THE STORY BEHIND SHAADI PITARA
             </div>
-            <h2 className="c-heading" style={{
+            <h2 className="c-heading on-light" style={{
               margin: "0 0 24px",
               lineHeight: 0.88,
+              color: "var(--brand-maroon-dark)",
             }}>
-              How Shaadi<br /><i>Pitara started.</i>
+              How Shaadi<br /><i style={{ color: "#A86F3E" }}>Pitara started.</i>
             </h2>
             <p className="jreveal" style={{
               maxWidth: 440,
-              color: "rgba(210,179,168,0.80)",
+              color: "rgba(58, 13, 16, 0.75)",
               fontSize: 15, lineHeight: 1.9, margin: "0 0 32px",
             }}>
               It started with a simple love for capturing everything around me. A
-              phone, Snapchat, random moments, editing, sharing — and slowly, a
+              phone, Snapchat, random moments, editing, sharing, and slowly, a
               feeling that this could become something more.
             </p>
             <button
               className="jreveal"
               onClick={() => document.getElementById("story-begin")?.scrollIntoView({ behavior: "smooth" })}
               style={{
-                border: "1px solid rgba(247,230,204,0.30)",
+                border: "1.5px solid var(--brand-maroon-dark)",
                 background: "transparent",
-                color: "var(--brand-cream)",
+                color: "var(--brand-maroon-dark)",
                 padding: "14px 28px",
                 fontFamily: "var(--font-mono)", fontSize: 10,
                 letterSpacing: "0.18em", textTransform: "uppercase",
                 cursor: "pointer",
                 display: "flex", alignItems: "center", gap: 12,
-                transition: "all 0.4s ease",
+                transition: "all 0.4s cubic-bezier(0.23, 1, 0.32, 1)",
+                fontWeight: 600,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(247,230,204,0.10)";
-                e.currentTarget.style.borderColor = "rgba(247,230,204,0.55)";
+                e.currentTarget.style.background = "var(--brand-maroon-dark)";
+                e.currentTarget.style.color = "#F6E5CB";
+                e.currentTarget.style.borderColor = "var(--brand-maroon-dark)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.borderColor = "rgba(247,230,204,0.30)";
+                e.currentTarget.style.color = "var(--brand-maroon-dark)";
+                e.currentTarget.style.borderColor = "var(--brand-maroon-dark)";
               }}
             >
               Enter the story <span style={{ fontSize: 14 }}>↓</span>
             </button>
           </div>
 
-          {/* Right — beginning image */}
+          {/* Right — logo */}
           <div
             ref={orbitRef}
             style={{
               position: "relative",
-              width: "min(430px, 37vw)",
-              height: "min(500px, 43vw)",
+              width: "min(400px, 36vw)",
+              aspectRatio: "1/1",
               margin: "0 auto",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <img
-              src="/beginningright.png"
-              alt="Wedding celebration moment on camera — Shaadi Pitara origin story"
-              crossOrigin="anonymous"
-              width={1372}
-              height={1147}
+              src="/only-red-and-shaadi-pitara-text-logo.png"
+              alt="Shaadipitara logo - Devarsh Jain"
+              width={1254}
+              height={1254}
               loading="eager"
               decoding="async"
               style={{
-                position:"relative",
-                width:"100%",
-                height:"100%",
-                objectFit:"contain",
-                display:"block",
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                display: "block",
+                filter: "drop-shadow(0 16px 36px rgba(94, 24, 28, 0.10))",
               }}
             />
           </div>
-        </div>
-      </div>
-
-      {/* ─── Separator Line between Part 1 & Part 2 ─── */}
-      <div
-        aria-hidden="true"
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          padding: "0 clamp(16px, 4vw, 48px)",
-          position: "relative",
-          zIndex: 5,
-        }}
-      >
-        <div
-          style={{
-            position: "relative",
-            height: 1,
-            background: "linear-gradient(90deg, transparent 0%, rgba(214,180,119,0.25) 15%, rgba(214,180,119,0.55) 50%, rgba(214,180,119,0.25) 85%, transparent 100%)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              width: 8,
-              height: 8,
-              background: "var(--brand-gold, #c4965f)",
-              transform: "rotate(45deg)",
-              boxShadow: "0 0 12px rgba(196,150,95,0.7), 0 0 0 3px #3A0B0E",
-            }}
-          />
         </div>
       </div>
 
@@ -399,7 +376,7 @@ export default function StorySection() {
             }}>
               Whenever something happened, I heard:{" "}
               <span style={{
-                color: "#fff6e7", fontWeight: 500, fontStyle: "italic",
+                color: "#F6E5CB", fontWeight: 500, fontStyle: "italic",
                 fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 21,
               }}>
                 "Tu hi story laga diya kar, tu achhe se edit karta hai."
@@ -479,7 +456,7 @@ export default function StorySection() {
                 lineHeight:1.85,margin:0,
               }}>
                 What began casually slowly became professional exploration. College,
-                a viral reel, food creators, struggle, experimenting and learning —
+                a viral reel, food creators, struggle, experimenting and learning,
                 every phase added something.
               </p>
             </div>
@@ -571,7 +548,7 @@ export default function StorySection() {
         <div
           id="moments"
           style={{
-            background:"#FFF6E7",
+            background:"#FEF5E6",
             padding:"clamp(80px,12vw,160px) clamp(16px,4vw,48px)",
           }}
         >
@@ -606,7 +583,7 @@ export default function StorySection() {
                 maxWidth:360,margin:0,opacity:0.85,
               }}>
                 The chaos behind the scenes. The laughter, nerves, parents, cousins,
-                tiny conversations, madness and happiness — all the things that may
+                tiny conversations, madness and happiness, all the things that may
                 never become the hero frame, but become the memory.
               </p>
             </div>
@@ -707,8 +684,6 @@ export default function StorySection() {
           textAlign:"center",
           padding:"clamp(80px,11vw,160px) clamp(16px,4vw,48px)",
           overflow:"hidden",
-          contentVisibility: "auto",
-          containIntrinsicSize: "auto 700px",
         }}>
           <div style={{ maxWidth:1100,margin:"auto" }}>
             <div style={{
@@ -748,7 +723,7 @@ export default function StorySection() {
               maxWidth:680,color:"#3A0B0E",
               fontSize:15,lineHeight:1.9,margin:"0 auto",opacity:0.85,
             }}>
-              Our content is raw, real, spontaneous and alive — the emotional, fun and
+              Our content is raw, real, spontaneous and alive, capturing the emotional, fun and
               candid side that might never make the final wedding album, but is often
               what people remember most.
             </p>
@@ -761,8 +736,6 @@ export default function StorySection() {
         <div style={{
           background:"var(--brand-ivory)",
           padding:"clamp(80px,11vw,160px) clamp(16px,4vw,48px)",
-          contentVisibility: "auto",
-          containIntrinsicSize: "auto 500px",
         }}>
           <div style={{
             maxWidth:1180,margin:"0 auto",
@@ -802,7 +775,7 @@ export default function StorySection() {
                 fontSize:15,lineHeight:1.9,margin:0,opacity:0.85,
               }}>
                 Months or even years later, you can go back to those stories and relive
-                the wedding exactly as it felt — not just how it looked. That thought
+                the wedding exactly as it felt, not just how it looked. That thought
                 became the foundation of Shaadi Pitara.
               </p>
             </div>
@@ -817,8 +790,6 @@ export default function StorySection() {
           color:"var(--brand-cream)",
           padding:"clamp(80px,12vw,180px) clamp(16px,4vw,48px)",
           position:"relative",overflow:"hidden",
-          contentVisibility: "auto",
-          containIntrinsicSize: "auto 600px",
         }}>
 
 
@@ -871,6 +842,7 @@ export default function StorySection() {
               gap: 16,
             }}>
               <div
+                className="dev-card-float"
                 style={{
                   position: "relative",
                   width: "clamp(200px, 20vw, 270px)",
@@ -880,10 +852,10 @@ export default function StorySection() {
               >
                 <img
                   src="/devimg.jpeg"
-                  alt="Devarsh Jain — Founder and Wedding Content Creator at Shaadi Pitara Ahmedabad"
+                  alt="Devarsh Jain - Jain wedding content creator"
                   width={540}
                   height={700}
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                   style={{
                     position: "absolute",
@@ -982,20 +954,28 @@ export default function StorySection() {
 
         {/* ─── Styles ─── */}
         <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes floatDevCard {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50%      { transform: translateY(-10px) rotate(0.8deg); }
+          }
           @keyframes floatNote1 {
             0%, 100% { transform: translateY(0px) rotate(3deg); }
-            50%      { transform: translateY(-7px) rotate(6deg); }
+            50%      { transform: translateY(-12px) rotate(6deg); }
           }
           @keyframes floatNote2 {
             0%, 100% { transform: translateY(0px) rotate(-3deg); }
-            50%      { transform: translateY(7px) rotate(-6deg); }
+            50%      { transform: translateY(12px) rotate(-6deg); }
+          }
+          .dev-card-float {
+            animation: floatDevCard 5.5s ease-in-out infinite;
+            will-change: transform;
           }
           .floating-note-1 {
-            animation: floatNote1 4.2s ease-in-out infinite;
+            animation: floatNote1 3.8s ease-in-out infinite;
             will-change: transform;
           }
           .floating-note-2 {
-            animation: floatNote2 4.8s ease-in-out infinite;
+            animation: floatNote2 4.4s ease-in-out infinite;
             will-change: transform;
           }
 

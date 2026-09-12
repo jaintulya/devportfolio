@@ -1,5 +1,7 @@
 "use client";
 
+const WHATSAPP_URL = `https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I would like to enquire about your wedding services. Please share more details. Thank you!")}`;
+
 export default function HeroSection() {
   const handleNav = (targetId, path) => {
     if (typeof window === "undefined") return;
@@ -144,7 +146,7 @@ export default function HeroSection() {
             WATCH OUR WORK
           </a>
           <a
-            href="https://wa.me/919377150889"
+            href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="hero-btn-secondary flex-1 inline-flex items-center justify-center px-3 py-3.5 sm:px-8 sm:py-4 rounded-full text-[10.5px] sm:text-[12px] tracking-[0.14em] sm:tracking-[0.2em] font-semibold uppercase text-center whitespace-nowrap cursor-pointer select-none"

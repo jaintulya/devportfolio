@@ -317,7 +317,7 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
                     fontSize: "clamp(14px, 1.5vw, 18px)",
                     fontStyle: "italic",
                     fontWeight: 500,
-                    color: "#FFFDF8",
+                    color: "#F6E5CB",
                     lineHeight: 1.25,
                     marginBottom: 5,
                     whiteSpace: "nowrap",

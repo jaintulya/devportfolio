@@ -10,7 +10,7 @@
 :root {
   /* ── Core Palette ── */
   --background: 26 5 7;
-  --foreground: 245 230 204;
+  --foreground: 246 229 203;
   --muted: 46 10 13;
   --muted-foreground: 212 184 150;
   --ring: 212 184 150;
@@ -19,9 +19,10 @@
   --brand-maroon-dark:    #3A0B0E;
   --brand-maroon-deep:    #3A0B0E;
   --brand-maroon-soft:    #3A0B0E;
-  --brand-cream:          #F7E6CC;
-  --brand-cream-light:    #FFF6E8;
-  --brand-ivory:          #FFFDF8;
+  --brand-cream:          #F6E5CB;
+  --brand-cream-light:    #FEF5E6;
+  --brand-ivory:          #FEF5E6;
+  --brand-white:          #F6E5CB;
   --brand-beige:          #EAD4BE;
   --brand-beige-muted:    #DBC4AA;
   --brand-gold:           #D4B896;
@@ -30,7 +31,7 @@
   --brand-gold-dark:      #B8976E;
   --brand-border:         rgba(212,184,150,0.18);
   --brand-border-subtle:  rgba(212,184,150,0.08);
-  --brand-off-white:      #F7E6CC;
+  --brand-off-white:      #FEF5E6;
 
   /* ── Typography ── */
   --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, 'Times New Roman', serif;
@@ -636,7 +637,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .hero-btn-primary:hover {
-  background: #FFFDF8;
+  background: #FEF5E6;
   color: #1A0507;
   transform: translateY(-2px);
   box-shadow: 0 8px 32px rgba(247, 230, 204, 0.35);
@@ -646,7 +647,7 @@ html.lenis, html.lenis body { height: auto; }
   background: rgba(26, 5, 7, 0.35);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  color: #F7E6CC;
+  color: #F6E5CB;
   border: 1px solid rgba(212, 184, 150, 0.45);
   font-family: var(--font-body);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -655,7 +656,7 @@ html.lenis, html.lenis body { height: auto; }
 .hero-btn-secondary:hover {
   background: rgba(212, 184, 150, 0.15);
   border-color: rgba(212, 184, 150, 0.85);
-  color: #FFFDF8;
+  color: #F6E5CB;
   transform: translateY(-2px);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
 }

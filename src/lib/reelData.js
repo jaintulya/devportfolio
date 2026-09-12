@@ -73,7 +73,7 @@ export const instagramProfileUrl = "https://www.instagram.com/shaadi.pitara";
 export const contactDetails = {
   name: "Devarsh Jain",
   phone: "+91 93771 50889",
-  whatsapp: "https://wa.me/919377150889",
+  whatsapp: `https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I would like to enquire about your wedding services. Please share more details. Thank you!")}`,
   instagram: "https://www.instagram.com/shaadi.pitara",
   youtube: "https://youtube.com/@shaadi.pitara",
   pinterest: "https://pin.it/5GKckms5T",

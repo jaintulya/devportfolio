@@ -49,7 +49,7 @@ export default function SmoothScroll({ children, onScroll }) {
       });
       resizeObserver.observe(document.body);
     }
-    const intervals = [100, 300, 600, 1000, 1500, 2000, 3000].map(delay =>
+    const intervals = [150, 500].map(delay =>
       setTimeout(() => ScrollTrigger.refresh(), delay)
     );
     const handleLoad = () => ScrollTrigger.refresh();

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const WHATSAPP_URL = "https://wa.me/919377150889";
+const WHATSAPP_URL = `https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I would like to enquire about your wedding services. Please share more details. Thank you!")}`;
 
 export default function Footer() {
   return (

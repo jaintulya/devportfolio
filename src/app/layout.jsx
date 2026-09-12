@@ -6,15 +6,14 @@ export const metadata = {
   description: 'Shaadi Pitara crafts cinematic wedding reels, couple stories, live stories, and Instagram content from Ahmedabad. Premium wedding storytelling by Devarsh Jain.',
   icons: {
     icon: [
+      { url: '/navlogo.png', type: 'image/png' },
       { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
       { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
-      { url: '/favicon-192.png', sizes: '192x192', type: 'image/png' },
     ],
-    shortcut: '/favicon-32.png',
+    shortcut: '/navlogo.png',
     apple: [
+      { url: '/navlogo.png', type: 'image/png' },
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-      { url: '/favicon-192.png', sizes: '192x192', type: 'image/png' },
     ],
   },
   keywords: [

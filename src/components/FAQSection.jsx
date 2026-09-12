@@ -24,12 +24,12 @@ const faqs = [
   {
     question: "How do you coordinate with our main photo and video team?",
     answer:
-      "Seamlessly and respectfully. We specialize in agile, mobile-first wedding content creation — capturing unscripted behind-the-scenes intimacies and cinematic micro-moments. We coordinate with your primary photographers ahead of time.",
+      "Seamlessly and respectfully. We specialize in agile, mobile-first wedding content creation, capturing unscripted behind-the-scenes intimacies and cinematic micro-moments. We coordinate with your primary photographers ahead of time.",
   },
   {
     question: "Can we curate our music choices and aesthetic preferences?",
     answer:
-      "Absolutely. Before the wedding, we conduct a pre-event creative session to map your aesthetic preferences — whether vintage Bollywood, soulful classical, or modern acoustic — ensuring your films reflect your authentic vibe.",
+      "Absolutely. Before the wedding, we conduct a pre-event creative session to map your aesthetic preferences, whether vintage Bollywood, soulful classical, or modern acoustic, ensuring your films reflect your authentic vibe.",
   },
 ];
 

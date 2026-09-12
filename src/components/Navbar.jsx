@@ -4,6 +4,8 @@ import { gsap } from "gsap";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 
+const WHATSAPP_URL = `https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I would like to enquire about your wedding services. Please share more details. Thank you!")}`;
+
 export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
@@ -54,7 +56,8 @@ export default function Navbar() {
     ];
 
     let rafId;
-    let lastPath = window.location.pathname;
+    let lastPath = typeof window !== "undefined" ? window.location.pathname : "/";
+    let urlUpdateTimer = null;
 
     const probe = () => {
       const scrollY  = window.scrollY || window.pageYOffset;
@@ -63,21 +66,31 @@ export default function Navbar() {
 
       // At very top → hero
       if (scrollY < vh * 0.45) {
+        setActiveSection("hero");
         if (lastPath !== "/") {
           lastPath = "/";
-          window.history.replaceState(null, "", "/");
+          clearTimeout(urlUpdateTimer);
+          urlUpdateTimer = setTimeout(() => {
+            if (typeof window !== "undefined" && window.location.pathname !== "/") {
+              window.history.replaceState(null, "", "/");
+            }
+          }, 350);
         }
-        setActiveSection("hero");
         return;
       }
 
       // At very bottom → contact
       if (scrollY + vh >= fullH - 60) {
+        setActiveSection("contact");
         if (lastPath !== "/contact") {
           lastPath = "/contact";
-          window.history.replaceState(null, "", "/contact");
+          clearTimeout(urlUpdateTimer);
+          urlUpdateTimer = setTimeout(() => {
+            if (typeof window !== "undefined" && window.location.pathname !== "/contact") {
+              window.history.replaceState(null, "", "/contact");
+            }
+          }, 350);
         }
-        setActiveSection("contact");
         return;
       }
 
@@ -115,7 +128,12 @@ export default function Navbar() {
         setActiveSection(matched.id);
         if (lastPath !== matched.path) {
           lastPath = matched.path;
-          window.history.replaceState(null, "", matched.path);
+          clearTimeout(urlUpdateTimer);
+          urlUpdateTimer = setTimeout(() => {
+            if (typeof window !== "undefined" && window.location.pathname !== matched.path) {
+              window.history.replaceState(null, "", matched.path);
+            }
+          }, 350);
         }
       }
     };
@@ -145,6 +163,7 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("scroll", onScroll);
       clearTimeout(throttleTimer);
+      clearTimeout(urlUpdateTimer);
       cancelAnimationFrame(rafId);
     };
   }, []);
@@ -334,16 +353,15 @@ export default function Navbar() {
             aria-label="Shaadi Pitara — Home"
           >
             <div style={{
-              position: "relative", width: 28, height: 28,
-              borderRadius: 6, overflow: "hidden",
+              position: "relative", width: 44, height: 30,
               flexShrink: 0,
             }}>
               <Image
-                src="/1.jpg"
-                alt="Shaadi Pitara — Cinematic Wedding Reels & Content Studio Logo"
+                src="/navlogo.png"
+                alt="Shaadipitara logo - Devarsh Jain"
                 fill
-                sizes="28px"
-                style={{ objectFit: "cover" }}
+                sizes="44px"
+                style={{ objectFit: "contain" }}
                 priority
               />
             </div>
@@ -364,8 +382,8 @@ export default function Navbar() {
                     letterSpacing: "0.18em",
                     textTransform: "uppercase",
                     color: isActive
-                      ? "#FFF8EE"
-                      : "rgba(247,230,204,0.85)",
+                      ? "#F3E1C4"
+                      : "rgba(243, 225, 196, 0.82)",
                     fontWeight: isActive ? 600 : 500,
                     textShadow: "0 1px 3px rgba(0,0,0,0.5)",
                     background: "none",
@@ -388,7 +406,7 @@ export default function Navbar() {
           {/* Desktop CTA — Redirects directly to WhatsApp */}
           <div className="nav-desktop-cta" style={{ display: "flex", alignItems: "center" }}>
             <a
-              href="https://wa.me/919377150889"
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
@@ -401,6 +419,8 @@ export default function Navbar() {
                 textDecoration: "none",
                 display: "inline-flex",
                 alignItems: "center",
+                background: "#F3E1C4",
+                color: "var(--brand-maroon-dark)",
               }}
             >
               Let&apos;s Connect
@@ -425,7 +445,7 @@ export default function Navbar() {
           >
             <span style={{
               display: "block", width: 18, height: 1.5,
-              background: "var(--brand-cream)",
+              background: "#F3E1C4",
               transition: "all 0.4s cubic-bezier(0.23,1,0.32,1)",
               transform: mobileOpen ? "rotate(45deg) translate(4px, 4px)" : "none",
               transformOrigin: "center",
@@ -433,7 +453,7 @@ export default function Navbar() {
             }} />
             <span style={{
               display: "block", width: 18, height: 1.5,
-              background: "var(--brand-cream)",
+              background: "#F3E1C4",
               transition: "all 0.35s cubic-bezier(0.23,1,0.32,1)",
               opacity: mobileOpen ? 0 : 1,
               transform: mobileOpen ? "scaleX(0)" : "scaleX(1)",
@@ -441,7 +461,7 @@ export default function Navbar() {
             }} />
             <span style={{
               display: "block", width: 18, height: 1.5,
-              background: "var(--brand-cream)",
+              background: "#F3E1C4",
               transition: "all 0.4s cubic-bezier(0.23,1,0.32,1)",
               transform: mobileOpen ? "rotate(-45deg) translate(4px, -4px)" : "none",
               transformOrigin: "center",
@@ -485,8 +505,8 @@ export default function Navbar() {
                   fontSize: "clamp(30px, 7vw, 42px)",
                   fontWeight: 400,
                   color: activeSection === l.sectionId
-                    ? "var(--brand-gold-light)"
-                    : "var(--brand-cream)",
+                    ? "#F3E1C4"
+                    : "rgba(243, 225, 196, 0.85)",
                   background: "none",
                   border: "none",
                   borderBottom: i < links.length - 1 ? "1px solid rgba(212,184,150,0.08)" : "none",
@@ -509,14 +529,17 @@ export default function Navbar() {
               transition: "all 0.55s cubic-bezier(0.23,1,0.32,1) 0.24s",
             }}>
               <a
-                href="https://wa.me/919377150889"
+                href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary-gold"
+                className="btn-primary"
                 style={{
                   padding: "14px 40px",
                   textDecoration: "none",
                   display: "inline-block",
+                  background: "#F3E1C4",
+                  color: "var(--brand-maroon-dark)",
+                  borderRadius: 100,
                 }}
               >
                 Let&apos;s Connect

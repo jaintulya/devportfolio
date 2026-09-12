@@ -10,19 +10,19 @@ const services = [
     id: "wedding-reels",
     title: "Wedding Reels",
     tagline: "Cinematic highlight films",
-    description: "Handcrafted cinematic reels with handpicked soundtracks, nuanced pacing, and organic color grading — turning fleeting moments into timeless heirlooms.",
+    description: "Handcrafted cinematic reels with handpicked soundtracks, nuanced pacing, and organic color grading, turning fleeting moments into timeless heirlooms.",
   },
   {
     id: "live-stories",
     title: "Live Stories",
     tagline: "Real-time, unscripted",
-    description: "Unfiltered, intimate Stories captured and uploaded live as your celebrations unfold — so friends and family experience every tear and cheer in real time.",
+    description: "Unfiltered, intimate Stories captured and uploaded live as your celebrations unfold, so friends and family experience every tear and cheer in real time.",
   },
   {
     id: "live-reels",
     title: "Live Reels",
     tagline: "Same-night cinematic magic",
-    description: "Real-time reel creation during your wedding — same-night edits delivered within hours while the energy is still electric.",
+    description: "Real-time reel creation during your wedding, with same-night edits delivered within hours while the energy is still electric.",
   },
   {
     id: "instant-reels",
@@ -40,7 +40,7 @@ const services = [
     id: "page-management",
     title: "Wedding Page Management",
     tagline: "Your page, perfectly curated",
-    description: "A dedicated couple page managed end-to-end — from countdown graphics and invitation posts to a perfectly curated feed and story highlights.",
+    description: "A dedicated couple page managed end to end, from countdown graphics and invitation posts to a perfectly curated feed and story highlights.",
   },
 ];
 
@@ -106,7 +106,7 @@ export default function ServicesSection() {
             margin: "16px auto 0",
             lineHeight: 1.7,
           }}>
-            Every wedding has its own rhythm. Choose the services that fit your vision — from live stories to full cinematic reels.
+            Every wedding has its own rhythm. Choose the services that fit your vision, from live stories to full cinematic reels.
           </p>
         </div>
 

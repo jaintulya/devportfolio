@@ -10,7 +10,7 @@ const cardsData = [
     tag: "THE SPARK · 2018",
     heading: "It all began with an instinct to freeze everyday magic.",
     highlight: "“No fancy rigs. Just raw curiosity and an eye for moments nobody else noticed.”",
-    content: "In my initial days, I shot anything that caught my breath. I used Snapchat to string together short, vibrant stories — discovering the rush of turning raw life into something cinematic.",
+    content: "In my initial days, I shot anything that caught my breath. I used Snapchat to string together short, vibrant stories, discovering the rush of turning raw life into something cinematic.",
     badge: "The First Frame",
   },
   {
@@ -19,7 +19,7 @@ const cardsData = [
     tag: "FIRST PRAISE",
     heading: "Then friends started leaning in.",
     highlight: "“Tu hi story laga diya kar, tu achhe se edit karta hai.”",
-    content: "That one casual college compliment hit different. Seeing peers genuinely connect with my rhythm and pacing made me realize — this wasn't just a hobby. It was my calling.",
+    content: "That one casual college compliment hit different. Seeing peers genuinely connect with my rhythm and pacing made me realize this wasn't just a hobby, it was my calling.",
     badge: "Validation",
   },
   {
@@ -45,7 +45,7 @@ const cardsData = [
     chapter: "CHAPTER 05",
     tag: "THE GRIND",
     heading: "Creating for food bloggers in chaotic restaurant kitchens.",
-    highlight: "“Fast cuts, tricky lighting, zero retakes — the ultimate training ground.”",
+    highlight: "“Fast cuts, tricky lighting, zero retakes: the ultimate training ground.”",
     content: "There were uncertain days of constant struggle, experimenting, and finding order in chaos. That phase taught me speed, agility, and emotional intuition under intense pressure.",
     badge: "Agility & Grit",
   },
@@ -55,7 +55,7 @@ const cardsData = [
     tag: "THE TURNING POINT",
     heading: "Then, I stepped into my first Indian wedding.",
     highlight: "“Photographers captured the staged frames. But who was preserving the unscripted heartbeat?”",
-    content: "Traditional teams focused on the mandatory rituals and portraits. But the nervous giggles, the tears behind sunglasses, the stolen glances — were slipping away uncaptured.",
+    content: "Traditional teams focused on the mandatory rituals and portraits. But the nervous giggles, the tears behind sunglasses, the stolen glances were slipping away uncaptured.",
     badge: "The Revelation",
   },
   {
@@ -78,7 +78,7 @@ const cardsData = [
     tag: "THE GENESIS",
     heading: "We don't just capture weddings. We preserve the feeling.",
     highlight: "“Instant, social-first vertical cinema delivered while your wedding is still unfolding.”",
-    content: "Our content is raw, real, spontaneous, and vibrant. The laughter, the tears, the unplanned magic — ready to share with the world instantly.",
+    content: "Our content is raw, real, spontaneous, and vibrant. The laughter, the tears, the unplanned magic, ready to share with the world instantly.",
     badge: "Shaadi Pitara Born",
   },
   {
@@ -98,7 +98,7 @@ const cardsData = [
     name: "Devarsh Jain",
     role: "Founder · Wedding Social Media Creator",
     quote: "“A love for capturing moments turned into a way of preserving how weddings actually feel.”",
-    content: "From Ahmedabad to destination weddings across India — crafting modern wedding stories with love, speed, and cinematic passion.",
+    content: "From Ahmedabad to destination weddings across India, crafting modern wedding stories with love, speed, and cinematic passion.",
     badge: "And this is only the beginning.",
   },
 ];
@@ -412,7 +412,7 @@ export default function MobileMemoryStack() {
                   >
                     <img
                       src="/devimg.jpeg"
-                      alt="Devarsh Jain — Founder and Wedding Content Creator at Shaadi Pitara"
+                      alt="Devarsh Jain - Jain wedding content creator"
                       style={{
                         width: "100%",
                         height: "100%",
@@ -667,7 +667,7 @@ export default function MobileMemoryStack() {
 
                     {card.isDevarsh ? (
                       <a
-                        href="https://wa.me/919377150889"
+                        href={`https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I would like to enquire about your wedding services. Please share more details. Thank you!")}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{

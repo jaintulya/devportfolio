@@ -24,7 +24,7 @@ export default function BookCTA() {
 
   return (
     <a
-      href="https://wa.me/919377150889"
+      href={`https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I would like to enquire about your wedding services. Please share more details. Thank you!")}`}
       target="_blank"
       rel="noopener noreferrer"
       className="book-cta"
