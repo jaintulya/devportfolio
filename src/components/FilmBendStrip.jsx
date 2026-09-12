@@ -395,6 +395,14 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       const absDY = Math.abs(dy);
 
       if (!t.gestureDecided) {
+        // Quick release for vertical scroll so mobile page scrolls up and down freely
+        if (absDY >= 3 && absDY > absDX) {
+          t.gestureDecided = true;
+          t.gestureType = "vertical";
+          t.active = false;
+          return;
+        }
+
         const totalMove = Math.sqrt(dx * dx + dy * dy);
         if (totalMove > GESTURE_LOCK_THRESHOLD) {
           t.gestureDecided = true;
@@ -599,7 +607,6 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         height: "560px",
         overflow: "hidden",
         touchAction: "pan-y",
-        overscrollBehavior: "contain",
         userSelect: "none",
         WebkitUserSelect: "none",
       }}
@@ -651,6 +658,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
                 width: "clamp(145px, 44vw, 195px)",
                 aspectRatio: "9/16", borderRadius: 14, overflow: "hidden",
                 cursor: "pointer",
+                touchAction: "pan-y",
                 background: "linear-gradient(180deg, #1A0507 0%, #140406 100%)",
                 border: isCenter ? "1.5px solid rgba(212,184,150,0.22)" : "1px solid rgba(212,184,150,0.08)",
                 boxShadow: isCenter ? "0 20px 45px rgba(0,0,0,0.45)" : "0 8px 24px rgba(0,0,0,0.25)",

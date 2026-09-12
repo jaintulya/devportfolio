@@ -18,7 +18,7 @@ function getEmbedUrl(url) {
   return url.replace(/\/$/, "") + "/embed/";
 }
 
-function DesktopDraggableRow({ cat, catReels, openModal }) {
+function DesktopDraggableRow({ cat, catReels, openModal, onCardClick }) {
   const rowRef = useRef(null);
   const isDown = useRef(false);
   const startX = useRef(0);
@@ -58,9 +58,13 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
     window.addEventListener("mouseup", onMouseUp);
   };
 
-  const handleCardClick = (item) => {
+  const handleCardClick = (cardEl, item) => {
     if (dragDistance.current > 5) return;
-    openModal(item);
+    if (onCardClick) {
+      onCardClick(cardEl, item);
+    } else {
+      openModal(item);
+    }
   };
 
   const scrollByAmount = (direction) => {
@@ -153,11 +157,11 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
           <article
             key={item.id}
             className="work-card"
-            onClick={() => handleCardClick(item)}
+            onClick={(e) => handleCardClick(e.currentTarget, item)}
             role="button"
             tabIndex={0}
             aria-label={`Watch ${item.title}`}
-            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(item); } }}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleCardClick(e.currentTarget, item); } }}
             style={{
               flex: "0 0 calc((100% - 60px) / 4)",
               minWidth: 240,
@@ -219,7 +223,8 @@ function DesktopDraggableRow({ cat, catReels, openModal }) {
               onClick={(e) => {
                 e.stopPropagation();
                 if (dragDistance.current > 5) return;
-                openModal(item);
+                const card = e.currentTarget.closest(".work-card");
+                handleCardClick(card, item);
               }}
               aria-label={`Play ${item.title}`}
               style={{
@@ -333,84 +338,373 @@ export default function WorkPage() {
     lenisRef.current?.stop();
   }, [filteredItems]);
 
-  // ── Tap-to-expand animation on mobile (same as FilmBendStrip) ──
+  // ── Tap/Click-to-expand animation on desktop & mobile using GSAP ──
   const expandCardAndOpenModal = useCallback(
     (cardElement, reel) => {
       if (!reel) return;
+      const realIndex = filteredItems.findIndex((r) => r.id === reel.id);
       if (!cardElement || isExpandingRef.current) {
         openModal(reel);
         return;
       }
 
       isExpandingRef.current = true;
+      if (typeof window !== "undefined") window.__lenis?.stop();
+      lenisRef.current?.stop();
 
       const rect = cardElement.getBoundingClientRect();
       const viewportW = window.innerWidth;
       const viewportH = window.innerHeight;
+      const isMobileScreen = viewportW < 768;
 
-      // Create backdrop
+      // ── MOBILE: Centered expand animation via GSAP ──
+      if (isMobileScreen) {
+        const backdrop = document.createElement("div");
+        backdrop.style.cssText = `
+          position: fixed; inset: 0; z-index: 99990;
+          background: rgba(5, 1, 2, 0.95);
+          backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+          opacity: 0; pointer-events: none;
+        `;
+        document.body.appendChild(backdrop);
+
+        const clone = cardElement.cloneNode(true);
+        clone.style.cssText = `
+          position: fixed;
+          left: ${rect.left}px;
+          top: ${rect.top}px;
+          width: ${rect.width}px;
+          height: ${rect.height}px;
+          border-radius: 12px;
+          overflow: hidden;
+          z-index: 99991;
+          pointer-events: none;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+          border: 1.5px solid rgba(212, 184, 150, 0.22);
+        `;
+        document.body.appendChild(clone);
+        cardElement.style.opacity = "0";
+
+        const targetW = Math.min(viewportW * 0.78, 300);
+        const targetH = targetW * (16 / 9);
+        const targetLeft = (viewportW - targetW) / 2;
+        const targetTop = (viewportH - targetH) / 2;
+
+        const mobileTl = gsap.timeline({
+          onComplete: () => {
+            clone.remove();
+            backdrop.remove();
+            cardElement.style.opacity = "";
+            isExpandingRef.current = false;
+            openModal(reel);
+          },
+        });
+
+        mobileTl.to(backdrop, { opacity: 1, duration: 0.38, ease: "power2.out" }, 0);
+        mobileTl.to(clone, {
+          left: targetLeft,
+          top: targetTop,
+          width: targetW,
+          height: targetH,
+          borderRadius: 18,
+          boxShadow: "0 40px 100px rgba(0, 0, 0, 0.9)",
+          duration: 0.42,
+          ease: "power3.out",
+        }, 0);
+
+        return;
+      }
+
+      // ── LAPTOP / DESKTOP: High-Performance GSAP Choreographed Animation ──
+      // 1. Root overlay
+      const overlay = document.createElement("div");
+      overlay.style.cssText = `
+        position: fixed; inset: 0; z-index: 99995;
+        pointer-events: none; overflow: hidden;
+      `;
+      document.body.appendChild(overlay);
+
+      // 2. Backdrop
       const backdrop = document.createElement("div");
       backdrop.style.cssText = `
-        position:fixed;inset:0;z-index:99990;
-        background:rgba(5,1,2,0);
-        transition:background .4s ease;
-        pointer-events:none;
+        position: fixed; inset: 0;
+        background: rgba(5, 1, 2, 0.97);
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        opacity: 0;
       `;
-      document.body.appendChild(backdrop);
+      overlay.appendChild(backdrop);
 
-      // Create clone of the card
+      // 3. Modal Shell Container (matches the real modal structure)
+      const modalWrapper = document.createElement("div");
+      modalWrapper.style.cssText = `
+        position: fixed; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        padding: clamp(20px, 4vw, 48px);
+      `;
+      overlay.appendChild(modalWrapper);
+
+      const modalShell = document.createElement("div");
+      modalShell.style.cssText = `
+        display: flex; align-items: center; gap: 44px;
+        width: 100%; max-width: 880px; max-height: 90vh;
+        flex-direction: row; overflow: hidden;
+        background: linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.png') center / cover no-repeat, #2A080A;
+        border-radius: 24px;
+        border: 1.5px solid rgba(212,184,150,0.26);
+        box-shadow: 0 35px 90px rgba(0,0,0,0.92), 0 0 0 1px rgba(212,184,150,0.12);
+        position: relative;
+        padding: 36px 40px;
+        opacity: 0;
+        transform: scale(0.96);
+      `;
+      modalWrapper.appendChild(modalShell);
+
+      // Left video placeholder to lock target coordinates
+      const targetW = Math.min(360, viewportW * 0.38);
+      const targetH = Math.min(viewportH * 0.80, targetW * (16 / 9));
+      const realTargetW = targetH * (9 / 16);
+
+      const videoPlaceholder = document.createElement("div");
+      videoPlaceholder.style.cssText = `
+        position: relative; flex-shrink: 0;
+        width: ${realTargetW}px;
+        height: ${targetH}px;
+        border-radius: 16px;
+        visibility: hidden;
+      `;
+      modalShell.appendChild(videoPlaceholder);
+
+      // Right Info Panel
+      const infoPanel = document.createElement("div");
+      infoPanel.style.cssText = `
+        flex: 1; min-width: 0; display: flex; flex-direction: column; width: 100%;
+      `;
+      modalShell.appendChild(infoPanel);
+
+      // Index text
+      const indexEl = document.createElement("div");
+      indexEl.style.cssText = `
+        font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.3em;
+        color: rgba(212,184,150,0.4); margin-bottom: 20px; text-transform: uppercase;
+        opacity: 0; transform: translateX(35px);
+      `;
+      indexEl.textContent = `${String(realIndex >= 0 ? realIndex + 1 : 1).padStart(2, "0")} / ${String(filteredItems.length).padStart(2, "0")}`;
+      infoPanel.appendChild(indexEl);
+
+      // Category Pill
+      const catLabel = reelCategories.find((c) => c.id === reel.category)?.label || reel.category;
+      const pillEl = document.createElement("div");
+      pillEl.style.cssText = `
+        display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;
+        padding: 5px 14px; background: rgba(212,184,150,0.07);
+        border: 1px solid rgba(212,184,150,0.18); border-radius: 100px; align-self: flex-start;
+        opacity: 0; transform: translateX(35px);
+      `;
+      pillEl.innerHTML = `
+        <div style="width: 5px; height: 5px; border-radius: 50%; background: var(--brand-gold);"></div>
+        <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--brand-gold);">${catLabel}</span>
+      `;
+      infoPanel.appendChild(pillEl);
+
+      // Title & Duration Row
+      const titleRow = document.createElement("div");
+      titleRow.style.cssText = `
+        display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px;
+        opacity: 0; transform: translateX(45px);
+      `;
+      titleRow.innerHTML = `
+        <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: clamp(28px, 3.5vw, 42px); font-weight: 400; font-style: italic; color: var(--brand-cream); line-height: 1.2; letter-spacing: -0.01em; margin: 0; flex: 1;">
+          ${reel.title}
+        </h2>
+        <div style="font-family: var(--font-mono); font-size: 14px; color: var(--brand-gold); font-weight: 600; letter-spacing: 0.05em; flex-shrink: 0;">
+          ${reel.duration}
+        </div>
+      `;
+      infoPanel.appendChild(titleRow);
+
+      // Gold Divider Line
+      const divider = document.createElement("div");
+      divider.style.cssText = `
+        width: 100%; height: 1px; background: rgba(212,184,150,0.1); margin-bottom: 28px;
+        opacity: 0; transform: scaleX(0); transform-origin: left center;
+      `;
+      infoPanel.appendChild(divider);
+
+      // Controls Row
+      const controlsRow = document.createElement("div");
+      controlsRow.style.cssText = `
+        display: flex; gap: 8px; width: 100%; justify-content: space-between;
+        opacity: 0; transform: translateY(20px);
+      `;
+      controlsRow.innerHTML = `
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 24px; background: rgba(212,184,150,0.08); border: 1px solid rgba(212,184,150,0.22); color: var(--brand-cream); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; border-radius: 4px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+          Prev
+        </div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 24px; background: rgba(212,184,150,0.08); border: 1px solid rgba(212,184,150,0.22); color: var(--brand-cream); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; border-radius: 4px;">
+          Next
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+        </div>
+      `;
+      infoPanel.appendChild(controlsRow);
+
+      // Close Button icon
+      const closeBtn = document.createElement("div");
+      closeBtn.style.cssText = `
+        position: absolute; top: 20px; right: 20px; z-index: 50;
+        width: 38px; height: 38px; border-radius: 50%;
+        background: rgba(212,184,150,0.08); border: 1px solid rgba(212,184,150,0.22);
+        color: var(--brand-cream); display: flex; align-items: center; justify-content: center;
+        opacity: 0; transform: scale(0.8);
+      `;
+      closeBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      `;
+      modalShell.appendChild(closeBtn);
+
+      // Measure target video placeholder rect
+      const targetRect = videoPlaceholder.getBoundingClientRect();
+
+      // 4. Moving Card Clone
       const clone = cardElement.cloneNode(true);
       clone.style.cssText = `
-        position:fixed;
-        left:${rect.left}px;
-        top:${rect.top}px;
-        width:${rect.width}px;
-        height:${rect.height}px;
-        border-radius:12px;
-        overflow:hidden;
-        z-index:99991;
-        pointer-events:none;
-        will-change:transform,opacity;
-        transform-origin:center center;
-        transition:none;
-        box-shadow:0 20px 60px rgba(0,0,0,0.6);
-        border:1.5px solid rgba(212,184,150,0.22);
+        position: fixed;
+        left: ${rect.left}px;
+        top: ${rect.top}px;
+        width: ${rect.width}px;
+        height: ${rect.height}px;
+        border-radius: 12px;
+        overflow: hidden;
+        z-index: 99998;
+        pointer-events: none;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        border: 1.5px solid rgba(212,184,150,0.22);
       `;
-      document.body.appendChild(clone);
-
-      // Hide original card temporarily
+      overlay.appendChild(clone);
       cardElement.style.opacity = "0";
 
-      // Calculate target: center of viewport, scaled up
-      const targetW = Math.min(viewportW * 0.78, 300);
-      const targetH = targetW * (16 / 9);
-      const targetLeft = (viewportW - targetW) / 2;
-      const targetTop = (viewportH - targetH) / 2;
+      // Center stage pop-out coordinates ("click kiya vo bahar aaya")
+      const centerW = Math.min(viewportW * 0.28, 340);
+      const centerH = centerW * (16 / 9);
+      const centerLeft = (viewportW - centerW) / 2;
+      const centerTop = (viewportH - centerH) / 2;
 
-      // Force reflow then animate
-      clone.offsetHeight; // eslint-disable-line no-unused-expressions
-      requestAnimationFrame(() => {
-        backdrop.style.background = "rgba(5,1,2,0.92)";
-        clone.style.transition =
-          "left .4s cubic-bezier(.22,.8,.2,1), top .4s cubic-bezier(.22,.8,.2,1), width .4s cubic-bezier(.22,.8,.2,1), height .4s cubic-bezier(.22,.8,.2,1), border-radius .4s ease, box-shadow .4s ease";
-        clone.style.left = `${targetLeft}px`;
-        clone.style.top = `${targetTop}px`;
-        clone.style.width = `${targetW}px`;
-        clone.style.height = `${targetH}px`;
-        clone.style.borderRadius = "18px";
-        clone.style.boxShadow = "0 40px 100px rgba(0,0,0,0.9)";
+      // Inner elements of clone to fade out when docking to side
+      const cloneOverlays = clone.querySelectorAll("button, div[style*='position: absolute']");
+
+      // ── GSAP Choreographed Master Timeline ──
+      const masterTl = gsap.timeline({
+        onComplete: () => {
+          openModal(reel);
+          gsap.to(overlay, {
+            opacity: 0,
+            duration: 0.24,
+            ease: "power1.out",
+            onComplete: () => {
+              overlay.remove();
+              cardElement.style.opacity = "";
+              isExpandingRef.current = false;
+            },
+          });
+        },
       });
 
-      // After animation completes, open modal and clean up
-      setTimeout(() => {
-        clone.remove();
-        backdrop.remove();
-        cardElement.style.opacity = "";
-        isExpandingRef.current = false;
-        openModal(reel);
-      }, 420);
+      // ── Step 1: "click kiya vo bahar aaya" (Card lifts & pops out to center stage) ──
+      masterTl.to(backdrop, {
+        opacity: 1,
+        duration: 0.55,
+        ease: "power2.out",
+      }, 0);
+
+      masterTl.to(clone, {
+        left: centerLeft,
+        top: centerTop,
+        width: centerW,
+        height: centerH,
+        borderRadius: 18,
+        boxShadow: "0 35px 95px rgba(0, 0, 0, 0.95), 0 0 45px rgba(212, 184, 150, 0.25)",
+        duration: 0.58,
+        ease: "power3.out",
+      }, 0);
+
+      // Distinct pause at center so user clearly sees the card front and center!
+      const glideStartTime = 0.70;
+
+      // ── Step 2: "fir side hogya jaha actually reel dhikne wali hoo" (Glides to left slot) ──
+      masterTl.to(clone, {
+        left: targetRect.left,
+        top: targetRect.top,
+        width: targetRect.width,
+        height: targetRect.height,
+        borderRadius: 16,
+        boxShadow: "0 24px 60px rgba(0, 0, 0, 0.75)",
+        duration: 0.68,
+        ease: "power3.inOut",
+      }, glideStartTime);
+
+      // Fade out the play button and bottom text overlay on the moving card as it docks
+      if (cloneOverlays.length > 0) {
+        masterTl.to(cloneOverlays, {
+          opacity: 0,
+          duration: 0.38,
+          ease: "power2.out",
+        }, glideStartTime + 0.08);
+      }
+
+      // ── Step 3: "and jab ye side ho tb text screen p ayee animatically" (Modal & text cascade) ──
+      // Modal shell appears around the stage
+      masterTl.to(modalShell, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.52,
+        ease: "power2.out",
+      }, glideStartTime + 0.10);
+
+      // Stagger in text items clearly and elegantly
+      const textStart = glideStartTime + 0.22;
+
+      masterTl.to([indexEl, pillEl], {
+        opacity: 1,
+        x: 0,
+        duration: 0.44,
+        stagger: 0.08,
+        ease: "power2.out",
+      }, textStart);
+
+      masterTl.to(titleRow, {
+        opacity: 1,
+        x: 0,
+        duration: 0.48,
+        ease: "power2.out",
+      }, textStart + 0.10);
+
+      masterTl.to(divider, {
+        opacity: 1,
+        scaleX: 1,
+        duration: 0.46,
+        ease: "power2.out",
+      }, textStart + 0.18);
+
+      masterTl.to(controlsRow, {
+        opacity: 1,
+        y: 0,
+        duration: 0.42,
+        ease: "power2.out",
+      }, textStart + 0.24);
+
+      masterTl.to(closeBtn, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.38,
+        ease: "back.out(1.5)",
+      }, textStart + 0.28);
+
+      // ── Step 4: Seamless handoff to real live modal with reel playing ──
+      // (Handled automatically in masterTl.onComplete)
     },
-    [openModal]
+    [filteredItems, openModal]
   );
 
   const navigateModal = (dir) => {
@@ -627,6 +921,7 @@ export default function WorkPage() {
                   key={cat.id}
                   cat={cat}
                   catReels={catReels}
+                  onCardClick={expandCardAndOpenModal}
                   openModal={openModal}
                 />
               );

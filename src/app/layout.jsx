@@ -175,6 +175,11 @@ export default function RootLayout({ children }) {
         <link rel="preload" as="image" href="/herobg.png" media="(min-width: 1025px)" fetchPriority="high" />
         <link rel="preload" as="image" href="/herobgtablet.png" media="(min-width: 641px) and (max-width: 1024px)" fetchPriority="high" />
         <link rel="preload" as="image" href="/herobgphone.png" media="(max-width: 640px)" fetchPriority="high" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+        <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+        <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
         <link rel="manifest" href="/manifest.json" />
         <script
           type="application/ld+json"
