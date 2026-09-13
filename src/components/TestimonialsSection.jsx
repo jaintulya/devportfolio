@@ -152,30 +152,59 @@ export default function TestimonialsSection() {
               opacity: isTransitioning ? 0 : 1,
               transform: isTransitioning ? "translateY(12px)" : "translateY(0)",
               transition: "all 0.6s cubic-bezier(0.23,1,0.32,1)",
+              position: "relative",
+              background: "linear-gradient(165deg, #FFFDF9 0%, #FAF1E3 50%, #EFE1CA 100%)",
+              border: "1.5px solid rgba(196,150,95,0.55)",
+              borderRadius: "20px",
+              boxShadow: "0 20px 48px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.15)",
+              overflow: "hidden",
             }}
           >
-            <div className="testimonial-quote-mark" aria-hidden="true">&ldquo;</div>
+            {/* Inner decorative golden border */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: "8px",
+                borderRadius: "14px",
+                border: "1px solid rgba(196,150,95,0.35)",
+                pointerEvents: "none",
+                zIndex: 1,
+              }}
+            />
+
+            <div
+              className="testimonial-quote-mark"
+              aria-hidden="true"
+              style={{
+                color: "#C4965F",
+                opacity: 0.22,
+              }}
+            >
+              &ldquo;
+            </div>
 
             <p style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(18px, 2.8vw, 26px)",
               fontStyle: "italic",
-              color: "var(--brand-cream)",
+              color: "#2C080B",
               lineHeight: 1.6,
-              marginBottom: 36,
+              marginBottom: 32,
               position: "relative",
               zIndex: 2,
               paddingLeft: 24,
-              borderLeft: "2px solid rgba(212,184,150,0.35)",
+              borderLeft: "3px solid #8E4822",
             }}>
               {t.quote}
             </p>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 16, position: "relative", zIndex: 2 }}>
               <div style={{
-                width: 48, height: 48, borderRadius: "50%",
+                width: 52, height: 52, borderRadius: "50%",
                 overflow: "hidden",
-                border: "2px solid rgba(212,184,150,0.4)",
+                border: "2px solid rgba(142,72,34,0.45)",
+                boxShadow: "0 3px 10px rgba(58,11,14,0.14)",
                 flexShrink: 0,
               }}>
                 <img
@@ -188,18 +217,19 @@ export default function TestimonialsSection() {
               <div>
                 <div style={{
                   fontFamily: "var(--font-display)",
-                  fontSize: 18,
+                  fontSize: 19,
                   fontWeight: 600,
-                  color: "var(--brand-cream)",
+                  color: "#2C080B",
                 }}>
                   {t.name}
                 </div>
                 <div style={{
                   fontFamily: "var(--font-mono)",
-                  fontSize: 10,
+                  fontSize: 10.5,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
-                  color: "rgba(212,184,150,0.65)",
+                  color: "#7B272C",
+                  fontWeight: 600,
                   marginTop: 2,
                 }}>
                   {t.location}

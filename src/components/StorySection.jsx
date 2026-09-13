@@ -267,12 +267,16 @@ export default function StorySection() {
                 fontWeight: 600,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--brand-maroon-dark)";
+                e.currentTarget.style.backgroundColor = "#3A0B0E";
+                e.currentTarget.style.backgroundImage = "url('/seamless-texture.jpg')";
+                e.currentTarget.style.backgroundRepeat = "repeat";
+                e.currentTarget.style.backgroundSize = "360px 360px";
                 e.currentTarget.style.color = "#F6E5CB";
                 e.currentTarget.style.borderColor = "var(--brand-maroon-dark)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.backgroundImage = "none";
                 e.currentTarget.style.color = "var(--brand-maroon-dark)";
                 e.currentTarget.style.borderColor = "var(--brand-maroon-dark)";
               }}
@@ -614,7 +618,11 @@ export default function StorySection() {
                         position:"relative",
                         minHeight:120,
                         border:"1px solid rgba(91,23,27,0.18)",
-                        background: isActive ? "#3A0B0E" : "#F4E2C5",
+                        backgroundColor: isActive ? "#3A0B0E" : "#F4E2C5",
+                        backgroundImage: isActive ? "url('/seamless-texture.jpg')" : "none",
+                        backgroundRepeat: "repeat",
+                        backgroundSize: "360px 360px",
+                        backgroundPosition: "0 0",
                         color: isActive ? "var(--brand-cream)" : "var(--brand-maroon-dark)",
                         padding:20,
                         display:"flex",alignItems:"flex-end",justifyContent:"space-between",
@@ -1035,16 +1043,18 @@ export default function StorySection() {
 
           @media (max-width: 768px) {
             .desktop-story-section { display: none !important; }
+            .mobile-story-section { display: block !important; }
           }
           @media (min-width: 769px) {
             .mobile-story-section { display: none !important; }
+            .desktop-story-section { display: block !important; }
           }
         ` }} />
     </section>
     </div>
 
     <div className="mobile-story-section">
-      {isMobile && <MobileMemoryStack />}
+      <MobileMemoryStack />
     </div>
     </div>
     </>

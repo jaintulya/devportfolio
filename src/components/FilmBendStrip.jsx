@@ -614,7 +614,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       aria-label="Reel gallery — swipe to browse"
       aria-roledescription="carousel"
     >
-      {/* Top Drag hint — mobile only */}
+      {/* Top Swipe hint — mobile only */}
       <div style={{
         position: "absolute", top: 12, left: "50%",
         transform: "translateX(-50%)", zIndex: 20,
@@ -622,7 +622,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         fontSize: 10, color: "rgba(247,230,204,0.55)", letterSpacing: "0.2em",
         fontFamily: "var(--font-mono)", textTransform: "uppercase",
       }}>
-        &larr; Drag to explore &rarr;
+        &larr; Swipe to explore &rarr;
       </div>
 
       {/* Center glow */}

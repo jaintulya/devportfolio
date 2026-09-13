@@ -971,7 +971,7 @@ export default function ReelShowcase() {
                 letterSpacing: "0.25em", textTransform: "uppercase",
                 color: "var(--brand-cream)",
               }}>
-                Drag to explore
+                Swipe to explore
               </span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand-cream)" strokeWidth={1.5}><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </div>
