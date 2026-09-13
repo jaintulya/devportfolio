@@ -135,19 +135,6 @@ export default function MobileMemoryStack() {
 
   const totalCards = cardsData.length;
 
-  const handleDragEnd = (event, info) => {
-    const offsetX = info.offset.x;
-    const velocityX = info.velocity.x;
-
-    // Responsive swipe threshold
-    if (Math.abs(offsetX) > 35 || Math.abs(velocityX) > 160) {
-      setExitDirection(offsetX > 0 || velocityX > 0 ? "right" : "left");
-      if (activeIndex < totalCards - 1) {
-        setActiveIndex((prev) => prev + 1);
-      }
-    }
-  };
-
   const nextCard = () => {
     if (activeIndex < totalCards - 1) {
       setExitDirection("right");
@@ -157,6 +144,7 @@ export default function MobileMemoryStack() {
 
   const prevCard = () => {
     if (activeIndex > 0) {
+      setExitDirection("left");
       setActiveIndex((prev) => prev - 1);
     }
   };
@@ -277,7 +265,7 @@ export default function MobileMemoryStack() {
           ))}
         </div>
 
-        {/* Swipe / Tap hint */}
+        {/* Tap navigation hint (Instagram Story Style) */}
         <div
           style={{
             fontFamily: "var(--font-mono)",
@@ -292,7 +280,7 @@ export default function MobileMemoryStack() {
           }}
         >
           <span style={{ color: "var(--brand-gold)", fontSize: "9px" }}>&larr;</span>
-          <span>SWIPE OR TAP CARD TO EXPLORE</span>
+          <span>TAP LEFT / RIGHT TO EXPLORE STORY</span>
           <span style={{ color: "var(--brand-gold)", fontSize: "9px" }}>&rarr;</span>
         </div>
       </div>
@@ -311,50 +299,37 @@ export default function MobileMemoryStack() {
           touchAction: "pan-y",
         }}
       >
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait" custom={exitDirection}>
           {cardsData.map((card, index) => {
-            // Render top 2 cards for silky performance
-            if (index < activeIndex || index > activeIndex + 1) return null;
-
-            const isTop = index === activeIndex;
-            const depthIndex = index - activeIndex;
-
-            const scale = 1 - depthIndex * 0.04;
-            const yOffset = depthIndex * 12;
-            const opacity = 1 - depthIndex * 0.22;
-            const zIndexVal = 30 - depthIndex;
-            const rot = depthIndex === 0 ? 0 : 2.5;
+            // Instagram Story style: Render strictly the active card with zero side peek
+            if (index !== activeIndex) return null;
 
             return (
               <motion.div
                 key={card.id}
-                drag={isTop ? "x" : false}
-                dragDirectionLock
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.65}
-                onDragEnd={handleDragEnd}
-                initial={{ scale: 0.94, opacity: 0, y: 20 }}
+                custom={exitDirection}
+                initial={{
+                  opacity: 0,
+                  x: exitDirection === "right" ? 32 : -32,
+                  scale: 0.985,
+                }}
                 animate={{
-                  scale,
-                  y: yOffset,
-                  opacity,
-                  rotate: rot,
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
                   transition: {
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 28,
-                    mass: 0.7,
+                    duration: 0.26,
+                    ease: [0.22, 1, 0.36, 1],
                   },
                 }}
                 exit={{
-                  x: exitDirection === "left" ? -360 : 360,
                   opacity: 0,
-                  rotate: exitDirection === "left" ? -14 : 14,
-                  transition: { duration: 0.25, ease: [0.25, 1, 0.5, 1] },
-                }}
-                whileDrag={{
-                  scale: 0.98,
-                  cursor: "grabbing",
+                  x: exitDirection === "right" ? -32 : 32,
+                  scale: 0.985,
+                  transition: {
+                    duration: 0.18,
+                    ease: [0.22, 1, 0.36, 1],
+                  },
                 }}
                 style={{
                   position: "absolute",
@@ -363,61 +338,53 @@ export default function MobileMemoryStack() {
                   height: "clamp(520px, 72vh, 570px)",
                   borderRadius: "18px",
                   overflow: "hidden",
-                  cursor: isTop ? "grab" : "default",
-                  zIndex: zIndexVal,
+                  zIndex: 20,
                   willChange: "transform, opacity",
-                  transformOrigin: "bottom center",
                   background: card.isDevarsh
                     ? "linear-gradient(160deg, #240508 0%, #150203 100%)"
                     : "linear-gradient(165deg, #FFFDF9 0%, #FAF1E3 50%, #EFE1CA 100%)",
                   border: card.isDevarsh
                     ? "1.5px solid rgba(212,184,150,0.42)"
                     : "1.5px solid rgba(196,150,95,0.52)",
-                  boxShadow: isTop
-                    ? "0 24px 52px rgba(0, 0, 0, 0.48), 0 4px 14px rgba(0, 0, 0, 0.25)"
-                    : "0 10px 24px rgba(0, 0, 0, 0.28)",
+                  boxShadow: "0 24px 52px rgba(0, 0, 0, 0.48), 0 4px 14px rgba(0, 0, 0, 0.25)",
                   display: "flex",
                   flexDirection: "column",
                   color: card.isDevarsh ? "var(--brand-cream)" : "#2C080B",
                 }}
               >
                 {/* ── Interactive Tap Zones for Story Navigation (Left = Prev, Right = Next) ── */}
-                {isTop && (
-                  <>
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        prevCard();
-                      }}
-                      title="Tap for previous slide"
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        width: "28%",
-                        zIndex: 4,
-                        cursor: activeIndex > 0 ? "pointer" : "default",
-                      }}
-                    />
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        nextCard();
-                      }}
-                      title="Tap for next slide"
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        bottom: 0,
-                        right: 0,
-                        width: "72%",
-                        zIndex: 4,
-                        cursor: "pointer",
-                      }}
-                    />
-                  </>
-                )}
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevCard();
+                  }}
+                  title="Tap for previous slide"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    bottom: "48px",
+                    left: 0,
+                    width: "32%",
+                    zIndex: 6,
+                    cursor: activeIndex > 0 ? "pointer" : "default",
+                  }}
+                />
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextCard();
+                  }}
+                  title="Tap for next slide"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    bottom: "48px",
+                    right: 0,
+                    width: "68%",
+                    zIndex: 6,
+                    cursor: "pointer",
+                  }}
+                />
 
                 {/* Decorative Inner Golden Frame */}
                 <div
@@ -886,7 +853,7 @@ export default function MobileMemoryStack() {
                           flexShrink: 0,
                         }}
                       >
-                        <span>Swipe or Tap</span>
+                        <span>Next</span>
                         <span style={{ color: "var(--brand-gold)" }}>&rarr;</span>
                       </button>
                     )}

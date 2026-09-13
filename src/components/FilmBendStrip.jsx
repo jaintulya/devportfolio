@@ -123,6 +123,9 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
   const stageRef = useRef(null);
   const cardRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isBloomed, setIsBloomed] = useState(false);
+  const isBloomedRef = useRef(false);
+  useEffect(() => { isBloomedRef.current = isBloomed; }, [isBloomed]);
 
   // Ref-based touch state (no React re-renders during touch)
   const touchRef = useRef({
@@ -133,6 +136,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
     gestureDecided: false,
     gestureType: null, // "horizontal" | "vertical" | null
     currentDX: 0,
+    currentDY: 0,
   });
 
   const activeIndexRef = useRef(0);
@@ -175,17 +179,22 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
   );
 
   const applySlots = useCallback(
-    (instant = true) => {
+    (instant = true, blooming = false) => {
       if (!stageRef.current) return;
       const slots = getSlots();
+      const bloomed = isBloomedRef.current;
+
       const transition = instant
-        ? "transform .5s cubic-bezier(.22,.8,.2,1), opacity .4s ease, filter .4s ease"
+        ? (blooming
+            ? "transform .72s cubic-bezier(.16, 1, .3, 1), opacity .55s ease, filter .55s ease"
+            : "transform .48s cubic-bezier(.22,.8,.2,1), opacity .4s ease, filter .4s ease")
         : "none";
 
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
         const rel = getRelFor(i, activeIndexRef.current);
+        const isCenter = rel === 0;
         const slotIndex = rel + 3;
         const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
         if (!slot) {
@@ -195,14 +204,43 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
           return;
         }
 
+        if (blooming) {
+          // Stagger delays like flower petals opening / folding
+          const delay = bloomed
+            ? `${Math.abs(rel) * 0.045}s`
+            : `${(3 - Math.abs(rel)) * 0.035}s`;
+          card.style.transitionDelay = isCenter ? "0s" : delay;
+        } else {
+          card.style.transitionDelay = "0s";
+        }
+
         card.style.transition = transition;
-        card.style.transform =
-          `translate(-50%,-50%) translate3d(${slot.x}px,${slot.y}px,0) rotate(${slot.r}deg) scale(${slot.s})`;
-        card.style.opacity = String(slot.o);
-        card.style.filter = rel === 0 ? "none" : "saturate(.65) brightness(.8)";
-        card.style.zIndex = String(slot.z);
-        // Allow tapping on the 3 central visible cards (slots 2, 3, 4 = rel -1, 0, 1)
-        card.style.pointerEvents = (Math.abs(rel) <= 1) ? "auto" : "none";
+
+        if (isCenter) {
+          // Center card: always prominent at center
+          card.style.transform =
+            `translate(-50%,-50%) translate3d(0,0,0) rotate(0deg) scale(1)`;
+          card.style.opacity = "1";
+          card.style.filter = "none";
+          card.style.zIndex = "10";
+          card.style.pointerEvents = "auto";
+        } else if (bloomed) {
+          // Open state: fanned out like flower petals
+          card.style.transform =
+            `translate(-50%,-50%) translate3d(${slot.x}px,${slot.y}px,0) rotate(${slot.r}deg) scale(${slot.s})`;
+          card.style.opacity = String(slot.o);
+          card.style.filter = "saturate(.65) brightness(.8)";
+          card.style.zIndex = String(slot.z);
+          card.style.pointerEvents = (Math.abs(rel) <= 1) ? "auto" : "none";
+        } else {
+          // Closed state: folded directly behind the center card (single card view)
+          card.style.transform =
+            `translate(-50%,-50%) translate3d(0,0,0) rotate(0deg) scale(0.95)`;
+          card.style.opacity = "0";
+          card.style.filter = "saturate(.65) brightness(.8)";
+          card.style.zIndex = String(slot.z);
+          card.style.pointerEvents = "none";
+        }
       });
     },
     [getSlots, getRelFor, reels.length]
@@ -244,12 +282,14 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       setActiveIndex(next);
 
       const slots = getSlots();
+      const bloomed = isBloomedRef.current;
       const transition = "transform .48s cubic-bezier(.22,.8,.2,1), opacity .4s ease, filter .4s ease";
 
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
         const rel = getRelFor(i, next);
+        const isCenter = rel === 0;
         const slotIndex = rel + 3;
         const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
         if (!slot) {
@@ -259,14 +299,31 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
           return;
         }
 
+        card.style.transitionDelay = "0s";
         card.style.transition = transition;
-        card.style.transform =
-          `translate(-50%,-50%) translate3d(${slot.x}px,${slot.y}px,0) rotate(${slot.r}deg) scale(${slot.s})`;
-        card.style.opacity = String(slot.o);
-        card.style.filter = rel === 0 ? "none" : "saturate(.65) brightness(.8)";
-        // Z-Index: New center card gets zIndex 10. Swiped card gets its new slot.z (3), tucking behind the center card!
-        card.style.zIndex = String(slot.z);
-        card.style.pointerEvents = (Math.abs(rel) <= 1) ? "auto" : "none";
+
+        if (isCenter) {
+          card.style.transform =
+            `translate(-50%,-50%) translate3d(0,0,0) rotate(0deg) scale(1)`;
+          card.style.opacity = "1";
+          card.style.filter = "none";
+          card.style.zIndex = "10";
+          card.style.pointerEvents = "auto";
+        } else if (bloomed) {
+          card.style.transform =
+            `translate(-50%,-50%) translate3d(${slot.x}px,${slot.y}px,0) rotate(${slot.r}deg) scale(${slot.s})`;
+          card.style.opacity = String(slot.o);
+          card.style.filter = "saturate(.65) brightness(.8)";
+          card.style.zIndex = String(slot.z);
+          card.style.pointerEvents = (Math.abs(rel) <= 1) ? "auto" : "none";
+        } else {
+          card.style.transform =
+            `translate(-50%,-50%) translate3d(0,0,0) rotate(0deg) scale(0.95)`;
+          card.style.opacity = "0";
+          card.style.filter = "saturate(.65) brightness(.8)";
+          card.style.zIndex = String(slot.z);
+          card.style.pointerEvents = "none";
+        }
       });
     },
     [getSlots, getRelFor, reels.length]
@@ -369,8 +426,9 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         startY: touch.clientY,
         startTime: performance.now(),
         gestureDecided: false,
-        gestureType: null,
+        gestureType: null, // "horizontal" | "vertical" | null
         currentDX: 0,
+        currentDY: 0,
       };
     };
 
@@ -384,35 +442,27 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       const absDX = Math.abs(dx);
       const absDY = Math.abs(dy);
 
-      if (!t.gestureDecided) {
-        // Quick release for vertical scroll so mobile page scrolls up and down freely
-        if (absDY >= 3 && absDY > absDX) {
-          t.gestureDecided = true;
-          t.gestureType = "vertical";
-          t.active = false;
-          return;
-        }
+      t.currentDX = dx;
+      t.currentDY = dy;
 
+      if (!t.gestureDecided) {
         const totalMove = Math.sqrt(dx * dx + dy * dy);
         if (totalMove > GESTURE_LOCK_THRESHOLD) {
           t.gestureDecided = true;
           if (absDY > absDX) {
-            // Vertical gesture → let browser handle normal page scroll
+            // Vertical gesture: allow native scroll while tracking swipe up/down
             t.gestureType = "vertical";
-            t.active = false;
-            return;
           } else {
-            // Horizontal gesture on card → we handle it
+            // Horizontal gesture on card: lock to swipe navigation
             t.gestureType = "horizontal";
             e.preventDefault();
           }
         }
-        return; // Not enough movement yet
+        return;
       }
 
       if (t.gestureType === "horizontal") {
         e.preventDefault();
-        t.currentDX = dx;
         applyTopCardDrag(dx);
       }
     };
@@ -424,11 +474,17 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
 
       const duration = performance.now() - t.startTime;
       const dx = t.currentDX;
+      const dy = t.currentDY;
       const absDX = Math.abs(dx);
+      const absDY = Math.abs(dy);
 
       if (t.gestureType === "horizontal") {
-        // Complete or cancel swipe
+        // Complete or cancel horizontal swipe
         if (absDX > SWIPE_THRESHOLD) {
+          if (!isBloomedRef.current) {
+            isBloomedRef.current = true;
+            setIsBloomed(true);
+          }
           if (dx > 0) {
             // Swiped right -> top card tucks into right stack, reveal previous card
             playSwipeToStack(1, -1);
@@ -438,10 +494,25 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
           }
         } else {
           // Snap back
-          applySlots(true);
+          applySlots(true, false);
+        }
+      } else if (t.gestureType === "vertical" || absDY > 30) {
+        // Vertical swipe:
+        // dy < -30 (swipe UP) -> open/bloom like a flower!
+        // dy > 30 (swipe DOWN) -> close back to single card!
+        if (dy < -30) {
+          if (!isBloomedRef.current) {
+            isBloomedRef.current = true;
+            setIsBloomed(true);
+          }
+        } else if (dy > 30) {
+          if (isBloomedRef.current) {
+            isBloomedRef.current = false;
+            setIsBloomed(false);
+          }
         }
       } else if (!t.gestureDecided || t.gestureType === null) {
-        // Movement stayed below threshold — tap on card
+        // Tap on card
         const touch = e.changedTouches[0];
         const totalDX = Math.abs(touch.clientX - t.startX);
         const totalDY = Math.abs(touch.clientY - t.startY);
@@ -470,7 +541,11 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
 
           if (tappedIndex >= 0) {
             e.preventDefault();
-            if (tappedIndex === currentActive) {
+            if (!isBloomedRef.current) {
+              // Tapping on single card blooms it open!
+              isBloomedRef.current = true;
+              setIsBloomed(true);
+            } else if (tappedIndex === currentActive) {
               expandCardAndOpenModal(tappedIndex);
             } else {
               // Tapped a side card -> rotate it to center!
@@ -491,13 +566,14 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         gestureDecided: false,
         gestureType: null,
         currentDX: 0,
+        currentDY: 0,
       };
     };
 
     const handleTouchCancel = () => {
       const t = touchRef.current;
       if (t.active && t.gestureType === "horizontal") {
-        applySlots(true);
+        applySlots(true, false);
       }
       touchRef.current = {
         active: false,
@@ -507,6 +583,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         gestureDecided: false,
         gestureType: null,
         currentDX: 0,
+        currentDY: 0,
       };
     };
 
@@ -585,10 +662,44 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
     };
   }, [playSwipeToStack]);
 
-  useEffect(() => { applySlots(true); }, [reels, applySlots]);
+  // Trigger flower bloom animation when isBloomed state changes
+  useEffect(() => {
+    applySlots(true, true);
+  }, [isBloomed, applySlots]);
+
+  // Scroll switch from Hero to Work: start as single card, bloom open like a flower when entering view; close when scrolled back to Hero
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.22) {
+            if (!isBloomedRef.current) {
+              isBloomedRef.current = true;
+              setIsBloomed(true);
+            }
+          } else if (!entry.isIntersecting && entry.boundingClientRect.top > 0) {
+            // Scrolled back up toward Hero
+            if (isBloomedRef.current) {
+              isBloomedRef.current = false;
+              setIsBloomed(false);
+            }
+          }
+        });
+      },
+      {
+        threshold: [0, 0.22, 0.5, 0.75],
+      }
+    );
+
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
-    const onResize = () => applySlots(true);
+    const onResize = () => applySlots(true, false);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, [applySlots]);
@@ -618,6 +729,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         textAlign: "center", width: "100%", pointerEvents: "none",
         fontSize: 10, color: "rgba(247,230,204,0.55)", letterSpacing: "0.2em",
         fontFamily: "var(--font-mono)", textTransform: "uppercase",
+        transition: "opacity 0.4s ease",
       }}>
         &larr; Swipe to explore &rarr;
       </div>
