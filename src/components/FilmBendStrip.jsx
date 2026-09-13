@@ -208,10 +208,13 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
     [getSlots, getRelFor, reels.length]
   );
 
-  // Only move the top card during horizontal drag
+  // Move the top card during horizontal drag with natural fan curvature
   const applyTopCardDrag = useCallback(
     (dx) => {
       const slots = getSlots();
+      const maxDrag = 110;
+      const clampedDX = Math.max(-maxDrag, Math.min(maxDrag, dx));
+
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
@@ -220,66 +223,53 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
 
         if (rel === 0 && slot) {
-          // Top card follows finger
-          const rotation = slot.r + dx * 0.03;
+          // Top card follows finger with slight curvature into stack
+          const rotation = slot.r + clampedDX * 0.035;
+          const yOffset = Math.min(Math.abs(clampedDX) * 0.08, 10);
           card.style.transition = "none";
           card.style.transform =
-            `translate(-50%,-50%) translate3d(${slot.x + dx}px,${slot.y}px,0) rotate(${rotation}deg) scale(${slot.s})`;
+            `translate(-50%,-50%) translate3d(${slot.x + clampedDX}px,${slot.y + yOffset}px,0) rotate(${rotation}deg) scale(${slot.s})`;
         }
-        // Other cards: do nothing, stay at their slot positions
       });
     },
     [getSlots, getRelFor, reels.length]
   );
 
-  const playSwipeExit = useCallback(
-    (exitDirection, indexDelta) => {
+  // Smoothly tuck the active card underneath into the stack (right stack if swiped right, left stack if swiped left)
+  const playSwipeToStack = useCallback(
+    (direction, indexDelta) => {
       const prevIndex = activeIndexRef.current;
-      const slots = getSlots();
+      const next = (prevIndex + indexDelta + reels.length) % reels.length;
+      activeIndexRef.current = next;
+      setActiveIndex(next);
 
-      // Animate top card flying off in the swipe direction (exitDirection: +1 right, -1 left)
+      const slots = getSlots();
+      const transition = "transform .48s cubic-bezier(.22,.8,.2,1), opacity .4s ease, filter .4s ease";
+
       reels.forEach((_, i) => {
         const card = cardRefs.current[i];
         if (!card) return;
-        const rel = getRelFor(i, prevIndex);
-        if (rel !== 0) return;
+        const rel = getRelFor(i, next);
         const slotIndex = rel + 3;
-        const slot = slots[slotIndex];
-        if (!slot) return;
-
-        const exitX = exitDirection * 340;
-        const exitRotation = exitDirection * 18;
-        card.style.transition = "transform .32s cubic-bezier(.22,.8,.2,1), opacity .28s ease";
-        card.style.transform =
-          `translate(-50%,-50%) translate3d(${exitX}px,${slot.y - 10}px,0) rotate(${exitRotation}deg) scale(${slot.s * 0.9})`;
-        card.style.opacity = "0";
-      });
-
-      // After exit animation, update active index and arrange cards
-      setTimeout(() => {
-        const next = (prevIndex + indexDelta + reels.length) % reels.length;
-        activeIndexRef.current = next;
-        setActiveIndex(next);
-
-        // Pre-position the exited card at its new slot with opacity 0 so it doesn't boomerang across
-        const exitedCard = cardRefs.current[prevIndex];
-        if (exitedCard) {
-          const newRel = getRelFor(prevIndex, next);
-          const newSlot = slots[newRel + 3];
-          if (newSlot) {
-            exitedCard.style.transition = "none";
-            exitedCard.style.transform =
-              `translate(-50%,-50%) translate3d(${newSlot.x}px,${newSlot.y}px,0) rotate(${newSlot.r}deg) scale(${newSlot.s})`;
-            exitedCard.style.opacity = "0";
-          }
+        const slot = (slotIndex >= 0 && slotIndex < slots.length) ? slots[slotIndex] : null;
+        if (!slot) {
+          card.style.opacity = "0";
+          card.style.pointerEvents = "none";
+          card.style.transform = "translate(-50%,-50%) scale(0.4)";
+          return;
         }
 
-        requestAnimationFrame(() => {
-          applySlots(true);
-        });
-      }, 200);
+        card.style.transition = transition;
+        card.style.transform =
+          `translate(-50%,-50%) translate3d(${slot.x}px,${slot.y}px,0) rotate(${slot.r}deg) scale(${slot.s})`;
+        card.style.opacity = String(slot.o);
+        card.style.filter = rel === 0 ? "none" : "saturate(.65) brightness(.8)";
+        // Z-Index: New center card gets zIndex 10. Swiped card gets its new slot.z (3), tucking behind the center card!
+        card.style.zIndex = String(slot.z);
+        card.style.pointerEvents = (Math.abs(rel) <= 1) ? "auto" : "none";
+      });
     },
-    [getSlots, getRelFor, reels.length, applySlots]
+    [getSlots, getRelFor, reels.length]
   );
 
   // ── Tap-to-expand animation ──
@@ -440,11 +430,11 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
         // Complete or cancel swipe
         if (absDX > SWIPE_THRESHOLD) {
           if (dx > 0) {
-            // Swiped right -> exit to right (+1), show previous card (-1)
-            playSwipeExit(1, -1);
+            // Swiped right -> top card tucks into right stack, reveal previous card
+            playSwipeToStack(1, -1);
           } else {
-            // Swiped left -> exit to left (-1), show next card (+1)
-            playSwipeExit(-1, 1);
+            // Swiped left -> top card tucks into left stack, reveal next card
+            playSwipeToStack(-1, 1);
           }
         } else {
           // Snap back
@@ -480,7 +470,14 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
 
           if (tappedIndex >= 0) {
             e.preventDefault();
-            expandCardAndOpenModal(tappedIndex);
+            if (tappedIndex === currentActive) {
+              expandCardAndOpenModal(tappedIndex);
+            } else {
+              // Tapped a side card -> rotate it to center!
+              const delta = tappedIndex === nextIdx ? 1 : -1;
+              const dir = delta === 1 ? -1 : 1;
+              playSwipeToStack(dir, delta);
+            }
           }
         }
       }
@@ -524,23 +521,23 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       stage.removeEventListener("touchend", handleTouchEnd);
       stage.removeEventListener("touchcancel", handleTouchCancel);
     };
-  }, [applyTopCardDrag, applySlots, playSwipeExit, expandCardAndOpenModal, reels.length]);
+  }, [applyTopCardDrag, applySlots, playSwipeToStack, expandCardAndOpenModal, reels.length]);
 
   // ── Keyboard navigation ──
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        playSwipeExit(1, -1);
+        playSwipeToStack(1, -1);
       }
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        playSwipeExit(-1, 1);
+        playSwipeToStack(-1, 1);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [playSwipeExit]);
+  }, [playSwipeToStack]);
 
   // ── Horizontal wheel (trackpad / Shift+wheel) — kept for non-touch ──
   useEffect(() => {
@@ -571,9 +568,9 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
 
         if (Math.abs(accumulatedDeltaX) >= THRESHOLD) {
           if (accumulatedDeltaX > 0) {
-            playSwipeExit(-1, 1);
+            playSwipeToStack(-1, 1);
           } else {
-            playSwipeExit(1, -1);
+            playSwipeToStack(1, -1);
           }
           lastTriggerTime = now;
           accumulatedDeltaX = 0;
@@ -586,7 +583,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       stage.removeEventListener("wheel", handleWheel);
       clearTimeout(resetTimer);
     };
-  }, [playSwipeExit]);
+  }, [playSwipeToStack]);
 
   useEffect(() => { applySlots(true); }, [reels, applySlots]);
 
