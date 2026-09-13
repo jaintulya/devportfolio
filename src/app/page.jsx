@@ -266,7 +266,11 @@ export default function Home() {
             style={{
               position: "relative",
               zIndex: 30,
-              backgroundColor: "var(--brand-maroon-dark)",
+              backgroundColor: "#3A0B0E",
+              backgroundImage: "url('/seamless-texture.jpg')",
+              backgroundRepeat: "repeat",
+              backgroundSize: "600px 600px",
+              backgroundPosition: "0 0",
               boxShadow: "none",
             }}
           >
@@ -278,7 +282,11 @@ export default function Home() {
             style={{
               position: "relative",
               zIndex: 40,
-              backgroundColor: "var(--brand-maroon-dark)",
+              backgroundColor: "#3A0B0E",
+              backgroundImage: "url('/seamless-texture.jpg')",
+              backgroundRepeat: "repeat",
+              backgroundSize: "600px 600px",
+              backgroundPosition: "0 0",
               boxShadow: "none",
             }}
           >
@@ -302,7 +310,11 @@ export default function Home() {
             style={{
               position: "relative",
               zIndex: 60,
-              backgroundColor: "var(--brand-maroon-dark)",
+              backgroundColor: "#3A0B0E",
+              backgroundImage: "url('/seamless-texture.jpg')",
+              backgroundRepeat: "repeat",
+              backgroundSize: "600px 600px",
+              backgroundPosition: "0 0",
               boxShadow: "none",
             }}
           >
@@ -314,7 +326,11 @@ export default function Home() {
             style={{
               position: "relative",
               zIndex: 70,
-              backgroundColor: "var(--brand-maroon-dark)",
+              backgroundColor: "#3A0B0E",
+              backgroundImage: "url('/seamless-texture.jpg')",
+              backgroundRepeat: "repeat",
+              backgroundSize: "600px 600px",
+              backgroundPosition: "0 0",
               boxShadow: "none",
             }}
           >

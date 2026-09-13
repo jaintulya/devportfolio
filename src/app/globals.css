@@ -486,88 +486,61 @@ html.lenis, html.lenis body { height: auto; }
   isolation: isolate;
   overflow: hidden;
 
-  background:
-    /* subtle readability overlay — lets image show through */
-    linear-gradient(
-      180deg,
-      rgba(26, 5, 7, 0.45) 0%,
-      rgba(26, 5, 7, 0.28) 40%,
-      rgba(26, 5, 7, 0.50) 100%
-    ),
-    /* workbg image — responsive cover */
-    url("/workbg.png") center / cover no-repeat,
-    /* deep maroon fallback base */
-    linear-gradient(
-      180deg,
-      var(--maroon-dark) 0%,
-      var(--maroon) 48%,
-      var(--maroon-dark) 100%
-    );
+  background-color: #3A0B0E;
+  background-image: url("/seamless-texture.jpg");
+  background-repeat: repeat;
+  background-size: 600px 600px;
+  background-position: 0 0;
 }
 
 
-/* 1. FINE PAPER / FABRIC TEXTURE (removed — replaced by workbg image) */
+/* 1. FINE PAPER / FABRIC TEXTURE (replaced by seamless maroon texture) */
 
 .work-section::before {
   display: none;
 }
 
 
-/* 2. VERY SUBTLE ORGANIC GRAIN (removed — replaced by workbg image) */
+/* 2. VERY SUBTLE ORGANIC GRAIN (replaced by seamless maroon texture) */
 
 .work-section .work-texture {
   display: none;
 }
 
 
-/* 3. VERY FAINT FLORAL LINE ART (removed — replaced by workbg image) */
+/* 3. VERY FAINT FLORAL LINE ART (replaced by seamless maroon texture) */
 
 .work-section .work-pattern {
   display: none;
 }
 
 
-/* 4. EDGE VIGNETTE (removed — replaced by workbg image) */
+/* 4. EDGE VIGNETTE (replaced by seamless maroon texture) */
 
 .work-section .work-vignette {
   display: none;
 }
 
 
-/* 5. MOBILE — EVEN MORE SUBTLE (texture removed) */
+/* 5. MOBILE — Maintains the exact same fixed 600px 600px seamless texture scale */
 
 @media (max-width: 768px) {
   .work-section {
-    background: linear-gradient(
-      180deg,
-      rgba(26, 5, 7, 0.45) 0%,
-      rgba(26, 5, 7, 0.28) 40%,
-      rgba(26, 5, 7, 0.50) 100%
-    ), var(--maroon-dark) !important;
+    background-color: #3A0B0E;
+    background-image: url("/seamless-texture.jpg") !important;
+    background-repeat: repeat !important;
+    background-size: 600px 600px !important;
+    background-position: 0 0 !important;
   }
 
   .work-section::before {
-    content: "";
-    display: block !important;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 150vh;  /* taller than typical width */
-    height: 100vw; /* full width as height */
-    transform: translate(-50%, -50%) rotate(90deg);
-    background-image: url("/workbg.png");
-    background-size: cover;
-    background-position: center;
-    mix-blend-mode: normal; /* keep it visible, since gradient is on background */
-    opacity: 0.25;
-    pointer-events: none;
-    z-index: 0;
+    display: none !important;
   }
 
   .work-section .work-texture,
   .work-section .work-pattern,
   .work-section .work-vignette {
-    display: none;
+    display: none !important;
   }
 }
 

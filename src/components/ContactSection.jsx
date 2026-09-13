@@ -201,7 +201,11 @@ export default function ContactSection() {
         .contact-3d-section {
           width: 100%;
           min-height: 100vh;
-          background: var(--brand-maroon-dark);
+          background-color: #3A0B0E;
+          background-image: url("/seamless-texture.jpg");
+          background-repeat: repeat;
+          background-size: 600px 600px;
+          background-position: 0 0;
           color: var(--brand-cream);
           font-family: var(--font-body);
           position: relative;

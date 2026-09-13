@@ -323,7 +323,11 @@ export default function StorySection() {
         ref={sceneRef}
         style={{
           position: "relative",
-          background: "#3A0B0E",
+          backgroundColor: "#3A0B0E",
+          backgroundImage: "url('/seamless-texture.jpg')",
+          backgroundRepeat: "repeat",
+          backgroundSize: "600px 600px",
+          backgroundPosition: "0 0",
           color: "var(--brand-cream)",
           padding: "clamp(45px, 6vw, 85px) clamp(16px, 4vw, 48px) clamp(60px, 8vw, 110px)",
           overflow: "hidden",
@@ -794,7 +798,11 @@ export default function StorySection() {
             PART 7 — ENDING  (emotional payoff)
            ═══════════════════════════════════ */}
         <div style={{
-          background:"#3A0B0E",
+          backgroundColor: "#3A0B0E",
+          backgroundImage: "url('/seamless-texture.jpg')",
+          backgroundRepeat: "repeat",
+          backgroundSize: "600px 600px",
+          backgroundPosition: "0 0",
           color:"var(--brand-cream)",
           padding:"clamp(80px,12vw,180px) clamp(16px,4vw,48px)",
           position:"relative",overflow:"hidden",

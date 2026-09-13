@@ -362,7 +362,7 @@ export default function WorkPage() {
         const backdrop = document.createElement("div");
         backdrop.style.cssText = `
           position: fixed; inset: 0; z-index: 99990;
-          background: rgba(5, 1, 2, 0.95);
+          background: radial-gradient(ellipse at center, rgba(45, 10, 13, 0.85) 0%, rgba(15, 3, 5, 0.95) 100%);
           backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
           opacity: 0; pointer-events: none;
         `;
@@ -385,8 +385,9 @@ export default function WorkPage() {
         document.body.appendChild(clone);
         cardElement.style.opacity = "0";
 
-        const targetW = Math.min(viewportW * 0.78, 300);
-        const targetH = targetW * (16 / 9);
+        const maxAvailH = viewportH * 0.70;
+        const targetW = Math.round(Math.min(viewportW * 0.88, maxAvailH * (9 / 16), 330));
+        const targetH = Math.round(targetW * (16 / 9));
         const targetLeft = (viewportW - targetW) / 2;
         const targetTop = (viewportH - targetH) / 2;
 
@@ -769,7 +770,11 @@ export default function WorkPage() {
       className="work-section"
       style={{
         minHeight: "100vh",
-        background: "var(--brand-maroon-dark)",
+        backgroundColor: "#3A0B0E",
+        backgroundImage: "url('/seamless-texture.jpg')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "600px 600px",
+        backgroundPosition: "0 0",
         color: "var(--brand-cream)",
         paddingTop: 1,
         position: "relative",
@@ -803,7 +808,6 @@ export default function WorkPage() {
         style={{
           padding: "clamp(48px, 7vw, 80px) clamp(16px, 4vw, 48px)",
           textAlign: "center",
-          borderBottom: "1px solid rgba(212,184,150,0.06)",
         }}
       >
         <div className="eyebrow-label" style={{ justifyContent: "center" }}>
@@ -975,7 +979,9 @@ export default function WorkPage() {
           aria-label={`${activeReel.title} — ${activeReel.category}`}
           style={{
             position: "fixed", inset: 0, zIndex: 99999,
-            background: "rgba(5, 1, 2, 0.97)",
+            background: isMobile
+              ? "radial-gradient(ellipse at center, rgba(45, 10, 13, 0.88) 0%, rgba(15, 3, 5, 0.96) 100%)"
+              : "rgba(5, 1, 2, 0.97)",
             backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
             display: "flex", alignItems: "center", justifyContent: "center",
             padding: isMobile ? "8px 12px" : "clamp(20px, 4vw, 48px)",
@@ -989,11 +995,13 @@ export default function WorkPage() {
               alignItems: "center",
               gap: isMobile ? 0 : 44,
               width: "100%",
-              maxWidth: isMobile ? "min(360px, 94vw)" : 880,
+              maxWidth: isMobile ? "min(340px, 88vw)" : 880,
               maxHeight: isMobile ? "calc(100svh - 20px)" : "90vh",
               flexDirection: isMobile ? "column" : "row",
               overflow: "hidden",
-              background: "linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.png') center / cover no-repeat, #2A080A",
+              background: isMobile
+                ? "linear-gradient(180deg, rgba(20, 4, 6, 0.35) 0%, rgba(20, 4, 6, 0.55) 100%), url('/workbg.png') center / cover no-repeat, #2A080A"
+                : "linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.png') center / cover no-repeat, #2A080A",
               borderRadius: isMobile ? 18 : 24,
               border: "1.5px solid rgba(212,184,150,0.26)",
               boxShadow: "0 35px 90px rgba(0,0,0,0.92), 0 0 0 1px rgba(212,184,150,0.12)",
@@ -1046,16 +1054,16 @@ export default function WorkPage() {
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: "8px 12px 6px",
-                borderBottom: "1px solid rgba(212,184,150,0.12)",
-                background: "rgba(18,3,6,0.95)",
+                borderBottom: "1px solid rgba(212,184,150,0.15)",
+                background: "linear-gradient(180deg, rgba(20, 4, 6, 0.4) 0%, transparent 100%)",
                 zIndex: 20,
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", color: "var(--brand-gold)", textTransform: "uppercase" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.2em", color: "var(--brand-gold)", textTransform: "uppercase", textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>
                     {reelCategories.find((c) => c.id === activeReel.category)?.label}
                   </span>
-                  <span style={{ color: "rgba(212,184,150,0.3)", fontSize: 9 }}>•</span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(212,184,150,0.6)", letterSpacing: "0.1em" }}>
+                  <span style={{ color: "rgba(212,184,150,0.4)", fontSize: 9 }}>•</span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(212,184,150,0.8)", letterSpacing: "0.1em", textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>
                     {String(activeReelIndex + 1).padStart(2, "0")}/{String(filteredItems.length).padStart(2, "0")}
                   </span>
                 </div>
@@ -1064,7 +1072,7 @@ export default function WorkPage() {
                   aria-label="Close modal"
                   style={{
                     width: 28, height: 28, borderRadius: "50%",
-                    background: "rgba(212,184,150,0.1)",
+                    background: "rgba(212,184,150,0.15)",
                     border: "1px solid rgba(212,184,150,0.35)",
                     color: "var(--brand-cream)",
                     cursor: "pointer",
@@ -1082,21 +1090,21 @@ export default function WorkPage() {
             <div style={{
               position: "relative", flexShrink: 0,
               width: isMobile ? "100%" : "min(360px, 38vw)",
-              height: isMobile ? "clamp(340px, 58svh, 480px)" : "auto",
-              aspectRatio: isMobile ? "auto" : "9/16",
-              maxHeight: isMobile ? "58svh" : "80vh",
+              height: "auto",
+              aspectRatio: "9/16",
+              maxHeight: isMobile ? "68svh" : "80vh",
               borderRadius: isMobile ? 0 : 16,
-              overflow: "hidden", background: "#000",
+              overflow: "hidden", background: "transparent",
               display: "flex", justifyContent: "center", alignItems: "center",
               border: isMobile ? "none" : "1px solid rgba(212,184,150,0.2)",
               boxShadow: isMobile ? "none" : "0 24px 60px rgba(0,0,0,0.75)",
             }}>
               <div style={{
-                width: isMobile ? "auto" : "100%",
+                width: "100%",
                 height: "100%",
                 aspectRatio: "9/16",
                 position: "relative",
-                background: "#000",
+                background: "transparent",
               }}>
                 <iframe
                   ref={iframeRef}
@@ -1115,7 +1123,7 @@ export default function WorkPage() {
               flex: 1, minWidth: 0, display: "flex", flexDirection: "column",
               padding: isMobile ? "8px 14px 10px" : 0,
               width: "100%",
-              background: isMobile ? "rgba(18,3,6,0.95)" : "transparent",
+              background: isMobile ? "linear-gradient(0deg, rgba(20, 4, 6, 0.5) 0%, transparent 100%)" : "transparent",
             }}>
 
               {!isMobile && (
@@ -1147,6 +1155,7 @@ export default function WorkPage() {
                   fontWeight: isMobile ? 600 : 400,
                   fontStyle: "italic",
                   color: "var(--brand-cream)",
+                  textShadow: "0 1px 4px rgba(0,0,0,0.6)",
                   lineHeight: 1.2,
                   letterSpacing: "-0.01em",
                   margin: 0,
@@ -1161,6 +1170,7 @@ export default function WorkPage() {
                   fontFamily: "var(--font-mono)",
                   fontSize: isMobile ? 10 : 14,
                   color: "var(--brand-gold)",
+                  textShadow: "0 1px 4px rgba(0,0,0,0.6)",
                   fontWeight: 600,
                   letterSpacing: "0.05em",
                   flexShrink: 0,

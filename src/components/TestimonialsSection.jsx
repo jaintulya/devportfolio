@@ -112,7 +112,11 @@ export default function TestimonialsSection() {
       aria-label="Testimonials"
       style={{
         padding: "clamp(80px, 10vw, 140px) clamp(16px, 4vw, 48px)",
-        background: "var(--brand-maroon-dark)",
+        backgroundColor: "#3A0B0E",
+        backgroundImage: "url('/seamless-texture.jpg')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "600px 600px",
+        backgroundPosition: "0 0",
         position: "relative",
         overflow: "hidden",
       }}

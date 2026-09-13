@@ -8,7 +8,11 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: "var(--brand-maroon-dark)",
+        backgroundColor: "#3A0B0E",
+        backgroundImage: "url('/seamless-texture.jpg')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "600px 600px",
+        backgroundPosition: "0 0",
         padding: "clamp(64px, 8vw, 100px) clamp(16px, 4vw, 48px) 40px",
         color: "var(--brand-cream)",
         borderTop: "1px solid rgba(200, 155, 93, 0.12)",
