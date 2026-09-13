@@ -157,17 +157,37 @@ export default function ServicesSection() {
             gap: clamp(16px, 2vw, 24px);
           }
           .services-grid .service-card {
+            position: relative;
             background: #F7E6CC;
             border: 1px solid var(--brand-border-subtle);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
             border-left: 3px solid transparent;
-            transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.55s ease, filter 0.55s ease, border-color 0.4s ease;
+            overflow: hidden;
+            cursor: pointer;
           }
-          .services-grid .service-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 48px rgba(94, 24, 28, 0.08), 0 0 0 1px rgba(212, 184, 150, 0.12);
-            border-left-color: var(--brand-gold) !important;
+          .services-grid .service-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 25%, rgba(255, 255, 255, 0.6) 47%, transparent 64%);
+            transform: translateX(-130%);
+            transition: transform 0.85s ease;
+            z-index: 10;
+            pointer-events: none;
+          }
+          @media (hover: hover) and (pointer: fine) {
+            .services-grid .service-card:hover::before {
+              transform: translateX(130%);
+            }
+            .services-grid .service-card:hover {
+              transform: translateY(-6px) scale(1.015);
+              box-shadow: 0 20px 48px rgba(94, 24, 28, 0.12), 0 0 25px rgba(212, 184, 150, 0.22);
+              filter: saturate(1.06);
+              border-left-color: var(--brand-gold) !important;
+              z-index: 10;
+            }
           }
           .services-grid .service-card .svc-num {
             color: rgba(94, 24, 28, 0.45);
@@ -200,7 +220,7 @@ export default function ServicesSection() {
             }
           }
 
-          /* WEB SIZE: Maroon background, 3 Columns x 2 Rows & BEIGE Luxury Cards */
+          /* WEB SIZE: Maroon background, 3 Columns x 2 Rows & BEIGE Luxury Cards with Contact card 3D hover */
           @media (min-width: 769px) {
             .services-section-wrapper {
               background-color: #3A0B0E !important;
@@ -238,15 +258,19 @@ export default function ServicesSection() {
               background: linear-gradient(160deg, #F8EDE1 0%, #EBD8C3 100%) !important;
               border: 1px solid rgba(212, 184, 150, 0.55) !important;
               border-radius: 14px !important;
-              box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28), 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+              box-shadow: 18px 25px 50px rgba(7, 1, 2, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
               border-left: 3px solid transparent !important;
             }
-            .services-grid .service-card:hover {
-              background: linear-gradient(160deg, #FCF5EC 0%, #F0E1CE 100%) !important;
-              border-color: #C89D66 !important;
-              border-left-color: var(--brand-maroon) !important;
-              transform: translateY(-6px) !important;
-              box-shadow: 0 24px 50px rgba(0, 0, 0, 0.38), 0 0 18px rgba(212, 184, 150, 0.22) !important;
+            @media (hover: hover) and (pointer: fine) {
+              .services-grid .service-card:hover {
+                background: linear-gradient(160deg, #FCF5EC 0%, #F0E1CE 100%) !important;
+                border-color: #C89D66 !important;
+                border-left-color: var(--brand-maroon) !important;
+                transform: translateY(-8px) scale(1.02) !important;
+                box-shadow: 25px 35px 65px rgba(5, 1, 2, 0.55), 0 0 35px rgba(214, 180, 119, 0.25) !important;
+                filter: saturate(1.08) !important;
+                z-index: 20 !important;
+              }
             }
             .services-grid .service-card .svc-num {
               color: rgba(94, 24, 28, 0.5) !important;
@@ -277,12 +301,6 @@ export default function ServicesSection() {
               style={{
                 padding: "clamp(28px, 3vw, 36px) clamp(24px, 2.5vw, 32px)",
                 display: "flex", flexDirection: "column", gap: 14,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderLeftColor = "var(--brand-gold)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderLeftColor = "transparent";
               }}
             >
               {/* Service number */}

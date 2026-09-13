@@ -90,8 +90,6 @@ const cardsData = [
       "Cousins breaking into wild dance moves when cameras turn away",
     ],
     content: "Weddings aren't rehearsed movie sets; they are intense, beautiful emotional storms. Our lens lives right inside that storm, invisible yet deeply present.",
-    memoryPills: ["Tears & Laughs", "Secret Glances"],
-    atmosphere: "The Unstaged Truth",
     badge: "Unfiltered Soul",
   },
   {
@@ -126,8 +124,7 @@ const cardsData = [
     name: "Devarsh Jain",
     role: "Founder · Wedding Content Creator",
     highlight: "“A love for capturing moments turned into a way of preserving how weddings actually feel.”",
-    content: "From Ahmedabad to destination celebrations across India, I travel with a handheld camera and an open heart, crafting modern vertical cinema that celebrates who you truly are.",
-    atmosphere: "Ahmedabad, Gujarat · Destination Worldwide",
+    content: "Traveling across India with a handheld camera and an open heart, crafting vertical cinema that celebrates who you truly are.",
     badge: "And this is only the beginning.",
   },
 ];
@@ -306,7 +303,7 @@ export default function MobileMemoryStack() {
           position: "relative",
           width: "100%",
           maxWidth: "364px",
-          height: "clamp(510px, 70vh, 555px)",
+          height: "clamp(530px, 73vh, 580px)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -363,7 +360,7 @@ export default function MobileMemoryStack() {
                   position: "absolute",
                   width: "93%",
                   maxWidth: "354px",
-                  height: "clamp(500px, 69vh, 545px)",
+                  height: "clamp(520px, 72vh, 570px)",
                   borderRadius: "18px",
                   overflow: "hidden",
                   cursor: isTop ? "grab" : "default",
@@ -473,7 +470,7 @@ export default function MobileMemoryStack() {
                     style={{
                       position: "relative",
                       width: "100%",
-                      height: "225px",
+                      height: "215px",
                       flexShrink: 0,
                       overflow: "hidden",
                     }}
@@ -554,7 +551,7 @@ export default function MobileMemoryStack() {
                 {/* ── Card Content Body ── */}
                 <div
                   style={{
-                    padding: card.isDevarsh ? "12px 18px 14px" : "16px 20px 14px",
+                    padding: card.isDevarsh ? "15px 18px 13px" : "16px 20px 14px",
                     display: "flex",
                     flexDirection: "column",
                     flex: 1,
@@ -572,7 +569,7 @@ export default function MobileMemoryStack() {
                         alignItems: "center",
                         justifyContent: "space-between",
                         gap: "6px",
-                        marginBottom: card.isDevarsh ? "6px" : "10px",
+                        marginBottom: card.isDevarsh ? "11px" : "10px",
                       }}
                     >
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -635,15 +632,16 @@ export default function MobileMemoryStack() {
 
                     {/* Main Heading */}
                     {card.name ? (
-                      <div style={{ marginBottom: "5px" }}>
+                      <div style={{ marginBottom: card.isDevarsh ? "11px" : "8px" }}>
                         <h3
                           style={{
                             fontFamily: "'Playfair Display', Georgia, serif",
-                            fontSize: "24px",
+                            fontSize: "23px",
                             fontWeight: 600,
-                            lineHeight: 1.15,
-                            margin: "0 0 2px",
+                            lineHeight: 1.2,
+                            margin: "0 0 4px",
                             color: "#FEF5E6",
+                            letterSpacing: "-0.01em",
                           }}
                         >
                           {card.name}
@@ -681,8 +679,8 @@ export default function MobileMemoryStack() {
                     {card.highlight && (
                       <div
                         style={{
-                          margin: card.isDevarsh ? "6px 0 8px" : "8px 0 12px",
-                          padding: card.isDevarsh ? "7px 12px" : "9px 13px",
+                          margin: card.isDevarsh ? "11px 0 12px" : "8px 0 12px",
+                          padding: card.isDevarsh ? "9px 13px" : "9px 13px",
                           background: card.isDevarsh
                             ? "linear-gradient(135deg, rgba(212,184,150,0.14) 0%, rgba(36,5,8,0.6) 100%)"
                             : "linear-gradient(135deg, rgba(196,150,95,0.18) 0%, rgba(245,229,206,0.6) 100%)",
@@ -700,10 +698,11 @@ export default function MobileMemoryStack() {
                             fontFamily: "'Playfair Display', Georgia, serif",
                             fontSize: card.isDevarsh ? "12.5px" : "13.5px",
                             fontStyle: "italic",
-                            fontWeight: 600,
-                            lineHeight: 1.4,
+                            fontWeight: 500,
+                            lineHeight: 1.52,
                             margin: 0,
                             color: card.isDevarsh ? "#FBF2E3" : "#34070B",
+                            letterSpacing: "0.01em",
                           }}
                         >
                           {card.highlight}
@@ -715,9 +714,9 @@ export default function MobileMemoryStack() {
                     {card.content && (
                       <p
                         style={{
-                          fontSize: card.isDevarsh ? "12.8px" : "13.5px",
-                          lineHeight: card.isDevarsh ? 1.5 : 1.62,
-                          margin: card.isDevarsh ? "0 0 8px" : "0 0 12px",
+                          fontSize: card.isDevarsh ? "12.5px" : "13.5px",
+                          lineHeight: card.isDevarsh ? 1.66 : 1.62,
+                          margin: card.isDevarsh ? "0 0 12px" : "0 0 12px",
                           color: card.isDevarsh
                             ? "rgba(247,230,204,0.92)"
                             : "rgba(58,11,14,0.92)",
@@ -794,58 +793,40 @@ export default function MobileMemoryStack() {
                     )}
                   </div>
 
-                  {/* Bottom Footer Row of Card */}
+                  {/* Bottom Footer Row of Card — Clean: only badge, no atmosphere second line */}
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      paddingTop: "8px",
+                      paddingTop: "9px",
                       borderTop: card.isDevarsh
-                        ? "1px solid rgba(212,184,150,0.18)"
+                        ? "1px solid rgba(212,184,150,0.2)"
                         : "1px solid rgba(196,150,95,0.32)",
                       marginTop: "auto",
                       position: "relative",
                       zIndex: 5,
+                      flexShrink: 0,
+                      gap: "10px",
                     }}
                   >
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <span
-                        style={{
-                          fontFamily: "var(--font-mono)",
-                          fontSize: "8.5px",
-                          letterSpacing: "0.14em",
-                          color: card.isDevarsh
-                            ? "rgba(212,184,150,0.8)"
-                            : "rgba(91,23,27,0.85)",
-                          textTransform: "uppercase",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {card.badge}
-                      </span>
-                      {card.atmosphere && (
-                        <span
-                          style={{
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "8px",
-                            color: card.isDevarsh
-                              ? "rgba(212,184,150,0.55)"
-                              : "rgba(91,23,27,0.65)",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 4,
-                            marginTop: 2,
-                          }}
-                        >
-                          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                            <circle cx="12" cy="10" r="3" />
-                          </svg>
-                          <span>{card.atmosphere}</span>
-                        </span>
-                      )}
-                    </div>
+                    <span
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "8.5px",
+                        letterSpacing: "0.12em",
+                        color: card.isDevarsh
+                          ? "rgba(212,184,150,0.8)"
+                          : "rgba(91,23,27,0.85)",
+                        textTransform: "uppercase",
+                        fontWeight: 600,
+                        lineHeight: 1.35,
+                        flex: 1,
+                        minWidth: 0,
+                      }}
+                    >
+                      {card.badge}
+                    </span>
 
                     {card.isDevarsh ? (
                       <a
@@ -855,21 +836,28 @@ export default function MobileMemoryStack() {
                         style={{
                           fontSize: "9px",
                           fontFamily: "var(--font-mono)",
-                          letterSpacing: "0.14em",
+                          letterSpacing: "0.08em",
                           textTransform: "uppercase",
                           color: "#1A0507",
                           textDecoration: "none",
                           fontWeight: 700,
                           display: "inline-flex",
+                          flexDirection: "row",
                           alignItems: "center",
-                          gap: 5,
-                          padding: "6px 14px",
+                          justifyContent: "center",
+                          gap: 6,
+                          padding: "8px 16px",
                           background: "#F7E6CC",
                           borderRadius: 100,
-                          boxShadow: "0 4px 14px rgba(247, 230, 204, 0.3)",
+                          boxShadow: "0 4px 14px rgba(247, 230, 204, 0.4)",
+                          whiteSpace: "nowrap",
+                          wordBreak: "keep-all",
+                          flexShrink: 0,
+                          lineHeight: 1,
                         }}
                       >
-                        Let&apos;s Connect &rarr;
+                        <span style={{ whiteSpace: "nowrap" }}>Let&apos;s Connect</span>
+                        <span style={{ fontSize: "12px", lineHeight: 1, display: "inline-block" }}>&rarr;</span>
                       </a>
                     ) : (
                       <button
@@ -894,6 +882,8 @@ export default function MobileMemoryStack() {
                           display: "inline-flex",
                           alignItems: "center",
                           gap: 5,
+                          whiteSpace: "nowrap",
+                          flexShrink: 0,
                         }}
                       >
                         <span>Swipe or Tap</span>
