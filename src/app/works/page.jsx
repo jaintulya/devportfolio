@@ -288,6 +288,7 @@ export default function WorkPage() {
   const [activeReel, setActiveReel] = useState(null);
   const [activeReelIndex, setActiveReelIndex] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   const tabsRef = useRef({});
@@ -300,6 +301,7 @@ export default function WorkPage() {
       : reelData.filter((item) => item.category === activeTab);
 
   useEffect(() => {
+    setMounted(true);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -831,7 +833,9 @@ export default function WorkPage() {
 
       {/* Work grid */}
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(32px, 5vw, 56px) 0" }}>
-        {isMobile ? (
+        {!mounted ? (
+          <div style={{ minHeight: "50vh" }} />
+        ) : isMobile ? (
           // Mobile Layout: Stacked Category Sections
           <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
             {reelCategories.map((cat) => {
@@ -936,34 +940,39 @@ export default function WorkPage() {
         {/* See More → Work page link */}
         <div style={{
           textAlign: "center",
-          marginTop: "clamp(32px, 4vw, 48px)",
+          marginTop: "clamp(48px, 6vw, 64px)",
         }}>
           <a
             href="https://www.instagram.com/shaadi.pitara/"
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              display: "inline-flex", alignItems: "center", gap: 10,
-              padding: "16px 36px",
-              background: "transparent",
-              border: "1px solid rgba(212,184,150,0.25)",
-              color: "var(--brand-cream)",
-              fontFamily: "var(--font-mono)", fontSize: 11,
-              letterSpacing: "0.25em", textTransform: "uppercase",
-              textDecoration: "none", cursor: "pointer",
-              transition: "all 0.3s ease",
+              display: "inline-flex", alignItems: "center", gap: 8,
+              padding: "10px 24px",
+              background: "var(--brand-gold)", backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: "1px solid var(--brand-gold)",
+              color: "var(--brand-maroon-dark)",
+              fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600,
+              letterSpacing: "0.2em", textTransform: "uppercase",
+              textDecoration: "none", cursor: "pointer", borderRadius: 4,
+              transition: "all 0.3s ease", whiteSpace: "nowrap",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "rgba(212,184,150,0.55)";
-              e.currentTarget.style.background = "rgba(212,184,150,0.06)";
+              e.currentTarget.style.background = "rgba(212, 184, 150, 0.08)";
+              e.currentTarget.style.color = "var(--brand-cream)";
+              e.currentTarget.style.borderColor = "rgba(212, 184, 150, 0.35)";
+              e.currentTarget.style.transform = "translateY(-2px)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(212,184,150,0.25)";
-              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.background = "var(--brand-gold)";
+              e.currentTarget.style.color = "var(--brand-maroon-dark)";
+              e.currentTarget.style.borderColor = "var(--brand-gold)";
+              e.currentTarget.style.transform = "translateY(0)";
             }}
           >
             See More on Instagram
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </a>

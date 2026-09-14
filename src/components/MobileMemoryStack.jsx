@@ -174,6 +174,8 @@ export default function MobileMemoryStack() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
+  const [isShared, setIsShared] = useState(false);
+  const [isCommented, setIsCommented] = useState(false);
   const totalCards = cardsData.length;
   const holdTimer = useRef(null);
   const isHolding = useRef(false);
@@ -254,6 +256,20 @@ export default function MobileMemoryStack() {
     setIsLiked((v) => !v);
   }, []);
 
+  const handleShare = useCallback((e) => {
+    e.stopPropagation();
+    setIsShared(true);
+    setTimeout(() => setIsShared(false), 300);
+    window.open(`https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I saw your amazing story on the portfolio and wanted to connect!")}`, '_blank');
+  }, []);
+
+  const handleComment = useCallback((e) => {
+    e.stopPropagation();
+    setIsCommented(true);
+    setTimeout(() => setIsCommented(false), 300);
+    window.open('https://instagram.com/shaadi.pitara', '_blank');
+  }, []);
+
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "ArrowRight") nextCard();
@@ -303,6 +319,7 @@ export default function MobileMemoryStack() {
           display: "flex",
           flexDirection: "column",
           borderRadius: "20px",
+          backgroundColor: "#0a0a0a",
         }}
       >
         {/* STORY CARD */}
@@ -311,7 +328,7 @@ export default function MobileMemoryStack() {
             position: "relative",
             width: "100%",
             height: "clamp(640px, 85vh, 760px)",
-            borderRadius: "20px 20px 14px 14px",
+            borderRadius: "20px 20px 6px 6px",
             overflow: "hidden",
             touchAction: "none",
             userSelect: "none",
@@ -340,7 +357,6 @@ export default function MobileMemoryStack() {
                 <img src="/logo.jpg" alt="Shaadi Pitara" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
               <span style={{ fontFamily: "var(--font-mono)", fontSize: "12px", fontWeight: 600, color: "#fff", letterSpacing: "0.02em" }}>shaadi.pitara</span>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>{card.chapter}</span>
               {isPaused && <span style={{ fontFamily: "var(--font-mono)", fontSize: "8px", letterSpacing: "0.14em", color: "rgba(255,255,255,0.6)", textTransform: "uppercase", marginLeft: "auto" }}>PAUSED</span>}
             </div>
           </div>
@@ -365,7 +381,7 @@ export default function MobileMemoryStack() {
                 }}
               >
               {/* Decorative inner frame */}
-              <div aria-hidden="true" style={{ position: "absolute", inset: "6px", borderRadius: "13px", border: "1px solid rgba(196,150,95,0.22)", pointerEvents: "none", zIndex: 2 }} />
+              <div aria-hidden="true" style={{ position: "absolute", inset: "6px", borderRadius: "14px 14px 3px 3px", border: "1px solid rgba(196,150,95,0.22)", pointerEvents: "none", zIndex: 2 }} />
 
               {/* Founder photo */}
               {c.isDevarsh && (
@@ -447,23 +463,16 @@ export default function MobileMemoryStack() {
             ))}
           </div>
 
-          {/* Single tap overlay — sits on top of all cards, outside the per-card map */}
+          {/* Single tap overlay — uses Pointer events to prevent double-firing on mobile */}
           <div
-            onMouseDown={handlePressStart}
-            onMouseLeave={handleLeave}
-            onTouchStart={handlePressStart}
-            onMouseUp={(e) => {
+            onPointerDown={handlePressStart}
+            onPointerLeave={handleLeave}
+            onPointerUp={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
               const side = e.clientX - rect.left < rect.width * 0.3 ? "left" : "right";
               handlePressEnd(e, side);
             }}
-            onTouchEnd={(e) => {
-              const touch = e.changedTouches[0];
-              const rect = e.currentTarget.getBoundingClientRect();
-              const side = touch.clientX - rect.left < rect.width * 0.3 ? "left" : "right";
-              handlePressEnd(e, side);
-            }}
-            style={{ position: "absolute", inset: 0, zIndex: 25, cursor: "pointer" }}
+            style={{ position: "absolute", inset: 0, zIndex: 25, cursor: "pointer", touchAction: "none" }}
           />
 
           {/* Heart popup removed */}
@@ -491,35 +500,85 @@ export default function MobileMemoryStack() {
             <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", fontWeight: 400 }}>Send message</span>
           </div>
 
-          {/* Heart — red when liked */}
-          <button
-            type="button"
-            onClick={handleHeart}
-            style={{ background: "none", border: "none", padding: "2px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-            aria-label={isLiked ? "Unlike" : "Like"}
-          >
-            <svg
-              width="26"
-              height="26"
-              viewBox="0 0 24 24"
-              fill={isLiked ? "#FF3040" : "none"}
-              stroke={isLiked ? "#FF3040" : "rgba(255,255,255,0.88)"}
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ transition: "fill 0.18s ease, stroke 0.18s ease, transform 0.16s ease", transform: isLiked ? "scale(1.2)" : "scale(1)" }}
+          {/* Icons container */}
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            {/* Heart — red when liked */}
+            <button
+              type="button"
+              onClick={handleHeart}
+              style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              aria-label={isLiked ? "Unlike" : "Like"}
             >
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-            </svg>
-          </button>
+              <svg
+                width="23"
+                height="23"
+                viewBox="0 0 24 24"
+                fill={isLiked ? "#FF3040" : "none"}
+                stroke={isLiked ? "#FF3040" : "rgba(255,255,255,0.95)"}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ transition: "fill 0.18s ease, stroke 0.18s ease" }}
+              >
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+            </button>
 
-          {/* IG DM share icon — correct Instagram paper plane */}
-          <button type="button" onClick={(e) => e.stopPropagation()} style={{ background: "none", border: "none", padding: "2px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }} aria-label="Share">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.88)" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21.5 2.5L2.5 9.5L10.5 13.5L14.5 21.5L21.5 2.5Z" />
-              <path d="M10.5 13.5L14.5 9.5" />
-            </svg>
-          </button>
+            {/* Comment icon (Instagram style: tail on bottom right, so flipped horizontally) */}
+            <button
+              type="button"
+              onClick={handleComment}
+              style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              aria-label="Comment"
+            >
+              <svg
+                width="23"
+                height="23"
+                viewBox="0 0 24 24"
+                fill={isCommented ? "#fff" : "none"}
+                stroke={isCommented ? "#fff" : "rgba(255,255,255,0.95)"}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ transform: "scaleX(-1)", transition: "fill 0.18s ease, stroke 0.18s ease" }}
+              >
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+              </svg>
+            </button>
+
+            {/* IG DM share icon — explicitly curved corners via path, thinner stroke */}
+            <button 
+              type="button" 
+              onClick={handleShare} 
+              style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }} 
+              aria-label="Share"
+            >
+              <svg 
+                width="23" 
+                height="23" 
+                viewBox="0 0 24 24" 
+                fill="none"
+                style={{ transition: "fill 0.18s ease, stroke 0.18s ease" }}
+              >
+                <path 
+                  fill={isShared ? "#fff" : "none"} 
+                  stroke={isShared ? "#fff" : "rgba(255,255,255,0.95)"} 
+                  strokeWidth="1.8" 
+                  strokeLinecap="round"
+                  strokeLinejoin="round" 
+                  d="M22 3L2 3L9 10.5L12 21L22 3Z" 
+                />
+                <path 
+                  fill="none" 
+                  stroke={isShared ? "#fff" : "rgba(255,255,255,0.95)"} 
+                  strokeWidth="1.8" 
+                  strokeLinecap="round"
+                  strokeLinejoin="round" 
+                  d="M9 10.5L21.5 3.5" 
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 

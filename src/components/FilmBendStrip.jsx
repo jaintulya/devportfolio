@@ -829,7 +829,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
 
       {/* Active Reel Info — mobile only */}
       <div style={{
-        position: "absolute", bottom: 58, left: "50%",
+        position: "absolute", bottom: 66, left: "50%",
         transform: "translateX(-50%)", zIndex: 20,
         textAlign: "center", width: "100%", pointerEvents: "none",
       }}>
@@ -851,27 +851,34 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
           style={{
             position: "absolute", bottom: 12, left: "50%",
             transform: "translateX(-50%)", zIndex: 20,
-            padding: "8px 22px",
-            display: "inline-flex", alignItems: "center", gap: 6,
-            background: "rgba(10,2,3,0.6)", backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
-            border: "1px solid rgba(212,184,150,0.22)",
-            color: "rgba(247,230,204,0.8)",
-            fontFamily: "var(--font-body)", fontSize: 10, fontWeight: 500,
-            letterSpacing: "0.22em", textTransform: "uppercase",
-            textDecoration: "none", cursor: "pointer", borderRadius: 0,
-            transition: "all 0.35s ease", whiteSpace: "nowrap",
+            padding: "10px 24px",
+            display: "inline-flex", alignItems: "center", gap: 8,
+            background: "var(--brand-gold)", backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            border: "1px solid var(--brand-gold)",
+            color: "var(--brand-maroon-dark)",
+            fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600,
+            letterSpacing: "0.2em", textTransform: "uppercase",
+            textDecoration: "none", cursor: "pointer", borderRadius: 4,
+            transition: "all 0.3s ease", whiteSpace: "nowrap",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(10,2,3,0.85)";
-            e.currentTarget.style.borderColor = "rgba(212,184,150,0.5)";
+            e.currentTarget.style.background = "rgba(212, 184, 150, 0.08)";
+            e.currentTarget.style.color = "var(--brand-cream)";
+            e.currentTarget.style.borderColor = "rgba(212, 184, 150, 0.35)";
+            e.currentTarget.style.transform = "translateX(-50%) translateY(-2px)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "rgba(10,2,3,0.6)";
-            e.currentTarget.style.borderColor = "rgba(212,184,150,0.22)";
+            e.currentTarget.style.background = "var(--brand-gold)";
+            e.currentTarget.style.color = "var(--brand-maroon-dark)";
+            e.currentTarget.style.borderColor = "var(--brand-gold)";
+            e.currentTarget.style.transform = "translateX(-50%) translateY(0)";
           }}
         >
-          SEE MORE &rarr;
+          SEE MORE
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
         </a>
       )}
     </div>
