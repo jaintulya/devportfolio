@@ -330,7 +330,7 @@ export default function MobileMemoryStack() {
             height: "clamp(640px, 85vh, 760px)",
             borderRadius: "20px 20px 6px 6px",
             overflow: "hidden",
-            touchAction: "none",
+            touchAction: "pan-y",
             userSelect: "none",
           }}
         >
@@ -472,7 +472,8 @@ export default function MobileMemoryStack() {
               const side = e.clientX - rect.left < rect.width * 0.3 ? "left" : "right";
               handlePressEnd(e, side);
             }}
-            style={{ position: "absolute", inset: 0, zIndex: 25, cursor: "pointer", touchAction: "none" }}
+            onPointerCancel={handleLeave}
+            style={{ position: "absolute", inset: 0, zIndex: 25, cursor: "pointer", touchAction: "pan-y" }}
           />
 
           {/* Heart popup removed */}
