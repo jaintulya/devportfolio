@@ -510,21 +510,21 @@ export default function MobileMemoryStack() {
               aria-label={isLiked ? "Unlike" : "Like"}
             >
               <svg
-                width="23"
-                height="23"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill={isLiked ? "#FF3040" : "none"}
                 stroke={isLiked ? "#FF3040" : "rgba(255,255,255,0.95)"}
-                strokeWidth="2"
+                strokeWidth="1.9"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 style={{ transition: "fill 0.18s ease, stroke 0.18s ease" }}
               >
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.438-.283-1.791-1.509-4.303-3.752C5.152 14.081 2.5 12.194 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.117 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.682-1.938Z" />
               </svg>
             </button>
 
-            {/* Comment icon (Instagram style: tail on bottom right, so flipped horizontally) */}
+            {/* Comment icon (official Instagram chat bubble with rounded corner tail at bottom right) */}
             <button
               type="button"
               onClick={handleComment}
@@ -532,21 +532,21 @@ export default function MobileMemoryStack() {
               aria-label="Comment"
             >
               <svg
-                width="23"
-                height="23"
+                width="21"
+                height="21"
                 viewBox="0 0 24 24"
                 fill={isCommented ? "#fff" : "none"}
                 stroke={isCommented ? "#fff" : "rgba(255,255,255,0.95)"}
-                strokeWidth="2"
+                strokeWidth="1.9"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                style={{ transform: "scaleX(-1)", transition: "fill 0.18s ease, stroke 0.18s ease" }}
+                style={{ transition: "fill 0.18s ease, stroke 0.18s ease" }}
               >
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" />
               </svg>
             </button>
 
-            {/* IG DM share icon — explicitly curved corners via path, thinner stroke */}
+            {/* IG DM share icon — official Instagram paper-plane path */}
             <button 
               type="button" 
               onClick={handleShare} 
@@ -554,28 +554,18 @@ export default function MobileMemoryStack() {
               aria-label="Share"
             >
               <svg 
-                width="23" 
-                height="23" 
+                width="21" 
+                height="21" 
                 viewBox="0 0 24 24" 
                 fill="none"
-                style={{ transition: "fill 0.18s ease, stroke 0.18s ease" }}
+                stroke={isShared ? "#fff" : "rgba(255,255,255,0.95)"}
+                strokeWidth="1.9"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ transform: "rotate(-3deg)", transition: "fill 0.18s ease, stroke 0.18s ease" }}
               >
-                <path 
-                  fill={isShared ? "#fff" : "none"} 
-                  stroke={isShared ? "#fff" : "rgba(255,255,255,0.95)"} 
-                  strokeWidth="1.8" 
-                  strokeLinecap="round"
-                  strokeLinejoin="round" 
-                  d="M22 3L2 3L9 10.5L12 21L22 3Z" 
-                />
-                <path 
-                  fill="none" 
-                  stroke={isShared ? "#fff" : "rgba(255,255,255,0.95)"} 
-                  strokeWidth="1.8" 
-                  strokeLinecap="round"
-                  strokeLinejoin="round" 
-                  d="M9 10.5L21.5 3.5" 
-                />
+                <line x1="22" y1="3" x2="9.218" y2="10.083" />
+                <polygon points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" fill={isShared ? "#fff" : "none"} />
               </svg>
             </button>
           </div>

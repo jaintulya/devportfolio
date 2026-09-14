@@ -1,4 +1,4 @@
-import Home from '../page';
+import Home from '@/components/HomeClient';
 
 export const metadata = {
   title: "Wedding Reel & Content Creation Services — Shaadi Pitara",

@@ -508,8 +508,8 @@ export default function ReelShowcase() {
         const backdrop = document.createElement("div");
         backdrop.style.cssText = `
           position: fixed; inset: 0; z-index: 99990;
-          background: radial-gradient(ellipse at center, rgba(45, 10, 13, 0.85) 0%, rgba(15, 3, 5, 0.95) 100%);
-          backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+          background: rgba(20, 4, 6, 0.3);
+          backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
           opacity: 0; pointer-events: none;
         `;
         document.body.appendChild(backdrop);
@@ -575,8 +575,8 @@ export default function ReelShowcase() {
       const backdrop = document.createElement("div");
       backdrop.style.cssText = `
         position: fixed; inset: 0;
-        background: rgba(5, 1, 2, 0.97);
-        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        background: rgba(20, 4, 6, 0.3);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
         opacity: 0;
       `;
       overlay.appendChild(backdrop);
@@ -1008,9 +1008,9 @@ export default function ReelShowcase() {
           style={{
             position: "fixed", inset: 0, zIndex: 99999,
             background: isMobile
-              ? "radial-gradient(ellipse at center, rgba(45, 10, 13, 0.88) 0%, rgba(15, 3, 5, 0.96) 100%)"
-              : "rgba(5, 1, 2, 0.97)",
-            backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+              ? "rgba(20, 4, 6, 0.3)"
+              : "rgba(20, 4, 6, 0.3)",
+            backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)",
             display: "flex", alignItems: "center", justifyContent: "center",
             padding: isMobile ? "8px 12px" : "clamp(20px, 4vw, 48px)",
             touchAction: "none",
@@ -1033,9 +1033,10 @@ export default function ReelShowcase() {
               background: isMobile
                 ? "linear-gradient(180deg, rgba(20, 4, 6, 0.35) 0%, rgba(20, 4, 6, 0.55) 100%), url('/workbg.png') center / cover no-repeat, #2A080A"
                 : "linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.png') center / cover no-repeat, #2A080A",
+              backdropFilter: "blur(15px)", WebkitBackdropFilter: "blur(15px)",
               borderRadius: isMobile ? 18 : 24,
-              border: "1.5px solid rgba(212,184,150,0.26)",
-              boxShadow: "0 35px 90px rgba(0,0,0,0.92), 0 0 0 1px rgba(212,184,150,0.12)",
+              border: "1.5px solid rgba(212,184,150,0.15)",
+              boxShadow: "0 35px 90px rgba(0,0,0,0.8), 0 0 0 1px rgba(212,184,150,0.1)",
               position: "relative",
               padding: isMobile ? 0 : "36px 40px",
             }}
@@ -1117,9 +1118,9 @@ export default function ReelShowcase() {
               </div>
             )}
 
-            {/* Iframe container */}
+            {/* Iframe panel */}
             <div style={{
-              position: "relative", flexShrink: 0,
+              position: "relative", flexShrink: 0, zIndex: 10,
               width: isMobile ? "100%" : "min(360px, 38vw)",
               height: "auto",
               aspectRatio: "9/16",
@@ -1153,7 +1154,7 @@ export default function ReelShowcase() {
             <div style={{
               flex: 1, minWidth: 0, display: "flex", flexDirection: "column",
               padding: isMobile ? "8px 14px 10px" : 0,
-              width: "100%",
+              width: "100%", position: "relative", zIndex: 10,
               background: isMobile ? "linear-gradient(0deg, rgba(20, 4, 6, 0.5) 0%, transparent 100%)" : "transparent",
             }}>
 

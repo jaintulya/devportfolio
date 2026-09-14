@@ -1,4 +1,4 @@
-import Home from '../page';
+import Home from '@/components/HomeClient';
 
 export const metadata = {
   title: "Book Your Wedding Story — Contact Shaadi Pitara | Ahmedabad",
