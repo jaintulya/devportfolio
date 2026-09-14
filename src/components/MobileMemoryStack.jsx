@@ -1,119 +1,104 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+
+const STORY_DURATION = 7000;
 
 const cardsData = [
   {
     id: 1,
     chapter: "CHAPTER 01",
     tag: "THE SPARK · 2018",
-    era: "Ahmedabad · 2018",
     heading: "It all began with an instinct to freeze everyday magic.",
-    highlight: "“No fancy rigs. Just raw curiosity and an eye for moments nobody else noticed.”",
+    highlight: "\u201cNo fancy rigs. Just raw curiosity and an eye for moments nobody else noticed.\u201d",
     content: "Before weddings, there was an obsession with observation. I walked around Ahmedabad with my phone, using Snapchat and simple cuts to stitch together fleeting slices of life. I discovered that even an ordinary evening feels like cinema when timed to the right heartbeat.",
     memoryPills: ["Phone Lens Only", "Zero Budget"],
-    atmosphere: "Riverfront Promenades · Ahmedabad",
     badge: "The First Frame",
   },
   {
     id: 2,
     chapter: "CHAPTER 02",
     tag: "FIRST PRAISE · 2019",
-    era: "Campus Hallways · 2019",
     heading: "Then friends started leaning in and watching closely.",
-    highlight: "“Tu hi story laga diya kar, tere edit mein emotion dikhta hai.”",
+    highlight: "\u201cTu hi story laga diya kar, tere edit mein emotion dikhta hai.\u201d",
     content: "That one casual college compliment shifted my universe. Seeing classmates wait for my edits, replay them, and genuinely feel the music made me realize: this was never a fleeting hobby. It was the visual language I was meant to speak.",
     memoryPills: ["Campus Hallways", "First Timelines"],
-    atmosphere: "College Canteen · 11:20 AM",
     badge: "The Validation",
   },
   {
     id: 3,
     chapter: "CHAPTER 03",
     tag: "THE EVOLUTION · 2020",
-    era: "Midnight Lab · 2020",
     heading: "From casual fun to an all-consuming creative obsession.",
-    highlight: "“I didn't just want pretty pictures. I wanted people to relive the exact pulse.”",
+    highlight: "\u201cI didn\u2019t just want pretty pictures. I wanted people to relive the exact pulse.\u201d",
     content: "Sleepless nights studying cuts, soundtrack drops, acoustic pacing, and color palettes. I obsessed over why certain 10-second sequences bring goosebumps while others feel hollow. Every frame had to breathe with genuine human pulse.",
     memoryPills: ["Midnight Rhythms", "Beat Drops"],
-    atmosphere: "02:45 AM · The Edit Desk",
-    badge: "Fun ➔ Obsession",
+    badge: "Fun to Obsession",
   },
   {
     id: 4,
     chapter: "CHAPTER 04",
     tag: "THE BREAKTHROUGH",
-    era: "Viral Feed · 2021",
     heading: "During college, one single reel unexpectedly exploded.",
-    highlight: "“Seeing thousands of strangers feel something from what I made unlocked ultimate conviction.”",
-    content: "The screen wouldn't stop ringing. Shares, emotional DMs, and strangers telling me a 30-second video made them tear up proved one truth: authentic storytelling transcends any screen size. That night, I decided to go all in.",
+    highlight: "\u201cSeeing thousands of strangers feel something from what I made unlocked ultimate conviction.\u201d",
+    content: "The screen wouldn\u2019t stop ringing. Shares, emotional DMs, and strangers telling me a 30-second video made them tear up proved one truth: authentic storytelling transcends any screen size. That night, I decided to go all in.",
     memoryPills: ["1M+ Organic Views", "Pan-India DMs"],
-    atmosphere: "Trending Feed · Midnight Surge",
     badge: "The Breakthrough",
   },
   {
     id: 5,
     chapter: "CHAPTER 05",
     tag: "THE GRIND · 2021",
-    era: "Commercial Kitchens",
     heading: "Creating in chaotic, high-pressure restaurant kitchens.",
-    highlight: "“Sizzling pans, tricky low-light, zero retakes: the ultimate training ground.”",
+    highlight: "\u201cSizzling pans, tricky low-light, zero retakes: the ultimate training ground.\u201d",
     content: "I took projects with food creators and brands, shooting in boiling kitchens with seconds to catch the steam and sizzle. That relentless phase forged my speed, sharp reflexes, and intuitive framing, which would later become my superpower at weddings.",
     memoryPills: ["Zero Retakes", "High-Pressure Sets"],
-    atmosphere: "Commercial Sets · 100% Instinct",
     badge: "The Bootcamp",
   },
   {
     id: 6,
     chapter: "CHAPTER 06",
     tag: "THE TURNING POINT",
-    era: "First Wedding · 2022",
     heading: "Then, I stepped into my first Indian wedding.",
-    highlight: "“Traditional crews were staging poses. But who was preserving the unscripted heartbeat?”",
-    content: "I watched photographers direct stiff poses while the real wedding was happening elsewhere: the bride's deep breath behind the door, the grandmother quietly wiping a tear, the cousins laughing hysterically backstage. Those were the real memories slipping away unrecorded.",
+    highlight: "\u201cTraditional crews were staging poses. But who was preserving the unscripted heartbeat?\u201d",
+    content: "I watched photographers direct stiff poses while the real wedding was happening elsewhere: the bride\u2019s deep breath behind the door, the grandmother quietly wiping a tear, the cousins laughing hysterically backstage. Those were the real memories slipping away unrecorded.",
     memoryPills: ["Staged vs Real", "Mandap Whispers"],
-    atmosphere: "Mandap Sidelines · Udaipur",
     badge: "The Revelation",
   },
   {
     id: 7,
     chapter: "CHAPTER 07",
     tag: "THE OTHER SIDE",
-    era: "Behind The Scenes",
     heading: "The candid moments behind the moments.",
-    highlight: "“All the spontaneous, imperfect madness that truly makes a celebration alive.”",
+    highlight: "\u201cAll the spontaneous, imperfect madness that truly makes a celebration alive.\u201d",
     bullets: [
       "The chaotic laughter between childhood best friends",
       "Parents getting overwhelmed in quiet, unlit corners",
-      "The fast heartbeat seconds before the bride's grand entry",
+      "The fast heartbeat seconds before the bride\u2019s grand entry",
       "Cousins breaking into wild dance moves when cameras turn away",
     ],
-    content: "Weddings aren't rehearsed movie sets; they are intense, beautiful emotional storms. Our lens lives right inside that storm, invisible yet deeply present.",
+    content: "Weddings aren\u2019t rehearsed movie sets; they are intense, beautiful emotional storms. Our lens lives right inside that storm, invisible yet deeply present.",
     badge: "Unfiltered Soul",
   },
   {
     id: 8,
     chapter: "CHAPTER 08",
     tag: "THE GENESIS",
-    era: "Shaadi Pitara Born",
-    heading: "We don't just film weddings. We preserve the feeling.",
-    highlight: "“Cinematic vertical reels delivered while your wedding is still unfolding.”",
-    content: "Why should couples wait 6 months for a standard film while the celebration's electricity is fresh right now? Shaadi Pitara was founded to deliver same-night cinematic reels that couples and guests can relive, cry to, and share with the world immediately.",
+    heading: "We don\u2019t just film weddings. We preserve the feeling.",
+    highlight: "\u201cCinematic vertical reels delivered while your wedding is still unfolding.\u201d",
+    content: "Why should couples wait 6 months for a standard film while the celebration\u2019s electricity is fresh right now? Shaadi Pitara was founded to deliver same-night cinematic reels that couples and guests can relive, cry to, and share with the world immediately.",
     memoryPills: ["9:16 Cinema", "Same-Night Delivery"],
-    atmosphere: "Electric Celebration · Live Edits",
     badge: "Shaadi Pitara Born",
   },
   {
     id: 9,
     chapter: "CHAPTER 09",
     tag: "THE SOUL",
-    era: "The Philosophy",
     heading: "Not just how it looked. How it actually felt.",
-    highlight: "“Years or decades later, our reels transport you right back into that exact warmth.”",
-    content: "When you look back on your wedding after 20 years, you won't care about artificial poses. You'll want to hear your mother's laugh, see your partner's nervous smile, and feel that rush all over again. That sacred promise is what drives every film we craft.",
+    highlight: "\u201cYears or decades later, our reels transport you right back into that exact warmth.\u201d",
+    content: "When you look back on your wedding after 20 years, you won\u2019t care about artificial poses. You\u2019ll want to hear your mother\u2019s laugh, see your partner\u2019s nervous smile, and feel that rush all over again. That sacred promise is what drives every film we craft.",
     memoryPills: ["Decades Later", "Emotional Audio"],
-    atmosphere: "Preserving Family Heirlooms",
     badge: "Living Memories",
   },
   {
@@ -122,39 +107,168 @@ const cardsData = [
     chapter: "FOUNDER",
     tag: "THE PERSON BEHIND THE PITARA",
     name: "Devarsh Jain",
-    role: "Founder · Wedding Content Creator",
-    highlight: "“A love for capturing moments turned into a way of preserving how weddings actually feel.”",
+    role: "Founder \u00b7 Wedding Content Creator",
+    highlight: "\u201cA love for capturing moments turned into a way of preserving how weddings actually feel.\u201d",
     content: "Traveling across India with a handheld camera and an open heart, crafting vertical cinema that celebrates who you truly are.",
     badge: "And this is only the beginning.",
   },
 ];
 
+/* ── Progress bar (per-segment, RAF-based) ── */
+function StoryProgressBar({ index, activeIndex, isPaused, onComplete }) {
+  const rafRef = useRef(null);
+  const startTimeRef = useRef(null);
+  const elapsedRef = useRef(0);
+  const [progress, setProgress] = useState(0);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+
+  useEffect(() => {
+    cancelAnimationFrame(rafRef.current);
+    if (index === activeIndex) {
+      setProgress(0);
+      elapsedRef.current = 0;
+      startTimeRef.current = null;
+    } else {
+      setProgress(index < activeIndex ? 1 : 0);
+    }
+  }, [activeIndex, index]);
+
+  useEffect(() => {
+    if (index !== activeIndex) return;
+    if (isPaused) {
+      cancelAnimationFrame(rafRef.current);
+      if (startTimeRef.current !== null) {
+        elapsedRef.current += performance.now() - startTimeRef.current;
+        startTimeRef.current = null;
+      }
+      return;
+    }
+    const animate = (timestamp) => {
+      if (!startTimeRef.current) startTimeRef.current = timestamp;
+      const elapsed = timestamp - startTimeRef.current + elapsedRef.current;
+      const pct = Math.min(elapsed / STORY_DURATION, 1);
+      setProgress(pct);
+      if (pct < 1) {
+        rafRef.current = requestAnimationFrame(animate);
+      } else {
+        onCompleteRef.current();
+      }
+    };
+    startTimeRef.current = null;
+    rafRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [index, activeIndex, isPaused]);
+
+  const isCurrent = index === activeIndex;
+  const isDone = index < activeIndex;
+
+  return (
+    <div style={{ flex: 1, height: 2.5, borderRadius: 2, background: "rgba(255,255,255,0.3)", overflow: "hidden", position: "relative" }}>
+      <div style={{ position: "absolute", inset: 0, borderRadius: 2, background: "rgba(255,255,255,0.92)", transformOrigin: "left center", transform: `scaleX(${isDone ? 1 : isCurrent ? progress : 0})`, willChange: "transform" }} />
+    </div>
+  );
+}
+
 export default function MobileMemoryStack() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [exitDirection, setExitDirection] = useState("right");
-
+  const [isPaused, setIsPaused] = useState(true);
+  const [isLiked, setIsLiked] = useState(false);
   const totalCards = cardsData.length;
+  const holdTimer = useRef(null);
+  const isHolding = useRef(false);
+  const sectionRef = useRef(null);
+  const hasStarted = useRef(false);
 
-  const nextCard = () => {
-    if (activeIndex < totalCards - 1) {
-      setExitDirection("right");
-      setActiveIndex((prev) => prev + 1);
+  /* ── Auto-play starts only when section enters viewport ── */
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasStarted.current) {
+            hasStarted.current = true;
+            setIsPaused(false);
+          } else if (!entry.isIntersecting) {
+            setIsPaused(true);
+          } else if (entry.isIntersecting) {
+            setIsPaused(false);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const nextCard = useCallback(() => {
+    setActiveIndex((prev) => {
+      if (prev < totalCards - 1) {
+        setIsPaused(false);
+        return prev + 1;
+      }
+      return prev;
+    });
+  }, [totalCards]);
+
+  const prevCard = useCallback(() => {
+    setActiveIndex((prev) => {
+      if (prev > 0) {
+        setIsPaused(false);
+        return prev - 1;
+      }
+      return prev;
+    });
+  }, []);
+
+  const handlePressStart = useCallback(() => {
+    holdTimer.current = setTimeout(() => {
+      isHolding.current = true;
+      setIsPaused(true);
+    }, 150);
+  }, []);
+
+  const handlePressEnd = useCallback((e, side) => {
+    clearTimeout(holdTimer.current);
+    if (isHolding.current) {
+      isHolding.current = false;
+      setIsPaused(false);
+      return;
     }
-  };
+    if (side === "left") prevCard();
+    else nextCard();
+  }, [prevCard, nextCard]);
 
-  const prevCard = () => {
-    if (activeIndex > 0) {
-      setExitDirection("left");
-      setActiveIndex((prev) => prev - 1);
+  const handleLeave = useCallback(() => {
+    clearTimeout(holdTimer.current);
+    if (isHolding.current) {
+      isHolding.current = false;
+      setIsPaused(false);
     }
-  };
+  }, []);
 
-  const restartStory = () => {
-    setActiveIndex(0);
-  };
+  const handleHeart = useCallback((e) => {
+    e.stopPropagation();
+    setIsLiked((v) => !v);
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowRight") nextCard();
+      if (e.key === "ArrowLeft") prevCard();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [nextCard, prevCard]);
+
+  const card = cardsData[activeIndex];
+  if (!card) return null;
 
   return (
     <section
+      ref={sectionRef}
       className="mobile-memory-stack"
       style={{
         position: "relative",
@@ -162,798 +276,259 @@ export default function MobileMemoryStack() {
         backgroundImage: "url('/seamless-texture.jpg')",
         backgroundRepeat: "repeat",
         backgroundSize: "600px 600px",
-        backgroundPosition: "0 0",
         overflow: "hidden",
-        paddingTop: "28px",
-        paddingBottom: "32px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
+        paddingTop: "24px",
+        paddingBottom: "16px",
       }}
     >
-      {/* Background radial glow */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: "35%",
-          left: "50%",
-          width: 380,
-          height: 380,
-          transform: "translate(-50%, -50%)",
-          background: "radial-gradient(circle, rgba(212,184,150,0.08) 0%, transparent 70%)",
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      />
-
-      {/* ── Top Header Section ── */}
-      <div
-        style={{
-          marginBottom: "10px",
-          textAlign: "center",
-          color: "var(--brand-cream)",
-          zIndex: 10,
-          width: "100%",
-          padding: "0 16px",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "9.5px",
-            fontFamily: "var(--font-mono)",
-            letterSpacing: "0.26em",
-            color: "var(--brand-gold)",
-            textTransform: "uppercase",
-            marginBottom: "2px",
-            opacity: 0.9,
-          }}
-        >
-          Chronicles of Passion
-        </div>
-
-        <h2
-          className="c-heading"
-          style={{
-            fontSize: "clamp(26px, 7vw, 32px)",
-            margin: "0 0 8px",
-            lineHeight: 1.15,
-            color: "#FEF5E6",
-          }}
-        >
-          Our <i>Story</i>
-        </h2>
-
-        {/* ── Segmented Story Progress Bar (Clickable) ── */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 4,
-            width: "100%",
-            maxWidth: "354px",
-            margin: "0 auto 8px",
-            padding: "0 4px",
-          }}
-          aria-label={`Story slide ${activeIndex + 1} of ${totalCards}`}
-        >
-          {cardsData.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setActiveIndex(i)}
-              aria-label={`Go to chapter ${i + 1}`}
-              style={{
-                flex: 1,
-                height: 3.5,
-                padding: 0,
-                border: "none",
-                borderRadius: 2,
-                background:
-                  i === activeIndex
-                    ? "var(--brand-gold)"
-                    : i < activeIndex
-                    ? "rgba(212, 184, 150, 0.75)"
-                    : "rgba(212, 184, 150, 0.22)",
-                boxShadow: i === activeIndex ? "0 0 6px rgba(212, 184, 150, 0.6)" : "none",
-                transition: "all 0.3s ease",
-                cursor: "pointer",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Tap navigation hint (Instagram Story Style) */}
-        <div
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "8.5px",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            color: "rgba(247,230,204,0.72)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "6px",
-          }}
-        >
-          <span style={{ color: "var(--brand-gold)", fontSize: "9px" }}>&larr;</span>
-          <span>TAP LEFT / RIGHT TO EXPLORE STORY</span>
-          <span style={{ color: "var(--brand-gold)", fontSize: "9px" }}>&rarr;</span>
-        </div>
+      {/* Section header */}
+      <div style={{ marginBottom: "14px", textAlign: "center", color: "#fff", zIndex: 10, width: "100%", padding: "0 16px" }}>
+        <div style={{ fontSize: "9.5px", fontFamily: "var(--font-mono)", letterSpacing: "0.26em", color: "var(--brand-gold)", textTransform: "uppercase", marginBottom: "2px", opacity: 0.9 }}>Chronicles of Passion</div>
+        <h2 className="c-heading" style={{ fontSize: "clamp(26px, 7vw, 32px)", margin: "0 0 6px", lineHeight: 1.15, color: "#FEF5E6" }}>Our <i>Story</i></h2>
       </div>
 
-      {/* ── Story Card Stack Container ── */}
+      {/* Phone frame wrapper */}
       <div
         style={{
           position: "relative",
           width: "100%",
-          maxWidth: "364px",
-          height: "clamp(530px, 73vh, 580px)",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          maxWidth: "390px",
           margin: "0 auto",
-          touchAction: "pan-y",
+          zIndex: 10,
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: "20px",
         }}
       >
-        <AnimatePresence mode="wait" custom={exitDirection}>
-          {cardsData.map((card, index) => {
-            // Instagram Story style: Render strictly the active card with zero side peek
-            if (index !== activeIndex) return null;
+        {/* STORY CARD */}
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "clamp(640px, 85vh, 760px)",
+            borderRadius: "20px 20px 14px 14px",
+            overflow: "hidden",
+            touchAction: "none",
+            userSelect: "none",
+          }}
+        >
+          {/* TOP OVERLAY: progress + profile */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              zIndex: 30,
+              padding: "8px 8px 0",
+              background: "linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.18) 65%, transparent 100%)",
+              pointerEvents: "none",
+            }}
+          >
+            <div style={{ display: "flex", gap: 3, marginBottom: "10px", pointerEvents: "all" }}>
+              {cardsData.map((_, i) => (
+                <StoryProgressBar key={i} index={i} activeIndex={activeIndex} isPaused={isPaused} onComplete={nextCard} />
+              ))}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, paddingBottom: "8px" }}>
+              <div style={{ width: 32, height: 32, borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(255,255,255,0.6)", flexShrink: 0 }}>
+                <img src="/logo.jpg" alt="Shaadi Pitara" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "12px", fontWeight: 600, color: "#fff", letterSpacing: "0.02em" }}>shaadi.pitara</span>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>{card.chapter}</span>
+              {isPaused && <span style={{ fontFamily: "var(--font-mono)", fontSize: "8px", letterSpacing: "0.14em", color: "rgba(255,255,255,0.6)", textTransform: "uppercase", marginLeft: "auto" }}>PAUSED</span>}
+            </div>
+          </div>
 
-            return (
+          {/* CARD CONTENT — All cards rendered, only active fades in. Fixes alternating card bug. */}
+          <div style={{ position: "absolute", inset: 0 }}>
+            {cardsData.map((c, i) => (
               <motion.div
-                key={card.id}
-                custom={exitDirection}
-                initial={{
-                  opacity: 0,
-                  x: exitDirection === "right" ? 32 : -32,
-                  scale: 0.985,
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                  scale: 1,
-                  transition: {
-                    duration: 0.26,
-                    ease: [0.22, 1, 0.36, 1],
-                  },
-                }}
-                exit={{
-                  opacity: 0,
-                  x: exitDirection === "right" ? -32 : 32,
-                  scale: 0.985,
-                  transition: {
-                    duration: 0.18,
-                    ease: [0.22, 1, 0.36, 1],
-                  },
-                }}
+                key={c.id}
+                initial={false}
+                animate={{ opacity: i === activeIndex ? 1 : 0 }}
+                transition={{ duration: 0.22, ease: "easeInOut" }}
                 style={{
                   position: "absolute",
-                  width: "93%",
-                  maxWidth: "354px",
-                  height: "clamp(520px, 72vh, 570px)",
-                  borderRadius: "18px",
-                  overflow: "hidden",
-                  zIndex: 20,
-                  willChange: "transform, opacity",
-                  background: card.isDevarsh
-                    ? "linear-gradient(160deg, #240508 0%, #150203 100%)"
-                    : "linear-gradient(165deg, #FFFDF9 0%, #FAF1E3 50%, #EFE1CA 100%)",
-                  border: card.isDevarsh
-                    ? "1.5px solid rgba(212,184,150,0.42)"
-                    : "1.5px solid rgba(196,150,95,0.52)",
-                  boxShadow: "0 24px 52px rgba(0, 0, 0, 0.48), 0 4px 14px rgba(0, 0, 0, 0.25)",
+                  inset: 0,
+                  background: "linear-gradient(165deg, #FFFDF9 0%, #FAF1E3 50%, #EFE1CA 100%)",
                   display: "flex",
                   flexDirection: "column",
-                  color: card.isDevarsh ? "var(--brand-cream)" : "#2C080B",
+                  color: "#2C080B",
+                  pointerEvents: i === activeIndex ? "auto" : "none",
+                  willChange: "opacity",
                 }}
               >
-                {/* ── Interactive Tap Zones for Story Navigation (Left = Prev, Right = Next) ── */}
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    prevCard();
-                  }}
-                  title="Tap for previous slide"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: "48px",
-                    left: 0,
-                    width: "32%",
-                    zIndex: 6,
-                    cursor: activeIndex > 0 ? "pointer" : "default",
-                  }}
-                />
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    nextCard();
-                  }}
-                  title="Tap for next slide"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: "48px",
-                    right: 0,
-                    width: "68%",
-                    zIndex: 6,
-                    cursor: "pointer",
-                  }}
-                />
+              {/* Decorative inner frame */}
+              <div aria-hidden="true" style={{ position: "absolute", inset: "6px", borderRadius: "13px", border: "1px solid rgba(196,150,95,0.22)", pointerEvents: "none", zIndex: 2 }} />
 
-                {/* Decorative Inner Golden Frame */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    inset: "7px",
-                    borderRadius: "13px",
-                    border: card.isDevarsh
-                      ? "1px solid rgba(212,184,150,0.24)"
-                      : "1px solid rgba(196,150,95,0.34)",
-                    pointerEvents: "none",
-                    zIndex: 2,
-                  }}
-                />
-
-                {/* Decorative Corner Accents */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    top: 12,
-                    right: 12,
-                    width: 4,
-                    height: 4,
-                    borderRadius: "50%",
-                    background: card.isDevarsh ? "rgba(212,184,150,0.5)" : "rgba(196,150,95,0.6)",
-                    pointerEvents: "none",
-                    zIndex: 2,
-                  }}
-                />
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    bottom: 12,
-                    left: 12,
-                    width: 4,
-                    height: 4,
-                    borderRadius: "50%",
-                    background: card.isDevarsh ? "rgba(212,184,150,0.5)" : "rgba(196,150,95,0.6)",
-                    pointerEvents: "none",
-                    zIndex: 2,
-                  }}
-                />
-
-                {/* ── Founder Photo for Card 10 (Priority to image: taller, majestic crop) ── */}
-                {card.isDevarsh && (
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "215px",
-                      flexShrink: 0,
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src="/devimg.jpeg"
-                      alt="Devarsh Jain - Shaadi Pitara Founder"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center 24%",
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: "55%",
-                        background: "linear-gradient(to bottom, transparent, #240508)",
-                      }}
-                    />
-
-                    {/* Clean Founder Pill on Image */}
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "14px",
-                        left: "14px",
-                        padding: "4px 10px",
-                        borderRadius: "100px",
-                        background: "rgba(26, 5, 7, 0.76)",
-                        backdropFilter: "blur(8px)",
-                        border: "1px solid rgba(212, 184, 150, 0.45)",
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "8.5px",
-                        letterSpacing: "0.14em",
-                        color: "var(--brand-gold)",
-                        textTransform: "uppercase",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 5,
-                      }}
-                    >
-                      <span style={{ color: "#DFC18A" }}>✦</span>
-                      <span>Founder · Storyteller</span>
+              {/* Founder photo */}
+              {c.isDevarsh && (
+                <div style={{ position: "relative", width: "100%", height: "300px", flexShrink: 0, overflow: "hidden" }}>
+                  <img src="/devimg.jpeg" alt="Devarsh Jain" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: "linear-gradient(to bottom, transparent, #EFE1CA)" }} />
+                  {/* Tags at bottom of image */}
+                  <div style={{ position: "absolute", bottom: "12px", left: "14px", right: "14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+                    <div style={{ padding: "4px 10px", borderRadius: "100px", background: "rgba(239,225,202,0.82)", backdropFilter: "blur(8px)", border: "1px solid rgba(196,150,95,0.35)", fontFamily: "var(--font-mono)", fontSize: "8.5px", letterSpacing: "0.14em", color: "#4A1216", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 5 }}>
+                      <span style={{ color: "#8E4822" }}>&#10022;</span><span>Founder &middot; Storyteller</span>
                     </div>
-
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "14px",
-                        right: "14px",
-                        padding: "4px 10px",
-                        borderRadius: "100px",
-                        background: "rgba(26, 5, 7, 0.76)",
-                        backdropFilter: "blur(8px)",
-                        border: "1px solid rgba(212, 184, 150, 0.45)",
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "8.5px",
-                        color: "var(--brand-cream)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 5,
-                      }}
-                    >
-                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--brand-gold)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                        <circle cx="12" cy="10" r="3" />
-                      </svg>
+                    <div style={{ padding: "4px 10px", borderRadius: "100px", background: "rgba(239,225,202,0.82)", backdropFilter: "blur(8px)", border: "1px solid rgba(196,150,95,0.35)", fontFamily: "var(--font-mono)", fontSize: "8.5px", color: "#4A1216", display: "flex", alignItems: "center", gap: 5 }}>
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#8E4822" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                       <span>Ahmedabad</span>
                     </div>
                   </div>
-                )}
-
-                {/* ── Card Content Body ── */}
-                <div
-                  style={{
-                    padding: card.isDevarsh ? "15px 18px 13px" : "16px 20px 14px",
-                    display: "flex",
-                    flexDirection: "column",
-                    flex: 1,
-                    justifyContent: "space-between",
-                    position: "relative",
-                    zIndex: 3,
-                  }}
-                >
-                  {/* Top Content Block */}
-                  <div>
-                    {/* Top Header Row — Clean (Like button removed) */}
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        gap: "6px",
-                        marginBottom: card.isDevarsh ? "11px" : "10px",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        {/* Monogram Badge */}
-                        <div
-                          style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: "50%",
-                            background: card.isDevarsh ? "rgba(212,184,150,0.18)" : "#3A0B0E",
-                            border: card.isDevarsh ? "1px solid var(--brand-gold)" : "1px solid rgba(196,150,95,0.4)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontFamily: "'Playfair Display', serif",
-                            fontSize: "9.5px",
-                            fontWeight: 700,
-                            color: card.isDevarsh ? "var(--brand-gold)" : "var(--brand-cream)",
-                            flexShrink: 0,
-                          }}
-                        >
-                          SP
-                        </div>
-
-                        <span
-                          style={{
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "9px",
-                            letterSpacing: "0.14em",
-                            textTransform: "uppercase",
-                            padding: "2.5px 8px",
-                            borderRadius: 100,
-                            background: card.isDevarsh
-                              ? "rgba(212,184,150,0.14)"
-                              : "linear-gradient(135deg, rgba(196,150,95,0.18) 0%, rgba(58,11,14,0.08) 100%)",
-                            border: card.isDevarsh
-                              ? "1px solid rgba(212,184,150,0.3)"
-                              : "1px solid rgba(196,150,95,0.35)",
-                            color: card.isDevarsh ? "var(--brand-gold)" : "#4A1216",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {card.chapter}
-                        </span>
-                      </div>
-
-                      <span
-                        style={{
-                          fontFamily: "var(--font-mono)",
-                          fontSize: "8.5px",
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          color: card.isDevarsh ? "rgba(212,184,150,0.7)" : "#7B272C",
-                          fontWeight: 500,
-                        }}
-                      >
-                        {card.tag}
-                      </span>
-                    </div>
-
-                    {/* Main Heading */}
-                    {card.name ? (
-                      <div style={{ marginBottom: card.isDevarsh ? "11px" : "8px" }}>
-                        <h3
-                          style={{
-                            fontFamily: "'Playfair Display', Georgia, serif",
-                            fontSize: "23px",
-                            fontWeight: 600,
-                            lineHeight: 1.2,
-                            margin: "0 0 4px",
-                            color: "#FEF5E6",
-                            letterSpacing: "-0.01em",
-                          }}
-                        >
-                          {card.name}
-                        </h3>
-                        <p
-                          style={{
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "9px",
-                            letterSpacing: "0.14em",
-                            color: "var(--brand-gold)",
-                            textTransform: "uppercase",
-                            margin: 0,
-                          }}
-                        >
-                          {card.role}
-                        </p>
-                      </div>
-                    ) : (
-                      <h3
-                        style={{
-                          fontFamily: "'Playfair Display', Georgia, serif",
-                          fontSize: "clamp(19px, 4.8vw, 23px)",
-                          fontWeight: 600,
-                          lineHeight: 1.22,
-                          letterSpacing: "-0.015em",
-                          margin: "0 0 10px",
-                          color: "#2C080B",
-                        }}
-                      >
-                        {card.heading}
-                      </h3>
-                    )}
-
-                    {/* Highlight Pull-Quote Box */}
-                    {card.highlight && (
-                      <div
-                        style={{
-                          margin: card.isDevarsh ? "11px 0 12px" : "8px 0 12px",
-                          padding: card.isDevarsh ? "9px 13px" : "9px 13px",
-                          background: card.isDevarsh
-                            ? "linear-gradient(135deg, rgba(212,184,150,0.14) 0%, rgba(36,5,8,0.6) 100%)"
-                            : "linear-gradient(135deg, rgba(196,150,95,0.18) 0%, rgba(245,229,206,0.6) 100%)",
-                          borderLeft: card.isDevarsh
-                            ? "3px solid var(--brand-gold)"
-                            : "3px solid #8E4822",
-                          borderRadius: "0 8px 8px 0",
-                          boxShadow: card.isDevarsh
-                            ? "0 2px 8px rgba(0,0,0,0.3)"
-                            : "0 2px 6px rgba(91,23,27,0.06)",
-                        }}
-                      >
-                        <p
-                          style={{
-                            fontFamily: "'Playfair Display', Georgia, serif",
-                            fontSize: card.isDevarsh ? "12.5px" : "13.5px",
-                            fontStyle: "italic",
-                            fontWeight: 500,
-                            lineHeight: 1.52,
-                            margin: 0,
-                            color: card.isDevarsh ? "#FBF2E3" : "#34070B",
-                            letterSpacing: "0.01em",
-                          }}
-                        >
-                          {card.highlight}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Narrative Story Content */}
-                    {card.content && (
-                      <p
-                        style={{
-                          fontSize: card.isDevarsh ? "12.5px" : "13.5px",
-                          lineHeight: card.isDevarsh ? 1.66 : 1.62,
-                          margin: card.isDevarsh ? "0 0 12px" : "0 0 12px",
-                          color: card.isDevarsh
-                            ? "rgba(247,230,204,0.92)"
-                            : "rgba(58,11,14,0.92)",
-                          fontWeight: 400,
-                        }}
-                      >
-                        {card.content}
-                      </p>
-                    )}
-
-                    {/* Bullets for Chapter 07 */}
-                    {card.bullets && (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 5,
-                          margin: "4px 0 10px",
-                        }}
-                      >
-                        {card.bullets.map((b, i) => (
-                          <div
-                            key={i}
-                            style={{
-                              display: "flex",
-                              alignItems: "flex-start",
-                              gap: 6,
-                              fontSize: "12.5px",
-                              lineHeight: 1.38,
-                              color: "#3D0C10",
-                            }}
-                          >
-                            <span style={{ color: "#8E4822", fontSize: "10px", marginTop: 1 }}>✦</span>
-                            <span style={{ fontWeight: 500 }}>{b}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Memory Snapshot Pills — Exactly 2 tags as requested */}
-                    {card.memoryPills && (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: 6,
-                          margin: "2px 0 6px",
-                        }}
-                      >
-                        {card.memoryPills.slice(0, 2).map((pill, pIdx) => (
-                          <span
-                            key={pIdx}
-                            style={{
-                              fontFamily: "var(--font-mono)",
-                              fontSize: "9px",
-                              letterSpacing: "0.08em",
-                              textTransform: "uppercase",
-                              padding: "3px 9px",
-                              borderRadius: 100,
-                              background: card.isDevarsh
-                                ? "rgba(212,184,150,0.08)"
-                                : "rgba(196,150,95,0.12)",
-                              border: card.isDevarsh
-                                ? "1px solid rgba(212,184,150,0.2)"
-                                : "1px solid rgba(196,150,95,0.25)",
-                              color: card.isDevarsh ? "var(--brand-gold-light)" : "#5C1B20",
-                              fontWeight: 500,
-                            }}
-                          >
-                            ✦ {pill}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Bottom Footer Row of Card — Clean: only badge, no atmosphere second line */}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      paddingTop: "9px",
-                      borderTop: card.isDevarsh
-                        ? "1px solid rgba(212,184,150,0.2)"
-                        : "1px solid rgba(196,150,95,0.32)",
-                      marginTop: "auto",
-                      position: "relative",
-                      zIndex: 5,
-                      flexShrink: 0,
-                      gap: "10px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "8.5px",
-                        letterSpacing: "0.12em",
-                        color: card.isDevarsh
-                          ? "rgba(212,184,150,0.8)"
-                          : "rgba(91,23,27,0.85)",
-                        textTransform: "uppercase",
-                        fontWeight: 600,
-                        lineHeight: 1.35,
-                        flex: 1,
-                        minWidth: 0,
-                      }}
-                    >
-                      {card.badge}
-                    </span>
-
-                    {card.isDevarsh ? (
-                      <a
-                        href={`https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I would like to enquire about your wedding services. Please share more details. Thank you!")}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          fontSize: "9px",
-                          fontFamily: "var(--font-mono)",
-                          letterSpacing: "0.08em",
-                          textTransform: "uppercase",
-                          color: "#1A0507",
-                          textDecoration: "none",
-                          fontWeight: 700,
-                          display: "inline-flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: 6,
-                          padding: "8px 16px",
-                          background: "#F7E6CC",
-                          borderRadius: 100,
-                          boxShadow: "0 4px 14px rgba(247, 230, 204, 0.4)",
-                          whiteSpace: "nowrap",
-                          wordBreak: "keep-all",
-                          flexShrink: 0,
-                          lineHeight: 1,
-                        }}
-                      >
-                        <span style={{ whiteSpace: "nowrap" }}>Let&apos;s Connect</span>
-                        <span style={{ fontSize: "12px", lineHeight: 1, display: "inline-block" }}>&rarr;</span>
-                      </a>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          nextCard();
-                        }}
-                        style={{
-                          fontSize: "9px",
-                          fontFamily: "var(--font-mono)",
-                          letterSpacing: "0.12em",
-                          color: "#FEF5E6",
-                          background: "linear-gradient(135deg, #3A0B0E 0%, #5B171B 100%)",
-                          border: "1px solid rgba(196,150,95,0.6)",
-                          borderRadius: 100,
-                          padding: "6px 14px",
-                          cursor: "pointer",
-                          fontWeight: 700,
-                          textTransform: "uppercase",
-                          boxShadow: "0 3px 10px rgba(58,11,14,0.22)",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 5,
-                          whiteSpace: "nowrap",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <span>Next</span>
-                        <span style={{ color: "var(--brand-gold)" }}>&rarr;</span>
-                      </button>
-                    )}
-                  </div>
                 </div>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </div>
+              )}
 
-      {/* ── Bottom Controls: Previous / Slide Indicator / Next & Restart ── */}
-      <div
-        style={{
-          marginTop: "16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 12,
-          zIndex: 10,
-        }}
-      >
-        <button
-          type="button"
-          onClick={prevCard}
-          disabled={activeIndex === 0}
-          aria-label="Previous story card"
+              {/* Card body */}
+              <div style={{ padding: c.isDevarsh ? "12px 18px 18px" : "76px 18px 20px", display: "flex", flexDirection: "column", flex: 1, justifyContent: "center", gap: 0, position: "relative", zIndex: 3, overflowY: "auto" }}>
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase", padding: "2.5px 8px", borderRadius: 100, background: "linear-gradient(135deg, rgba(196,150,95,0.18) 0%, rgba(58,11,14,0.08) 100%)", border: "1px solid rgba(196,150,95,0.35)", color: "#4A1216", fontWeight: 600 }}>{c.chapter}</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "8.5px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#7B272C", fontWeight: 500 }}>{c.tag}</span>
+                  </div>
+
+                  {c.name ? (
+                    <div style={{ marginBottom: "11px" }}>
+                      <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "23px", fontWeight: 600, lineHeight: 1.2, margin: "0 0 4px", color: "#2C080B", letterSpacing: "-0.01em" }}>{c.name}</h3>
+                      <p style={{ fontFamily: "var(--font-mono)", fontSize: "9px", letterSpacing: "0.14em", color: "#7B272C", textTransform: "uppercase", margin: 0 }}>{c.role}</p>
+                    </div>
+                  ) : (
+                    <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(19px, 4.8vw, 23px)", fontWeight: 600, lineHeight: 1.22, letterSpacing: "-0.015em", margin: "0 0 10px", color: "#2C080B" }}>{c.heading}</h3>
+                  )}
+
+                  {c.highlight && (
+                    <div style={{ margin: "8px 0 12px", padding: "9px 13px", background: "linear-gradient(135deg, rgba(196,150,95,0.18) 0%, rgba(245,229,206,0.6) 100%)", borderLeft: "3px solid #8E4822", borderRadius: "0 8px 8px 0", boxShadow: "0 2px 6px rgba(91,23,27,0.06)" }}>
+                      <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "13.5px", fontStyle: "italic", fontWeight: 500, lineHeight: 1.52, margin: 0, color: "#34070B", letterSpacing: "0.01em" }}>{c.highlight}</p>
+                    </div>
+                  )}
+
+                  {c.content && (
+                    <p style={{ fontSize: "13.5px", lineHeight: 1.62, margin: "0 0 12px", color: "rgba(58,11,14,0.92)", fontWeight: 400 }}>{c.content}</p>
+                  )}
+
+                  {c.bullets && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 5, margin: "4px 0 10px" }}>
+                      {c.bullets.map((b, bi) => (
+                        <div key={bi} style={{ display: "flex", alignItems: "flex-start", gap: 6, fontSize: "12.5px", lineHeight: 1.38, color: "#3D0C10" }}>
+                          <span style={{ color: "#8E4822", fontSize: "10px", marginTop: 1 }}>&#10022;</span>
+                          <span style={{ fontWeight: 500 }}>{b}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {c.memoryPills && (
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6, margin: "2px 0 6px" }}>
+                      {c.memoryPills.slice(0, 2).map((pill, pIdx) => (
+                        <span key={pIdx} style={{ fontFamily: "var(--font-mono)", fontSize: "9px", letterSpacing: "0.08em", textTransform: "uppercase", padding: "3px 9px", borderRadius: 100, background: "rgba(196,150,95,0.12)", border: "1px solid rgba(196,150,95,0.25)", color: "#5C1B20", fontWeight: 500 }}>&#10022; {pill}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Badge row — no Next button */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "8px", borderTop: "1px solid rgba(196,150,95,0.28)", marginTop: "16px", gap: "10px" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "8.5px", letterSpacing: "0.12em", color: "rgba(91,23,27,0.75)", textTransform: "uppercase", fontWeight: 600, lineHeight: 1.35 }}>{c.badge}</span>
+                  {c.isDevarsh && (
+                    <a href={`https://wa.me/919377150889?text=${encodeURIComponent("Hi Shaadi Pitara, I would like to enquire about your wedding services. Please share more details. Thank you!")}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ fontSize: "9px", fontFamily: "var(--font-mono)", letterSpacing: "0.08em", textTransform: "uppercase", color: "#4A1216", textDecoration: "none", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6, padding: "7px 14px", background: "rgba(196,150,95,0.18)", border: "1px solid rgba(196,150,95,0.4)", borderRadius: 100, whiteSpace: "nowrap", flexShrink: 0, lineHeight: 1 }}>
+                      <span>Let&apos;s Connect</span><span style={{ fontSize: "11px" }}>&rarr;</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+
+            </motion.div>
+            ))}
+          </div>
+
+          {/* Single tap overlay — sits on top of all cards, outside the per-card map */}
+          <div
+            onMouseDown={handlePressStart}
+            onMouseLeave={handleLeave}
+            onTouchStart={handlePressStart}
+            onMouseUp={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const side = e.clientX - rect.left < rect.width * 0.3 ? "left" : "right";
+              handlePressEnd(e, side);
+            }}
+            onTouchEnd={(e) => {
+              const touch = e.changedTouches[0];
+              const rect = e.currentTarget.getBoundingClientRect();
+              const side = touch.clientX - rect.left < rect.width * 0.3 ? "left" : "right";
+              handlePressEnd(e, side);
+            }}
+            style={{ position: "absolute", inset: 0, zIndex: 25, cursor: "pointer" }}
+          />
+
+          {/* Heart popup removed */}
+        </div>
+
+        {/* Side glows — give the card depth like a phone screen */}
+        <div aria-hidden="true" style={{ position: "absolute", top: 0, left: "-12px", width: "12px", height: "100%", background: "linear-gradient(to right, transparent, rgba(0,0,0,0.18))", borderRadius: "20px 0 0 20px", pointerEvents: "none", zIndex: 5 }} />
+        <div aria-hidden="true" style={{ position: "absolute", top: 0, right: "-12px", width: "12px", height: "100%", background: "linear-gradient(to left, transparent, rgba(0,0,0,0.18))", borderRadius: "0 20px 20px 0", pointerEvents: "none", zIndex: 5 }} />
+
+        {/* BOTTOM BAR — exact Instagram style */}
+        <div
           style={{
-            padding: "6px 14px",
-            background: "rgba(212,184,150,0.08)",
-            border: "1px solid rgba(212,184,150,0.25)",
-            borderRadius: 100,
-            color: activeIndex === 0 ? "rgba(247,230,204,0.25)" : "var(--brand-cream)",
-            fontFamily: "var(--font-mono)",
-            fontSize: "9px",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            cursor: activeIndex === 0 ? "default" : "pointer",
-            transition: "all 0.25s ease",
+            width: "100%",
+            background: "#0a0a0a",
+            borderRadius: "0 0 20px 20px",
+            padding: "8px 12px 10px",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            zIndex: 35,
           }}
         >
-          &larr; Prev
-        </button>
+          {/* Send message pill */}
+          <div style={{ flex: 1, height: 36, borderRadius: 100, border: "1.5px solid rgba(255,255,255,0.22)", display: "flex", alignItems: "center", padding: "0 16px", cursor: "text" }}>
+            <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", fontWeight: 400 }}>Send message</span>
+          </div>
 
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "9px",
-            letterSpacing: "0.16em",
-            color: "var(--brand-gold)",
-            padding: "0 4px",
-          }}
-        >
-          {String(activeIndex + 1).padStart(2, "0")} / {String(totalCards).padStart(2, "0")}
-        </span>
-
-        {activeIndex < totalCards - 1 ? (
+          {/* Heart — red when liked */}
           <button
             type="button"
-            onClick={nextCard}
-            aria-label="Next story card"
-            style={{
-              padding: "6px 16px",
-              background: "rgba(212,184,150,0.15)",
-              border: "1px solid rgba(212,184,150,0.4)",
-              borderRadius: 100,
-              color: "var(--brand-cream)",
-              fontFamily: "var(--font-mono)",
-              fontSize: "9px",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              transition: "all 0.25s ease",
-            }}
+            onClick={handleHeart}
+            style={{ background: "none", border: "none", padding: "2px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+            aria-label={isLiked ? "Unlike" : "Like"}
           >
-            Next &rarr;
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 24 24"
+              fill={isLiked ? "#FF3040" : "none"}
+              stroke={isLiked ? "#FF3040" : "rgba(255,255,255,0.88)"}
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ transition: "fill 0.18s ease, stroke 0.18s ease, transform 0.16s ease", transform: isLiked ? "scale(1.2)" : "scale(1)" }}
+            >
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
           </button>
-        ) : (
-          <button
-            type="button"
-            onClick={restartStory}
-            aria-label="Restart story"
-            style={{
-              padding: "6px 16px",
-              background: "rgba(212,184,150,0.18)",
-              border: "1px solid var(--brand-gold)",
-              borderRadius: 100,
-              color: "var(--brand-gold-light)",
-              fontFamily: "var(--font-mono)",
-              fontSize: "9px",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              transition: "all 0.25s ease",
-            }}
-          >
-            ↺ Read Again
+
+          {/* IG DM share icon — correct Instagram paper plane */}
+          <button type="button" onClick={(e) => e.stopPropagation()} style={{ background: "none", border: "none", padding: "2px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }} aria-label="Share">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.88)" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21.5 2.5L2.5 9.5L10.5 13.5L14.5 21.5L21.5 2.5Z" />
+              <path d="M10.5 13.5L14.5 9.5" />
+            </svg>
           </button>
-        )}
+        </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .mobile-memory-stack { display: none; }
+        @media (max-width: 768px) {
+          .mobile-memory-stack { display: flex !important; }
+        }
+      ` }} />
     </section>
   );
 }
