@@ -6,15 +6,15 @@ export const metadata = {
   description: 'Shaadi Pitara crafts cinematic wedding reels, couple stories, live stories, and Instagram content from Ahmedabad. Premium wedding storytelling by Devarsh Jain.',
   icons: {
     icon: [
-      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
-      { url: '/favicon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/favicon-512.png', sizes: '512x512', type: 'image/png' },
+      { url: '/favicon-32.png?v=2', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16.png?v=2', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-48.png?v=2', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-192.png?v=2', sizes: '192x192', type: 'image/png' },
+      { url: '/favicon-512.png?v=2', sizes: '512x512', type: 'image/png' },
     ],
-    shortcut: '/favicon-32.png',
+    shortcut: '/favicon-32.png?v=2',
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-touch-icon.png?v=2', sizes: '180x180', type: 'image/png' },
     ],
   },
   keywords: [
@@ -25,6 +25,13 @@ export const metadata = {
     'Instagram wedding reel',
     'wedding videographer Ahmedabad',
     'Shaadi Pitara',
+    'Shadi Pitara',
+    'Shadi Pitra',
+    'Shaadi Pitra',
+    'Shaadipitara',
+    'Shadipitara',
+    'Shaadi Pittara',
+    'Shadi Patara',
     'wedding content studio',
     'wedding films India',
     'pre-wedding reels',
@@ -175,11 +182,11 @@ export default function RootLayout({ children }) {
         <link rel="preload" as="image" href="/herobg.png" media="(min-width: 1025px)" fetchPriority="high" />
         <link rel="preload" as="image" href="/herobgtablet.png" media="(min-width: 641px) and (max-width: 1024px)" fetchPriority="high" />
         <link rel="preload" as="image" href="/herobgphone.png" media="(max-width: 640px)" fetchPriority="high" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
-        <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
-        <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+        <link rel="icon" href="/favicon-48.png?v=2" type="image/png" sizes="48x48" />
+        <link rel="icon" href="/favicon-32.png?v=2" type="image/png" sizes="32x32" />
+        <link rel="icon" href="/favicon-192.png?v=2" type="image/png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" sizes="180x180" />
         <link rel="manifest" href="/manifest.json" />
         <script
           type="application/ld+json"
