@@ -227,13 +227,7 @@ export default function Footer() {
           }}>
             &copy; {new Date().getFullYear()} Shaadi Pitara by Devarsh Jain. All rights reserved.
           </p>
-          <p style={{
-            fontFamily: "var(--font-mono)", fontSize: 9,
-            letterSpacing: "0.18em", textTransform: "uppercase",
-            color: "rgba(212,184,150,0.25)",
-          }}>
-            Crafted with love in Ahmedabad
-          </p>
+
         </div>
       </div>
     </footer>
