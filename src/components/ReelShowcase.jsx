@@ -53,15 +53,20 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
       const distance = Math.abs(offset);
       const ramp = Math.pow(distance, 0.56);
       const tilt = Math.min(44 * ramp, 82) * Math.sign(offset);
+
+      // Cards further from center rotate away on Y and lose a touch of brightness per spec
+      const brightness = Math.max(0.48, 1 - distance * 0.16);
+      card.style.filter = `brightness(${brightness})`;
+
       card.style.transform =
         `translateX(calc(-50% + ${offset * pitch}px)) translateZ(${-0.5 * width * ramp}px) rotateY(${-tilt}deg)`;
       const edge = Math.min(1, Math.max(0, count / 2 - distance));
       card.style.opacity = String(Math.max(0, 1 - 0.12 * distance) * edge);
       card.style.zIndex = String(100 - Math.round(distance));
       if (Math.round(distance) === 0) {
-        card.style.boxShadow = "0 0 0 1.5px rgba(212,184,150,0.35)";
+        card.style.boxShadow = "0 0 0 1.5px rgba(212,184,150,0.45), 0 20px 50px rgba(0,0,0,0.6)";
       } else {
-        card.style.boxShadow = "none";
+        card.style.boxShadow = "0 10px 30px rgba(0,0,0,0.4)";
       }
     });
   }, [count]);
@@ -198,6 +203,29 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
     };
   }, [nudge]);
 
+  // ── ScrollTrigger Scrub (drives carousel smoothly on vertical scroll) ──
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) return;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top 85%",
+        end: "bottom 15%",
+        scrub: 1.2,
+        onUpdate: (self) => {
+          if (dragRef.current?.isDragging) return;
+          const target = self.progress * (count - 1);
+          settle(target);
+        },
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [count, settle]);
+
   return (
     <div ref={containerRef} style={{ width: "100%", userSelect: "none" }}>
       {/* Coverflow track */}
@@ -232,10 +260,22 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
             <div
               key={reel.id}
               ref={(node) => { cardRefs.current[index] = node; }}
-              className="coverflow-card"
+              className="coverflow-card preserve-3d"
               onClick={(e) => {
                 if (dragRef.current?.isDragging) return;
                 onOpen(e.currentTarget, reel, index);
+              }}
+              onMouseMove={(e) => {
+                if (dragRef.current?.isDragging) return;
+                const rect = e.currentTarget.getBoundingClientRect();
+                const nx = (e.clientX - rect.left) / rect.width - 0.5;
+                const ny = (e.clientY - rect.top) / rect.height - 0.5;
+                e.currentTarget.style.transform =
+                  e.currentTarget.style.transform.split(" rotateX(")[0] +
+                  ` rotateX(${-ny * 12}deg) rotateY(${nx * 12}deg)`;
+              }}
+              onMouseLeave={() => {
+                paint();
               }}
               style={{
                 position: "absolute",
@@ -249,13 +289,22 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
                 background: "#1a0408",
                 willChange: "transform",
                 transition: "box-shadow 0.4s ease",
+                transformStyle: "preserve-3d",
               }}
             >
               <img
                 src={reel.poster}
                 alt={`${reel.title} — ${reel.couple || 'Wedding'} reel by Shaadi Pitara`}
                 draggable={false}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                  pointerEvents: "none",
+                  transform: "translateZ(-8px) scale(1.04)",
+                  transition: "transform 0.4s ease",
+                }}
               />
               {/* Play button */}
               <button
@@ -275,7 +324,7 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
                 aria-label={`Play ${reel.title}`}
                 style={{
                   position: "absolute", top: "50%", left: "50%",
-                  transform: "translate(-50%,-50%)",
+                  transform: "translate(-50%,-50%) translateZ(16px)",
                   width: 52, height: 52, borderRadius: "50%",
                   background: "rgba(10,2,3,0.65)",
                   border: "1.5px solid rgba(212,184,150,0.65)",
@@ -284,8 +333,8 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
                   cursor: "pointer", zIndex: 5,
                   transition: "transform 0.3s ease, border-color 0.3s ease",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = "translate(-50%,-50%) scale(1.1)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = "translate(-50%,-50%) scale(1)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "translate(-50%,-50%) translateZ(24px) scale(1.1)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "translate(-50%,-50%) translateZ(16px) scale(1)"; }}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--brand-cream)"><polygon points="6 3 20 12 6 21 6 3" /></svg>
               </button>
@@ -302,7 +351,7 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
                 }}
               />
 
-              {/* Bottom info — clean luxury typography */}
+              {/* Bottom info — clean luxury typography on elevated Z-depth */}
               <div
                 style={{
                   position: "absolute",
@@ -312,6 +361,7 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
                   padding: "0 16px 14px",
                   pointerEvents: "none",
                   zIndex: 4,
+                  transform: "translateZ(18px)",
                 }}
               >
                 <div

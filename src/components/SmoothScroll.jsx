@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { mouseRef } from '@/lib/mouseRef';
 import { scrollRef } from '@/lib/scrollRef';
+
 gsap.registerPlugin(ScrollTrigger);
 
 // Shared Lenis instance — lets other components (e.g. modal scroll-lock) stop/start it
@@ -12,67 +13,103 @@ export const lenisRef = { current: null };
 
 export default function SmoothScroll({ children, onScroll }) {
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.05, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    if (typeof window === 'undefined') return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const lenis = new Lenis({
+      duration: prefersReducedMotion ? 0.01 : 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: !prefersReducedMotion,
+      touchMultiplier: 1.5,
+    });
     lenisRef.current = lenis;
-    if (typeof window !== 'undefined') window.__lenis = lenis;
-    lenis.on('scroll', ({ progress, scroll }) => {
+    window.__lenis = lenis;
+
+    // Single unified scroll listener
+    lenis.on('scroll', (e) => {
       ScrollTrigger.update();
-      // Write to a mutable ref — no React re-renders per scroll tick
-      scrollRef.current.progress = progress;
-      scrollRef.current.y = scroll;
+      scrollRef.current.progress = e.progress || 0;
+      scrollRef.current.y = e.scroll || 0;
+      scrollRef.current.velocity = e.velocity || 0;
+      scrollRef.current.direction = e.direction || 1;
+
       if (typeof onScroll === 'function') {
-        onScroll({ progress, y: scroll });
+        onScroll({ progress: e.progress, y: e.scroll });
       }
     });
-    gsap.ticker.add(time => lenis.raf(time * 1000));
+
+    // Unified RAF loop using GSAP's ticker (no double RAF)
+    const updateTicker = (time) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(updateTicker);
     gsap.ticker.lagSmoothing(500, 33);
 
+    // Smooth anchor handling
     const handleDocClick = (e) => {
       const anchor = e.target.closest('a[href^="#"]');
       if (anchor) {
         const targetId = anchor.getAttribute('href');
-        e.preventDefault();
-        const targetEl = targetId === '#' ? null : document.querySelector(targetId);
-        lenis.scrollTo(targetEl || 0);
+        if (targetId && targetId !== '#') {
+          e.preventDefault();
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            lenis.scrollTo(targetEl, { offset: -20, duration: 1.2 });
+          }
+        }
       }
     };
     document.addEventListener('click', handleDocClick);
 
-    let resizeObserver;
+    // Debounced resize observer
     let refreshTimeout;
-    if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
-      resizeObserver = new ResizeObserver(() => {
-        clearTimeout(refreshTimeout);
-        refreshTimeout = setTimeout(() => {
-          ScrollTrigger.refresh();
-        }, 150);
-      });
+    const handleResize = () => {
+      clearTimeout(refreshTimeout);
+      refreshTimeout = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 150);
+    };
+
+    let resizeObserver;
+    if ('ResizeObserver' in window) {
+      resizeObserver = new ResizeObserver(handleResize);
       resizeObserver.observe(document.body);
     }
-    const intervals = [150, 500].map(delay =>
-      setTimeout(() => ScrollTrigger.refresh(), delay)
-    );
+    window.addEventListener('resize', handleResize);
+
     const handleLoad = () => ScrollTrigger.refresh();
     window.addEventListener('load', handleLoad);
 
+    // Track normalized mouse coordinates for 3D interactions
+    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     const handleMove = (e) => {
+      if (isTouch) return;
       mouseRef.current = {
         x: (e.clientX / window.innerWidth) * 2 - 1,
         y: -(e.clientY / window.innerHeight) * 2 + 1,
       };
     };
-    window.addEventListener('mousemove', handleMove, { passive: true });
+    if (!isTouch) {
+      window.addEventListener('mousemove', handleMove, { passive: true });
+    }
 
     return () => {
       lenisRef.current = null;
+      delete window.__lenis;
       lenis.destroy();
+      gsap.ticker.remove(updateTicker);
       document.removeEventListener('click', handleDocClick);
       window.removeEventListener('load', handleLoad);
+      window.removeEventListener('resize', handleResize);
       if (resizeObserver) resizeObserver.disconnect();
-      intervals.forEach(clearTimeout);
-      window.removeEventListener('mousemove', handleMove);
+      clearTimeout(refreshTimeout);
+      if (!isTouch) {
+        window.removeEventListener('mousemove', handleMove);
+      }
     };
   }, [onScroll]);
 
   return <>{children}</>;
 }
+

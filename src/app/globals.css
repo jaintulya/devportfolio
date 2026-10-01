@@ -47,7 +47,37 @@
   --dark:     var(--brand-maroon-dark);
   --mid:      var(--brand-border);
   --black:    var(--brand-maroon-deep);
+
+  /* ── Fluid scale tokens per claudedesignskills ── */
+  --font-size-hero: clamp(40px, 6.8vw, 84px);
+  --font-size-script: clamp(44px, 6.4vw, 78px);
+  --font-size-h2: clamp(32px, 4.8vw, 56px);
+  --font-size-h3: clamp(20px, 2.6vw, 30px);
+  --font-size-body: clamp(14px, 1.1vw, 16.5px);
+  --space-section: clamp(64px, 9vw, 140px);
+  --space-gap: clamp(16px, 2.5vw, 32px);
 }
+
+/* ── 3D & Cinematic Helper Classes ── */
+.perspective-1200 { perspective: 1200px; }
+.perspective-800  { perspective: 800px; }
+.preserve-3d      { transform-style: preserve-3d; }
+.backface-hidden  { backface-visibility: hidden; }
+
+/* ── Frosted glass within existing palette ── */
+.glass-maroon {
+  background: rgba(46, 10, 13, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 184, 150, 0.18);
+}
+.glass-dark {
+  background: rgba(26, 5, 7, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 184, 150, 0.14);
+}
+
 
 /* ── Reset ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }

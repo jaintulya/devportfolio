@@ -255,25 +255,58 @@ function DesktopDraggableRow({ cat, catReels, openModal, onCardClick }) {
               </svg>
             </button>
 
-            {/* Title + category */}
+            {/* Title + category — matches ReelShowcase home card style */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: 0,
+                zIndex: 3,
+                pointerEvents: "none",
+                background:
+                  "linear-gradient(to top, rgba(14,2,4,0.96) 0%, rgba(14,2,4,0.75) 28%, rgba(14,2,4,0.25) 55%, transparent 75%)",
+              }}
+            />
             <div style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
-              padding: 24, zIndex: 3, pointerEvents: "none",
+              padding: "0 16px 14px", zIndex: 4, pointerEvents: "none",
             }}>
               <div style={{
-                fontFamily: "var(--font-mono)", fontSize: 10,
-                letterSpacing: "0.25em", textTransform: "uppercase",
-                color: "var(--brand-gold)", marginBottom: 6,
-                textShadow: "0 2px 8px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,0.95)",
-              }}>
-                {cat.label}
-              </div>
-              <div style={{
-                fontFamily: "var(--font-display)", fontSize: 20,
-                fontWeight: 600, color: "var(--brand-cream)", lineHeight: 1.2,
-                textShadow: "0 2px 10px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,1)",
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize: "clamp(14px, 1.5vw, 18px)",
+                fontStyle: "italic",
+                fontWeight: 500,
+                color: "#F6E5CB",
+                lineHeight: 1.25,
+                marginBottom: 5,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                textShadow: "0 2px 8px rgba(0,0,0,0.9)",
               }}>
                 {item.title}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 9.5,
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  color: "#F5C87A",
+                  fontWeight: 600,
+                  textShadow: "0 1px 4px rgba(0,0,0,0.85)",
+                }}>
+                  {cat.label}
+                </span>
+                <span style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  letterSpacing: "0.08em",
+                  color: "rgba(247,230,204,0.75)",
+                  textShadow: "0 1px 4px rgba(0,0,0,0.85)",
+                }}>
+                  {item.duration}
+                </span>
               </div>
             </div>
           </article>
@@ -306,6 +339,14 @@ export default function WorkPage() {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Scroll to top on page mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    }
   }, []);
 
   // Keep browser tab title as Our Works
@@ -937,44 +978,31 @@ export default function WorkPage() {
           </div>
         )}
 
-        {/* See More → Work page link */}
-        <div style={{
-          textAlign: "center",
-          marginTop: "clamp(48px, 6vw, 64px)",
-        }}>
+        {/* See More on Instagram */}
+        <div style={{ textAlign: "center", marginTop: "clamp(48px, 6vw, 64px)", zIndex: 10, position: "relative" }}>
           <a
             href="https://www.instagram.com/shaadi.pitara/"
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "10px 24px",
-              background: "var(--brand-gold)", backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              border: "1px solid var(--brand-gold)",
-              color: "var(--brand-maroon-dark)",
-              fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600,
-              letterSpacing: "0.2em", textTransform: "uppercase",
-              textDecoration: "none", cursor: "pointer", borderRadius: 4,
-              transition: "all 0.3s ease", whiteSpace: "nowrap",
+              display: "inline-flex", alignItems: "center", gap: 10,
+              padding: "14px 32px", background: "transparent",
+              color: "var(--brand-cream)", fontFamily: "var(--font-body)",
+              fontSize: 10, fontWeight: 600, letterSpacing: "0.2em",
+              textTransform: "uppercase", border: "1px solid rgba(212,184,150,0.25)",
+              textDecoration: "none", cursor: "pointer", borderRadius: 0,
+              transition: "all 0.35s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(212, 184, 150, 0.08)";
-              e.currentTarget.style.color = "var(--brand-cream)";
-              e.currentTarget.style.borderColor = "rgba(212, 184, 150, 0.35)";
-              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.borderColor = "rgba(212,184,150,0.55)";
+              e.currentTarget.style.background = "rgba(212,184,150,0.06)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "var(--brand-gold)";
-              e.currentTarget.style.color = "var(--brand-maroon-dark)";
-              e.currentTarget.style.borderColor = "var(--brand-gold)";
-              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "rgba(212,184,150,0.25)";
+              e.currentTarget.style.background = "transparent";
             }}
           >
-            See More on Instagram
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+            SEE MORE ON INSTAGRAM &rarr;
           </a>
         </div>
       </div>
