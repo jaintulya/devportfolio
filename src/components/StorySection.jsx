@@ -94,7 +94,7 @@ export default function StorySection() {
         gsap.from(storyHeroRef.current.children, {
           y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
           stagger: 0.12,
-          scrollTrigger: { trigger: storyHeroRef.current, start: "top 85%", once: true },
+          scrollTrigger: { trigger: storyHeroRef.current, start: "top 85%", once: true, fastScrollEnd: true, invalidateOnRefresh: true },
         });
       }
 
@@ -103,7 +103,7 @@ export default function StorySection() {
         gsap.from(headRef.current.children, {
           y: 20, opacity: 0, duration: 0.7, ease: "power2.out",
           stagger: 0.1,
-          scrollTrigger: { trigger: sceneRef.current, start: "top 80%", once: true },
+          scrollTrigger: { trigger: sceneRef.current, start: "top 80%", once: true, fastScrollEnd: true, invalidateOnRefresh: true },
         });
       }
 
@@ -111,7 +111,7 @@ export default function StorySection() {
       if (journeyHeadRef.current) {
         gsap.from(journeyHeadRef.current, {
           y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
-          scrollTrigger: { trigger: journeyHeadRef.current, start: "top 85%", once: true },
+          scrollTrigger: { trigger: journeyHeadRef.current, start: "top 85%", once: true, fastScrollEnd: true, invalidateOnRefresh: true },
         });
       }
 
@@ -123,7 +123,7 @@ export default function StorySection() {
             y: 20, opacity: 0, duration: 0.7,
             stagger: 0.08,
             ease: "power2.out",
-            scrollTrigger: { trigger: routeRef.current, start: "top 85%", once: true },
+            scrollTrigger: { trigger: routeRef.current, start: "top 85%", once: true, fastScrollEnd: true, invalidateOnRefresh: true },
           });
         }
       }
@@ -189,7 +189,9 @@ export default function StorySection() {
       style={{
         position: "relative",
         color: "var(--brand-maroon-dark)",
-        overflow: "clip",
+        overflow: "hidden",
+        willChange: "transform",
+        transform: "translateZ(0)",
       }}
     >
 

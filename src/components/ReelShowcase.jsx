@@ -54,20 +54,15 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
       const ramp = Math.pow(distance, 0.56);
       const tilt = Math.min(44 * ramp, 82) * Math.sign(offset);
 
-      // Cards further from center rotate away on Y and lose a touch of brightness per spec
-      const brightness = Math.max(0.48, 1 - distance * 0.16);
-      card.style.filter = `brightness(${brightness})`;
-
+      card.style.filter = `brightness(1)`;
       card.style.transform =
         `translateX(calc(-50% + ${offset * pitch}px)) translateZ(${-0.5 * width * ramp}px) rotateY(${-tilt}deg)`;
       const edge = Math.min(1, Math.max(0, count / 2 - distance));
-      card.style.opacity = String(Math.max(0, 1 - 0.12 * distance) * edge);
+      card.style.opacity = String(edge > 0 ? 1 : 0);
       card.style.zIndex = String(100 - Math.round(distance));
-      if (Math.round(distance) === 0) {
-        card.style.boxShadow = "0 0 0 1.5px rgba(212,184,150,0.45), 0 20px 50px rgba(0,0,0,0.6)";
-      } else {
-        card.style.boxShadow = "0 10px 30px rgba(0,0,0,0.4)";
-      }
+      card.style.boxShadow = Math.round(distance) === 0
+        ? "0 0 0 1.5px rgba(212,184,150,0.45), 0 20px 50px rgba(0,0,0,0.6)"
+        : "none";
     });
   }, [count]);
 
@@ -159,72 +154,7 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
 
   useEffect(() => () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); }, []);
 
-  // ── Horizontal Side-Scroll (trackpad two-finger swipe, horizontal mouse wheel, Shift+wheel) ──
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    let accumulatedDeltaX = 0;
-    let lastTriggerTime = 0;
-    let resetTimer = null;
-    const THRESHOLD = 35;
-    const COOLDOWN = 260;
-
-    const handleWheel = (e) => {
-      if (dragRef.current?.isDragging) return;
-      const dx = e.deltaX !== 0 ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
-      const absX = Math.abs(dx);
-      const absY = Math.abs(e.deltaY);
-
-      if (absX > absY && absX > 2) {
-        e.preventDefault();
-        const now = performance.now();
-        if (now - lastTriggerTime < COOLDOWN) return;
-
-        accumulatedDeltaX += dx;
-        clearTimeout(resetTimer);
-        resetTimer = setTimeout(() => {
-          accumulatedDeltaX = 0;
-        }, 140);
-
-        if (Math.abs(accumulatedDeltaX) >= THRESHOLD) {
-          const dir = accumulatedDeltaX > 0 ? 1 : -1;
-          nudge(dir);
-          lastTriggerTime = now;
-          accumulatedDeltaX = 0;
-        }
-      }
-    };
-
-    container.addEventListener("wheel", handleWheel, { passive: false });
-    return () => {
-      container.removeEventListener("wheel", handleWheel);
-      clearTimeout(resetTimer);
-    };
-  }, [nudge]);
-
-  // ── ScrollTrigger Scrub (drives carousel smoothly on vertical scroll) ──
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) return;
-
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: "top 85%",
-        end: "bottom 15%",
-        scrub: 1.2,
-        onUpdate: (self) => {
-          if (dragRef.current?.isDragging) return;
-          const target = self.progress * (count - 1);
-          settle(target);
-        },
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, [count, settle]);
+  // ScrollTrigger scrub removed — coverflow only moves via pointer drag
 
   return (
     <div ref={containerRef} style={{ width: "100%", userSelect: "none" }}>
@@ -241,7 +171,7 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
         }}
         tabIndex={0}
         style={{
-          overflow: "hidden",
+          overflow: "visible",
           padding: "40px 0 32px",
           cursor: "grab",
           outline: "none",

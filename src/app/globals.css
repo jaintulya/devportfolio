@@ -610,27 +610,27 @@ html.lenis, html.lenis body { height: auto; }
 
 .hero-anim-eyebrow {
   opacity: 0;
-  animation: heroFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+  animation: heroFadeUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
 }
 
 .hero-anim-headline {
   opacity: 0;
-  animation: heroFadeUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.22s forwards;
+  animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
 }
 
 .hero-anim-script {
   opacity: 0;
-  animation: heroFadeUp 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.38s forwards;
+  animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
 }
 
 .hero-anim-subtext {
   opacity: 0;
-  animation: heroFadeUp 0.90s cubic-bezier(0.16, 1, 0.3, 1) 0.52s forwards;
+  animation: heroFadeUp 0.60s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
 }
 
 .hero-anim-buttons {
   opacity: 0;
-  animation: heroFadeUp 0.90s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards;
+  animation: heroFadeUp 0.60s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
 }
 
 /* Atmospheric Overlays */
