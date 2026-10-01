@@ -26,6 +26,10 @@ export default function Home() {
 
   useEffect(() => {
     setTier(getQualityTier());
+    try {
+      sessionStorage.setItem("sp_loaded", "1");
+      document.documentElement.classList.add("sp-loaded");
+    } catch (e) {}
   }, []);
 
   useEffect(() => {

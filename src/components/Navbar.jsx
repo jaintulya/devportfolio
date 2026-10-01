@@ -28,8 +28,11 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Entrance animation — capsule slides down from top
+  // Entrance animation — capsule slides down from top only on initial first load
   useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("sp_loaded")) {
+      return;
+    }
     const ctx = gsap.context(() => {
       gsap.from(navRef.current, {
         y: -60, opacity: 0, duration: 1.2, ease: "power3.out", delay: 0.5,

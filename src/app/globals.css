@@ -608,29 +608,59 @@ html.lenis, html.lenis body { height: auto; }
   }
 }
 
+/* Prevent FOUT (Flash of Unstyled Fallback Text) on hard reload:
+   ALL hero elements stay invisible until fonts ready — eliminates glitch */
+html:not(.wf-ready):not(.sp-loaded) .hero-anim-eyebrow,
+html:not(.wf-ready):not(.sp-loaded) .hero-anim-headline,
+html:not(.wf-ready):not(.sp-loaded) .hero-anim-script,
+html:not(.wf-ready):not(.sp-loaded) .hero-anim-subtext,
+html:not(.wf-ready):not(.sp-loaded) .hero-anim-buttons,
+html:not(.wf-ready):not(.sp-loaded) .hero-headline,
+html:not(.wf-ready):not(.sp-loaded) .hero-accent-text {
+  visibility: hidden;
+}
+
+html.wf-ready .hero-headline,
+html.wf-ready .hero-accent-text,
+html.sp-loaded .hero-headline,
+html.sp-loaded .hero-accent-text,
+html.wf-ready .hero-anim-eyebrow,
+html.wf-ready .hero-anim-headline,
+html.wf-ready .hero-anim-script,
+html.wf-ready .hero-anim-subtext,
+html.wf-ready .hero-anim-buttons {
+  visibility: visible;
+}
+
+/* Once loaded in this session, never re-run entrance animation on reload or navigation */
+html.sp-loaded .hero-anim-eyebrow,
+html.sp-loaded .hero-anim-headline,
+html.sp-loaded .hero-anim-script,
+html.sp-loaded .hero-anim-subtext,
+html.sp-loaded .hero-anim-buttons {
+  opacity: 1 !important;
+  animation: none !important;
+  transform: none !important;
+}
+
 .hero-anim-eyebrow {
-  opacity: 0;
-  animation: heroFadeUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
+  animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0s backwards;
 }
 
 .hero-anim-headline {
-  opacity: 0;
-  animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.06s backwards;
 }
 
 .hero-anim-script {
-  opacity: 0;
-  animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.12s backwards;
 }
 
 .hero-anim-subtext {
-  opacity: 0;
-  animation: heroFadeUp 0.60s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+  animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.18s backwards;
 }
 
 .hero-anim-buttons {
-  opacity: 0;
-  animation: heroFadeUp 0.60s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+  animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.22s backwards;
 }
 
 /* Atmospheric Overlays */

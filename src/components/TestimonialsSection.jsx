@@ -92,12 +92,12 @@ export default function TestimonialsSection() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(headRef.current, {
-        y: 50, opacity: 0, duration: 1, ease: "power3.out",
-        scrollTrigger: { trigger: headRef.current, start: "top 80%" },
+        y: 24, opacity: 0, duration: 0.8, ease: "power2.out",
+        scrollTrigger: { trigger: headRef.current, start: "top 85%", once: true, fastScrollEnd: true },
       });
       gsap.from(trackRef.current, {
-        y: 40, opacity: 0, duration: 1, ease: "power3.out",
-        scrollTrigger: { trigger: trackRef.current, start: "top 85%" },
+        y: 20, opacity: 0, duration: 0.8, ease: "power2.out",
+        scrollTrigger: { trigger: trackRef.current, start: "top 88%", once: true, fastScrollEnd: true },
       });
     }, secRef);
     return () => ctx.revert();
@@ -121,12 +121,6 @@ export default function TestimonialsSection() {
         overflow: "hidden",
       }}
     >
-      {/* Texture overlay matching Contact section */}
-      <div aria-hidden="true" style={{
-        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1, opacity: 0.04,
-        backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-      }} />
-
       <div style={{ maxWidth: 900, margin: "0 auto", position: "relative", zIndex: 2 }}>
         <div ref={headRef} style={{ textAlign: "center", marginBottom: "clamp(48px, 7vw, 80px)" }}>
           <div className="eyebrow-label" style={{ justifyContent: "center" }}>

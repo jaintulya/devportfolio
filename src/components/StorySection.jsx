@@ -70,8 +70,10 @@ export default function StorySection() {
   const note2Ref          = useRef(null);
 
   /* Journey / timeline refs */
+  const journeyPinRef     = useRef(null);
   const journeyHeadRef    = useRef(null);
   const routeRef          = useRef(null);
+  const pathRef           = useRef(null);
   const detailTextRef     = useRef(null);  // ref for the detail text paragraph only
 
   /* ─── Reduced motion ─── */
@@ -85,51 +87,109 @@ export default function StorySection() {
   }, []);
 
   /* ══════════════════════════════════════════
-     GSAP — SCROLL-DRIVEN ANIMATIONS
+     GSAP — SCROLL-PINNED TIMELINE ANIMATION (ONLY ON 2ND IMAGE / TIMELINE)
+     The Journey locks in place while the user scrolls; line draws and points activate;
+     only advances to the next section when the full line is drawn; scrubs backward on reverse.
      ══════════════════════════════════════════ */
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      /* ── Story hero heading reveal ── */
-      if (storyHeroRef.current) {
-        gsap.from(storyHeroRef.current.children, {
-          y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
-          stagger: 0.12,
-          scrollTrigger: { trigger: storyHeroRef.current, start: "top 85%", once: true, fastScrollEnd: true, invalidateOnRefresh: true },
-        });
-      }
+    const mm = gsap.matchMedia();
 
-      /* ── The Beginning reveal ── */
-      if (headRef.current) {
-        gsap.from(headRef.current.children, {
-          y: 20, opacity: 0, duration: 0.7, ease: "power2.out",
-          stagger: 0.1,
-          scrollTrigger: { trigger: sceneRef.current, start: "top 80%", once: true, fastScrollEnd: true, invalidateOnRefresh: true },
-        });
-      }
+    mm.add("(min-width: 769px)", () => {
+      if (journeyPinRef.current && routeRef.current && pathRef.current) {
+        const path = pathRef.current;
+        let length = 1000;
+        try {
+          length = path.getTotalLength() || 1000;
+        } catch (e) {}
 
-      /* ── Journey heading reveal ── */
-      if (journeyHeadRef.current) {
-        gsap.from(journeyHeadRef.current, {
-          y: 28, opacity: 0, duration: 0.9, ease: "power3.out",
-          scrollTrigger: { trigger: journeyHeadRef.current, start: "top 85%", once: true, fastScrollEnd: true, invalidateOnRefresh: true },
-        });
-      }
-
-      /* ── Timeline stop staggered reveal ── */
-      if (routeRef.current) {
         const stops = routeRef.current.querySelectorAll(".js-tstop");
-        if (stops.length) {
-          gsap.from(stops, {
-            y: 20, opacity: 0, duration: 0.7,
-            stagger: 0.08,
-            ease: "power2.out",
-            scrollTrigger: { trigger: routeRef.current, start: "top 85%", once: true, fastScrollEnd: true, invalidateOnRefresh: true },
-          });
-        }
-      }
-    }, rootRef);
 
-    return () => ctx.revert();
+        if (reducedMotion) {
+          gsap.set(path, { visibility: "visible", strokeDasharray: length, strokeDashoffset: 0 });
+          stops.forEach((stop) => {
+            const dot = stop.querySelector(".tstop-dot");
+            const texts = stop.querySelectorAll(".tstop-num, .tstop-title, .tstop-body");
+            if (dot) gsap.set(dot, { scale: 1, opacity: 1 });
+            if (texts.length) gsap.set(texts, { opacity: 1, y: 0 });
+          });
+          return;
+        }
+
+        // Make path visible (was hidden in CSS to prevent gray flash on load)
+        // then set dashoffset so the line starts completely undrawn
+        gsap.set(path, {
+          visibility: "visible",
+          strokeDasharray: length,
+          strokeDashoffset: length,
+        });
+
+        // Hide all 5 stops initially
+        stops.forEach((stop) => {
+          const dot = stop.querySelector(".tstop-dot");
+          const texts = stop.querySelectorAll(".tstop-num, .tstop-title, .tstop-body");
+          if (dot) gsap.set(dot, { scale: 0, opacity: 0 });
+          if (texts.length) gsap.set(texts, { opacity: 0, y: 14 });
+        });
+
+        // Pinned timeline:
+        // Section locks on screen until line is 100% drawn and all points have appeared!
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: journeyPinRef.current,
+            start: "top top",
+            end: "+=1300",
+            pin: true,
+            scrub: 0.8,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // Draw the curved SVG line from start to finish
+        tl.to(path, {
+          strokeDashoffset: 0,
+          ease: "none",
+          duration: 1,
+        }, 0);
+
+        // Milestone timings for the 5 stops along the line
+        // Stop 01 (College): x=80 -> ~0.12
+        // Stop 02 (Confidence): x=285 -> ~0.32
+        // Stop 03 (Food Creators): x=490 -> ~0.52
+        // Stop 04 (Struggle): x=695 -> ~0.72
+        // Stop 05 (Storytelling): x=900 -> ~0.92
+        const stopTimings = [0.12, 0.32, 0.52, 0.72, 0.92];
+
+        stopTimings.forEach((t, i) => {
+          const stop = stops[i];
+          if (!stop) return;
+          const dot = stop.querySelector(".tstop-dot");
+          const texts = stop.querySelectorAll(".tstop-num, .tstop-title, .tstop-body");
+
+          if (dot) {
+            tl.to(dot, {
+              scale: 1,
+              opacity: 1,
+              boxShadow: "0 0 0 10px rgba(124,41,45,0.22), 0 0 0 1px rgba(124,41,45,0.45)",
+              ease: "back.out(2)",
+              duration: 0.08,
+            }, t - 0.04);
+          }
+
+          if (texts.length) {
+            tl.to(texts, {
+              opacity: 1,
+              y: 0,
+              stagger: 0.02,
+              ease: "power2.out",
+              duration: 0.08,
+            }, t - 0.02);
+          }
+        });
+      }
+    });
+
+    return () => mm.revert();
   }, [reducedMotion]);
 
   /* ─── Moment pill interaction ─── */
@@ -190,8 +250,6 @@ export default function StorySection() {
         position: "relative",
         color: "var(--brand-maroon-dark)",
         overflow: "hidden",
-        willChange: "transform",
-        transform: "translateZ(0)",
       }}
     >
 
@@ -427,13 +485,21 @@ export default function StorySection() {
         {/* ═══════════════════════════════════
             PART 3 — THE JOURNEY  (timeline with tdha curved line)
            ═══════════════════════════════════ */}
-        <div style={{
-          position:"relative",zIndex:5,
-          padding:"clamp(60px,9vw,120px) clamp(16px,4vw,48px)",
-          background:"var(--brand-ivory)",
-          color:"var(--brand-maroon-dark)",
-        }}>
-          <div style={{ maxWidth:1100,margin:"0 auto" }}>
+        <div
+          ref={journeyPinRef}
+          style={{
+            position:"relative",
+            zIndex:5,
+            padding:"clamp(50px, 8vh, 100px) clamp(16px,4vw,48px)",
+            background:"var(--brand-ivory)",
+            color:"var(--brand-maroon-dark)",
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <div style={{ maxWidth:1180,margin:"0 auto" }}>
             {/* Journey header */}
             <div
               ref={journeyHeadRef}
@@ -494,13 +560,15 @@ export default function StorySection() {
                   overflow:"visible",pointerEvents:"none",zIndex:1,
                 }}
               >
-                {/* Visible curved stroke — clearly tdha (S-curve through dots) */}
+                {/* Visible curved stroke — animated directly with scroll; starts invisible so no gray flash */}
                 <path
+                  ref={pathRef}
                   d={pathD}
                   fill="none"
-                  stroke="rgba(58,11,14,0.55)"
+                  stroke="#7C292D"
                   strokeWidth="3.2"
                   strokeLinecap="round"
+                  style={{ visibility: "hidden" }}
                 />
               </svg>
 
@@ -518,38 +586,53 @@ export default function StorySection() {
                     left: [0, "20.5%", "41%", "61.5%", "82%"][i],
                   }}
                 >
-                  <span style={{
-                    display:"block",
-                    fontFamily:"var(--font-mono)",fontSize:10.5,
-                    letterSpacing:".14em",
-                    color:"#280508",
-                    fontWeight: 700,
-                    opacity:1,
-                    marginBottom:14,textTransform:"uppercase",
-                  }}>
+                  <span
+                    className="tstop-num"
+                    style={{
+                      display:"block",
+                      fontFamily:"var(--font-mono)",fontSize:10.5,
+                      letterSpacing:".14em",
+                      color:"#280508",
+                      fontWeight: 700,
+                      marginBottom:14,textTransform:"uppercase",
+                    }}
+                  >
                     {String(i+1).padStart(2,"0")}
                   </span>
-                  <div style={{
-                    width:16,height:16,borderRadius:"50%",
-                    background:"#3A0B0E",
-                    margin:"0 auto 22px",
-                    boxShadow:"0 0 0 8px rgba(124,41,45,0.12),0 0 0 1px rgba(124,41,45,0.30)",
-                    transition:"0.4s",
-                    position:"relative",zIndex:3,
-                    cursor:"default",
-                  }} />
-                  <h3 style={{
-                    fontFamily:"'Cormorant Garamond',Georgia,serif",
-                    fontWeight:700,fontSize:33,lineHeight:1.1,
-                    paddingBottom:2,
-                    margin:"0 0 8px",color:"#280508",
-                  }}>{stop.title}</h3>
-                  <p style={{
-                    fontFamily:"var(--font-body)",fontSize:13,
-                    fontWeight: 600,
-                    lineHeight:1.6,color:"#1D0507",
-                    margin:0,maxWidth:170,marginLeft:"auto",marginRight:"auto",
-                  }}>{stop.body}</p>
+                  <div
+                    className="tstop-dot"
+                    style={{
+                      width:16,height:16,borderRadius:"50%",
+                      background:"#3A0B0E",
+                      margin:"0 auto 22px",
+                      boxShadow:"0 0 0 8px rgba(124,41,45,0.12),0 0 0 1px rgba(124,41,45,0.30)",
+                      position:"relative",zIndex:3,
+                      cursor:"default",
+                      transformOrigin:"center center",
+                    }}
+                  />
+                  <h3
+                    className="tstop-title"
+                    style={{
+                      fontFamily:"'Cormorant Garamond',Georgia,serif",
+                      fontWeight:700,fontSize:33,lineHeight:1.1,
+                      paddingBottom:2,
+                      margin:"0 0 8px",color:"#280508",
+                    }}
+                  >
+                    {stop.title}
+                  </h3>
+                  <p
+                    className="tstop-body"
+                    style={{
+                      fontFamily:"var(--font-body)",fontSize:13,
+                      fontWeight: 600,
+                      lineHeight:1.6,color:"#1D0507",
+                      margin:0,maxWidth:170,marginLeft:"auto",marginRight:"auto",
+                    }}
+                  >
+                    {stop.body}
+                  </p>
                 </div>
               ))}
             </div>
@@ -819,16 +902,6 @@ export default function StorySection() {
         }}>
 
 
-          {/* Radial glow */}
-          <div aria-hidden="true" style={{
-            position:"absolute",left:"50%",top:"50%",
-            transform:"translate(-50%,-50%)",
-            width:600,height:600,borderRadius:"50%",
-            background:"radial-gradient(circle,rgba(124,41,45,0.14) 0%,transparent 70%)",
-            pointerEvents:"none",
-            zIndex: 1,
-          }} />
-
           <div style={{
             maxWidth: 1180, margin: "0 auto", width: "100%",
             display: "grid",
@@ -875,6 +948,8 @@ export default function StorySection() {
                   width: "clamp(200px, 20vw, 270px)",
                   height: "clamp(260px, 26vw, 350px)",
                   flexShrink: 0,
+                  transform: "rotate(0.6deg)",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 }}
               >
                 <img
@@ -892,7 +967,7 @@ export default function StorySection() {
                     objectFit: "cover",
                     display: "block",
                     borderRadius: 12,
-                    boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+                    boxShadow: "0 16px 36px rgba(0,0,0,0.38)",
                   }}
                 />
                 {/* Floating note 1 */}
@@ -901,12 +976,12 @@ export default function StorySection() {
                   className="floating-note-1"
                   style={{
                     position: "absolute",
-                    right: "-18px",
+                    right: "-10px",
                     top: "12px",
                     padding: "10px 14px",
                     background: "var(--brand-cream)",
                     color: "var(--brand-maroon-dark)",
-                    boxShadow: "0 14px 35px rgba(0,0,0,0.3)",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.22)",
                     fontFamily: "'Cormorant Garamond', Georgia, serif",
                     fontSize: 17,
                     lineHeight: 1.2,
@@ -924,12 +999,12 @@ export default function StorySection() {
                   className="floating-note-2"
                   style={{
                     position: "absolute",
-                    left: "-16px",
+                    left: "-10px",
                     bottom: "12px",
                     padding: "8px 14px",
                     background: "var(--brand-cream)",
                     color: "var(--brand-maroon-dark)",
-                    boxShadow: "0 14px 35px rgba(0,0,0,0.3)",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.22)",
                     fontFamily: "'Cormorant Garamond', Georgia, serif",
                     fontSize: 15,
                     fontWeight: 500,
@@ -981,20 +1056,32 @@ export default function StorySection() {
 
         {/* ─── Styles ─── */}
         <style dangerouslySetInnerHTML={{ __html: `
-          @keyframes floatDevCard {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50%      { transform: translateY(-10px) rotate(0.8deg); }
-          }
           @keyframes floatNote1 {
-            0%, 100% { transform: translateY(0px) rotate(3deg); }
-            50%      { transform: translateY(-12px) rotate(6deg); }
+            0%, 100% {
+              transform: translateY(0px) rotate(3.5deg);
+            }
+            50% {
+              transform: translateY(-9px) rotate(3.5deg);
+            }
           }
           @keyframes floatNote2 {
-            0%, 100% { transform: translateY(0px) rotate(-3deg); }
-            50%      { transform: translateY(12px) rotate(-6deg); }
+            0%, 100% {
+              transform: translateY(0px) rotate(-3.5deg);
+            }
+            50% {
+              transform: translateY(9px) rotate(-3.5deg);
+            }
+          }
+          @keyframes floatDevCard {
+            0%, 100% {
+              transform: translateY(0px) rotate(0.6deg);
+            }
+            50% {
+              transform: translateY(-6px) rotate(0.6deg);
+            }
           }
           .dev-card-float {
-            animation: floatDevCard 5.5s ease-in-out infinite;
+            animation: floatDevCard 5.4s ease-in-out infinite;
             will-change: transform;
           }
           .floating-note-1 {
