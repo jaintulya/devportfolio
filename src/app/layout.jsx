@@ -1,4 +1,5 @@
 import './globals.css';
+import Preloader from "@/components/Preloader";
 
 export const metadata = {
   metadataBase: new URL("https://www.shaadipitara.in"),
@@ -193,6 +194,8 @@ export default function RootLayout({ children }) {
         <link rel="preload" as="image" href="/herobg.png" media="(min-width: 1025px)" fetchPriority="high" />
         <link rel="preload" as="image" href="/herobgtablet.png" media="(min-width: 641px) and (max-width: 1024px)" fetchPriority="high" />
         <link rel="preload" as="image" href="/herobgphone.png" media="(max-width: 640px)" fetchPriority="high" />
+        <link rel="preload" as="image" href="/navlogo-exact.png" fetchPriority="high" />
+        <link rel="preload" as="image" href="/seamless-texture.jpg" fetchPriority="high" />
         <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
         <link rel="icon" href="/favicon-48.png?v=2" type="image/png" sizes="48x48" />
         <link rel="icon" href="/favicon-32.png?v=2" type="image/png" sizes="32x32" />
@@ -209,6 +212,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body style={{ margin: 0 }}>
+        <Preloader />
         <a href="#main-content" className="skip-to-main">Skip to main content</a>
         {children}
       </body>
