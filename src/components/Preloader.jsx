@@ -1,12 +1,26 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import LogoContourSVG from "./LogoContourSVG";
 import "./Preloader.css";
 
 export default function Preloader() {
+  const pathname = usePathname();
+  const isWorksRoute = Boolean(
+    pathname && (pathname === "/works" || pathname.startsWith("/works/"))
+  );
+
   // Lifecycle phases: 'ready' -> 'drawing' -> 'filling' -> 'zooming' -> 'exiting' -> 'done'
-  const [phase, setPhase] = useState("ready");
+  const [phase, setPhase] = useState(() => {
+    if (typeof window !== "undefined") {
+      const currentPath = window.location.pathname;
+      if (currentPath === "/works" || currentPath.startsWith("/works/")) {
+        return "done";
+      }
+    }
+    return "ready";
+  });
   const timersRef = useRef([]);
 
   const addTimer = (fn, delay) => {
@@ -21,6 +35,25 @@ export default function Preloader() {
   };
 
   useEffect(() => {
+    // 1. If currently on /works, immediately cancel, clean up and do not run preloader
+    if (isWorksRoute) {
+      clearAllTimers();
+      setPhase("done");
+      document.body.classList.remove("sp-preloader-active", "sp-preloader-exiting");
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      try {
+        sessionStorage.setItem("sp_loaded", "1");
+        document.documentElement.classList.add("sp-loaded");
+      } catch (e) {}
+      return;
+    }
+
+    // If preloader is already done, avoid re-running when navigating back
+    if (phase === "done") {
+      return;
+    }
+
     const params = new URLSearchParams(window.location.search);
     const manualPhase = params.get("preloader_phase");
 
@@ -33,7 +66,6 @@ export default function Preloader() {
       }
       return;
     }
-
 
     // 2. Lock page scroll during preloader presentation
     const origBodyOverflow = document.body.style.overflow;
@@ -69,6 +101,10 @@ export default function Preloader() {
     // 6200ms: Complete and unmount cleanly
     addTimer(() => {
       setPhase("done");
+      try {
+        sessionStorage.setItem("sp_loaded", "1");
+        document.documentElement.classList.add("sp-loaded");
+      } catch (e) {}
       document.body.style.overflow = origBodyOverflow;
       document.documentElement.style.overflow = origHtmlOverflow;
       document.body.classList.remove("sp-preloader-active", "sp-preloader-exiting");
@@ -80,9 +116,10 @@ export default function Preloader() {
       document.documentElement.style.overflow = origHtmlOverflow;
       document.body.classList.remove("sp-preloader-active", "sp-preloader-exiting");
     };
-  }, []);
+  }, [isWorksRoute]);
 
-  if (phase === "done") {
+  // Completely bypass rendering when on /works or when phase is done
+  if (isWorksRoute || phase === "done") {
     return null;
   }
 
