@@ -2037,15 +2037,31 @@ export default function PackagesClient() {
           }
         }
 
+        /* Sticky Duration Bar */
+        .sticky-dur-bar {
+          position: sticky;
+          top: 76px;
+          z-index: 95;
+          display: flex;
+          justify-content: center;
+          margin-bottom: clamp(32px, 4.5vw, 48px);
+          pointer-events: none;
+          padding: 6px 0;
+          transition: top 0.3s ease;
+        }
+
         /* Duration Switcher responsive */
         .dur-switcher-wrap {
+          pointer-events: auto;
           display: inline-flex;
           gap: 8px;
-          padding: 8px;
-          background: rgba(26, 5, 7, 0.45);
-          border: 1px solid rgba(212, 184, 150, 0.22);
+          padding: 6px;
+          background: rgba(26, 5, 7, 0.92);
+          border: 1px solid rgba(212, 184, 150, 0.28);
           border-radius: 16px;
-          backdrop-filter: blur(12px);
+          backdrop-filter: blur(20px) saturate(1.3);
+          -webkit-backdrop-filter: blur(20px) saturate(1.3);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
           max-width: 100%;
           flex-wrap: wrap;
           justify-content: center;
@@ -2055,25 +2071,42 @@ export default function PackagesClient() {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          padding: 12px 28px;
+          padding: 10px 24px;
           border-radius: 12px;
           border: 1px solid transparent;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
-          min-width: 140px;
+          min-width: 130px;
           text-align: center;
         }
         @media (max-width: 600px) {
+          .sticky-dur-bar {
+            top: 50px !important;
+            margin-bottom: 22px !important;
+            padding: 4px 0 !important;
+          }
           .dur-switcher-wrap {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            padding: 6px;
+            width: 100% !important;
+            max-width: 380px !important;
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 5px !important;
+            padding: 5px !important;
+            border-radius: 14px !important;
+            background: rgba(26, 5, 7, 0.95) !important;
+            border: 1px solid rgba(212, 184, 150, 0.3) !important;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55) !important;
           }
           .dur-tab-btn {
-            min-width: auto;
-            padding: 10px 8px;
+            min-width: auto !important;
+            padding: 8px 4px !important;
+            border-radius: 10px !important;
+          }
+          .dur-tab-btn span:first-child {
+            font-size: 14px !important;
+          }
+          .dur-tab-btn span:last-child {
+            font-size: 7.5px !important;
           }
         }
       `}</style>
@@ -2253,16 +2286,17 @@ export default function PackagesClient() {
               </div>
             </div>
 
-            {/* Duration Switcher (Immediately Below 2-column header) */}
-            <div style={{ textAlign: "center", marginBottom: "clamp(36px, 4.5vw, 52px)" }}>
+            {/* Duration Switcher (Sticky through Classic, Luxe & Royal) */}
+            <div style={{ textAlign: "center", marginBottom: 12 }}>
               <div style={{
                 fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.22em",
                 textTransform: "uppercase", color: "rgba(212,184,150,0.6)",
-                marginBottom: 14,
               }}>
                 Select Duration of Festivities
               </div>
+            </div>
 
+            <div className="sticky-dur-bar">
               <div ref={selectorRef} className="dur-switcher-wrap">
                 {DURATION_OPTIONS.map((opt) => {
                   const isSelected = days === opt.days;
