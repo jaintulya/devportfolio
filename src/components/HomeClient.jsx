@@ -47,11 +47,33 @@ export default function Home() {
       "/story": "story",
       "/contact": "contact"
     };
-    const sectionId = sectionMap[path];
-    if (sectionId) {
-      setTimeout(() => {
-        document.getElementById(sectionId)?.scrollIntoView({ behavior: "instant" });
-      }, 100);
+    const targetId = sectionMap[path] || (typeof sessionStorage !== "undefined" ? sessionStorage.getItem("sp_nav_target") : null);
+    if (targetId) {
+      try { sessionStorage.removeItem("sp_nav_target"); } catch (e) {}
+
+      const doScroll = () => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          if (window.__lenis) {
+            window.__lenis.scrollTo(el, { offset: -20, duration: 1.2 });
+          } else {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+          return true;
+        }
+        return false;
+      };
+
+      if (!doScroll()) {
+        const t1 = setTimeout(doScroll, 120);
+        const t2 = setTimeout(doScroll, 350);
+        const t3 = setTimeout(doScroll, 750);
+        return () => {
+          clearTimeout(t1);
+          clearTimeout(t2);
+          clearTimeout(t3);
+        };
+      }
     }
   }, []);
 

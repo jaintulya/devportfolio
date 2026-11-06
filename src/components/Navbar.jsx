@@ -14,8 +14,25 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState("hero");
   const linkRefs = useRef({});
   const [menuReady, setMenuReady] = useState(false);
+  const navigatingUntilRef = useRef(0);
 
   const isStandalone = pathname === "/packages" || pathname?.startsWith("/packages") || pathname === "/works";
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.pathname !== "/" && !isStandalone) {
+      navigatingUntilRef.current = Date.now() + 1600;
+      const sectionMap = {
+        "/work": "reels",
+        "/services": "services",
+        "/story": "story",
+        "/contact": "contact",
+      };
+      const initialId = sectionMap[window.location.pathname];
+      if (initialId) {
+        setActiveSection(initialId);
+      }
+    }
+  }, [pathname, isStandalone]);
   const [scrolled, setScrolled] = useState(isStandalone);
 
   useEffect(() => {
@@ -74,6 +91,7 @@ export default function Navbar() {
 
     const probe = () => {
       if (typeof window !== "undefined" && window.location.pathname.startsWith("/packages")) return;
+      if (Date.now() < navigatingUntilRef.current) return;
       const scrollY  = window.scrollY || window.pageYOffset;
       const vh       = window.innerHeight;
       const fullH    = document.documentElement.scrollHeight;
@@ -218,24 +236,49 @@ export default function Navbar() {
 
   const go = (path) => {
     setMobileOpen(false);
-    // Standalone pages navigate directly (no section scroll-spy)
-    const standalonePages = ["/packages", "/works"];
-    if (standalonePages.includes(path)) {
+
+    // If clicking Packages while on Packages, scroll to top
+    if (path === "/packages" && (pathname === "/packages" || pathname?.startsWith("/packages"))) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    // Standalone pages navigate directly
+    if (path === "/packages" || path === "/works") {
       router.push(path);
       return;
     }
+
     const id = pathToId[path] ?? "hero";
     const el = document.getElementById(id);
-    
+
+    // If the section exists on the CURRENT page (e.g. we are on homepage / section page)
     if (el) {
       window.history.pushState(null, "", path);
+      setActiveSection(id);
+      navigatingUntilRef.current = Date.now() + 1500;
+
       if (id === "hero") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (window.__lenis) {
+          window.__lenis.scrollTo(0, { duration: 1.2 });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       } else {
-        el.scrollIntoView({ behavior: "smooth" });
+        if (window.__lenis) {
+          window.__lenis.scrollTo(el, { offset: -20, duration: 1.2 });
+        } else {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
       }
     } else {
-      router.push("/" + (path === "/" ? "" : `?section=${id}`));
+      // We are on a different page (e.g. /packages or /works) where section elements don't exist in DOM!
+      // Set the intended target section in sessionStorage so HomeClient scrolls directly to it upon mount
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("sp_nav_target", id);
+      }
+      navigatingUntilRef.current = Date.now() + 1800;
+      router.push(path);
     }
   };
 
@@ -363,8 +406,18 @@ export default function Navbar() {
           {/* Logo only — no text */}
           <button
             onClick={() => {
-              if (pathname !== "/") { router.push("/"); return; }
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              if (pathname !== "/") {
+                router.push("/");
+                return;
+              }
+              window.history.pushState(null, "", "/");
+              setActiveSection("hero");
+              navigatingUntilRef.current = Date.now() + 1200;
+              if (window.__lenis) {
+                window.__lenis.scrollTo(0, { duration: 1.2 });
+              } else {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
             }}
             style={{
               background: "none", border: "none", cursor: "pointer",
