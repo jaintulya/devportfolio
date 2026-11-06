@@ -156,6 +156,20 @@ const PRICING = {
 
 const WA_NUMBER = "919377150889";
 
+const CUSTOM_WA_MSG = `Hi Shaadi Pitara! We would like to enquire about a Custom Wedding Package.
+
+Please find our wedding details below:
+• Bride & Groom Names: 
+• Wedding Dates / Month: 
+• Number of Days: 
+• Destination / Venue City: 
+• Events to Cover (Haldi, Mehendi, Sangeet, Wedding, Reception): 
+• Special Requests (Drone, Live Reels, etc.): 
+
+Please share your availability and tailored package options. Thank you!`;
+
+const CUSTOM_WA_URL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(CUSTOM_WA_MSG)}`;
+
 function buildWaUrl(tier, days) {
   const price = PRICING[tier.id][days];
   const msg = `Hi Shaadi Pitara! I would like to enquire about the ${tier.name} Package for ${days} Days, priced at ${price}. Please share more details about the inclusions and booking process.`;
@@ -334,30 +348,38 @@ function RenderIcon({ name, size = 16 }) {
 function PackageCard({ pkg, days, animRef, index = 0 }) {
   const price = PRICING[pkg.id][days];
   const isLuxe = pkg.highlight;
+  const isRoyal = pkg.id === "royal";
   const waUrl = buildWaUrl(pkg, days);
 
-  // All cards in rich beige tone per user request
-  const bg = isLuxe
+  // Classic: Ivory Beige | Luxe: Warm Cream | Royal: 24K Champagne Gold
+  const bg = isRoyal
+    ? "linear-gradient(160deg, #FFF9EE 0%, #F5E5C9 45%, #EED2A4 100%)"
+    : isLuxe
     ? "linear-gradient(160deg, #FFFDF9 0%, #F6E5CB 100%)"
     : "linear-gradient(165deg, #FAF5EE 0%, #F5ECE0 100%)";
-  const border = isLuxe
+
+  const border = isRoyal
+    ? "2px solid #C49647"
+    : isLuxe
     ? "2px solid #C4965F"
     : "1.5px solid rgba(196,150,95,0.38)";
-  const shadow = isLuxe
+
+  const shadow = isRoyal
+    ? "0 28px 65px rgba(0,0,0,0.46), 0 0 0 1px rgba(212,175,55,0.45), inset 0 1px 0 rgba(255,255,255,0.95)"
+    : isLuxe
     ? "0 24px 60px rgba(0,0,0,0.42), 0 0 0 1px rgba(196,150,95,0.4), inset 0 1px 0 rgba(255,255,255,0.95)"
     : "0 16px 44px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.85)";
 
-  const nameColor = "#2E0A0D";
-  const textColor = isLuxe ? "rgba(46,10,13,0.88)" : "rgba(46,10,13,0.82)";
-  const mutedColor = "rgba(94,24,28,0.52)";
-  const iconBg = isLuxe ? "rgba(94,24,28,0.09)" : "rgba(94,24,28,0.07)";
-  const iconColor = isLuxe ? "#966A3A" : "#5E181C";
-  const divider = isLuxe ? "rgba(94,24,28,0.14)" : "rgba(94,24,28,0.11)";
-  const taglineColor = "#966A3A";
+  const nameColor = isRoyal ? "#1C0507" : "#2E0A0D";
+  const textColor = isRoyal ? "#1C0507" : isLuxe ? "rgba(46,10,13,0.88)" : "rgba(46,10,13,0.82)";
+  const mutedColor = isRoyal ? "#7D5218" : "rgba(94,24,28,0.52)";
+  const iconBg = isRoyal ? "rgba(180, 130, 60, 0.16)" : isLuxe ? "rgba(94,24,28,0.09)" : "rgba(94,24,28,0.07)";
+  const iconColor = isRoyal ? "#8C5E1E" : isLuxe ? "#966A3A" : "#5E181C";
+  const divider = isRoyal ? "rgba(180, 130, 60, 0.22)" : isLuxe ? "rgba(94,24,28,0.14)" : "rgba(94,24,28,0.11)";
 
-  const btnBg = isLuxe ? "#3A0B0E" : "transparent";
-  const btnColor = isLuxe ? "#F3E1C4" : "#2E0A0D";
-  const btnBorder = isLuxe ? "1px solid #3A0B0E" : "1.5px solid #3A0B0E";
+  const btnBg = isRoyal ? "#1C0507" : isLuxe ? "#3A0B0E" : "transparent";
+  const btnColor = isRoyal ? "#F5DFB8" : isLuxe ? "#F3E1C4" : "#2E0A0D";
+  const btnBorder = isRoyal ? "1.5px solid #C49647" : isLuxe ? "1px solid #3A0B0E" : "1.5px solid #3A0B0E";
 
   return (
     <article
@@ -384,8 +406,28 @@ function PackageCard({ pkg, days, animRef, index = 0 }) {
         e.currentTarget.style.boxShadow = shadow;
       }}
     >
+      {/* Royal Flagship badge */}
+      {isRoyal && (
+        <div style={{
+          position: "absolute",
+          top: 0, left: 0, right: 0,
+          background: "linear-gradient(90deg, #1C0507 0%, #3D0E12 50%, #1C0507 100%)",
+          padding: "7px 20px",
+          textAlign: "center",
+          fontFamily: "var(--font-mono)",
+          fontSize: 9,
+          letterSpacing: "0.28em",
+          textTransform: "uppercase",
+          color: "#E8C88B",
+          fontWeight: 700,
+          borderBottom: "1px solid rgba(212,175,55,0.35)",
+        }}>
+          ✦ Royal Flagship · All-Inclusive
+        </div>
+      )}
+
       {/* Most Chosen badge */}
-      {isLuxe && (
+      {isLuxe && !isRoyal && (
         <div style={{
           position: "absolute",
           top: 0, left: 0, right: 0,
@@ -405,7 +447,7 @@ function PackageCard({ pkg, days, animRef, index = 0 }) {
 
       <div style={{
         padding: "clamp(24px,3vw,32px) clamp(22px,2.5vw,28px)",
-        paddingTop: isLuxe ? "clamp(44px,5vw,52px)" : "clamp(24px,3vw,32px)",
+        paddingTop: (isLuxe || isRoyal) ? "clamp(44px,5vw,52px)" : "clamp(24px,3vw,32px)",
         flex: 1,
         display: "flex",
         flexDirection: "column",
@@ -431,22 +473,10 @@ function PackageCard({ pkg, days, animRef, index = 0 }) {
           lineHeight: 1.08,
           letterSpacing: "-0.025em",
           color: nameColor,
-          margin: "0 0 6px",
+          margin: "0 0 16px",
         }}>
           {pkg.name}
         </h3>
-
-        {/* Tagline */}
-        <p style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(13px,1.3vw,15px)",
-          fontStyle: "italic",
-          color: taglineColor,
-          margin: "0 0 20px",
-          lineHeight: 1.5,
-        }}>
-          {pkg.tagline}
-        </p>
 
         {/* Price */}
         <div style={{ marginBottom: 20 }}>
@@ -872,6 +902,46 @@ function AlwaysIncludedSection() {
           }}>
             All the raw and edited videos will be given back to the client within <strong style={{ color: "#5E181C" }}>15–20 working days</strong> after the wedding is over.
           </p>
+        </div>
+
+        {/* Watch Our Work CTA Button */}
+        <div style={{ textAlign: "center", marginTop: 36 }}>
+          <Link
+            href="/work"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "14px 38px",
+              borderRadius: 100,
+              background: "#3A0B0E",
+              color: "#F3E1C4",
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              fontWeight: 700,
+              textDecoration: "none",
+              boxShadow: "0 8px 24px rgba(58, 11, 14, 0.22)",
+              border: "1px solid #3A0B0E",
+              transition: "all 0.3s cubic-bezier(0.23, 1, 0.32, 1)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#5E181C";
+              e.currentTarget.style.borderColor = "#5E181C";
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 12px 30px rgba(58, 11, 14, 0.32)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "#3A0B0E";
+              e.currentTarget.style.borderColor = "#3A0B0E";
+              e.currentTarget.style.transform = "none";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(58, 11, 14, 0.22)";
+            }}
+          >
+            Watch Our Work
+            <Icon.ArrowRight />
+          </Link>
         </div>
       </div>
     </section>
@@ -1555,9 +1625,9 @@ export default function PackagesClient() {
 
   /* Duration options for refined switcher */
   const DURATION_OPTIONS = [
-    { days: 2, label: "2 Days", sub: "Two days together" },
-    { days: 3, label: "3 Days", sub: "Three days of events" },
-    { days: 4, label: "4 Days", sub: "Grand celebrations" },
+    { days: 2, label: "2 Days" },
+    { days: 3, label: "3 Days" },
+    { days: 4, label: "4 Days" },
   ];
 
   return (
@@ -2056,57 +2126,56 @@ export default function PackagesClient() {
           display: inline-flex;
           gap: 8px;
           padding: 6px;
-          background: rgba(26, 5, 7, 0.92);
+          background: rgba(22, 4, 6, 0.94);
           border: 1px solid rgba(212, 184, 150, 0.28);
           border-radius: 16px;
           backdrop-filter: blur(20px) saturate(1.3);
           -webkit-backdrop-filter: blur(20px) saturate(1.3);
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
           max-width: 100%;
           flex-wrap: wrap;
           justify-content: center;
         }
         .dur-tab-btn {
-          display: flex;
-          flex-direction: column;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          padding: 10px 24px;
+          padding: 12px 24px;
           border-radius: 12px;
           border: 1px solid transparent;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
-          min-width: 130px;
+          min-width: 110px;
           text-align: center;
+          text-decoration: none;
         }
         @media (max-width: 600px) {
           .sticky-dur-bar {
             top: 50px !important;
-            margin-bottom: 22px !important;
-            padding: 4px 0 !important;
+            margin-bottom: 24px !important;
+            padding: 6px 0 !important;
           }
           .dur-switcher-wrap {
             width: 100% !important;
-            max-width: 380px !important;
+            max-width: 420px !important;
             display: grid !important;
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 5px !important;
-            padding: 5px !important;
-            border-radius: 14px !important;
-            background: rgba(26, 5, 7, 0.95) !important;
-            border: 1px solid rgba(212, 184, 150, 0.3) !important;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55) !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 6px !important;
+            padding: 6px !important;
+            border-radius: 16px !important;
+            background: rgba(20, 3, 5, 0.96) !important;
+            border: 1px solid rgba(212, 184, 150, 0.35) !important;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65) !important;
           }
           .dur-tab-btn {
             min-width: auto !important;
-            padding: 8px 4px !important;
-            border-radius: 10px !important;
+            padding: 14px 4px !important;
+            min-height: 50px !important;
+            border-radius: 11px !important;
           }
-          .dur-tab-btn span:first-child {
-            font-size: 14px !important;
-          }
-          .dur-tab-btn span:last-child {
-            font-size: 7.5px !important;
+          .dur-tab-btn span {
+            font-size: 15px !important;
+            font-weight: 700 !important;
           }
         }
       `}</style>
@@ -2140,43 +2209,30 @@ export default function PackagesClient() {
             <div ref={heroRef} className="pkg-hero-grid">
               {/* Left Column: Text & Actions */}
               <div data-anim>
-                <div style={{
-                  display: "inline-flex", alignItems: "center", gap: 12,
-                  fontFamily: "var(--font-mono)", fontSize: 10.5,
-                  letterSpacing: "0.28em", textTransform: "uppercase",
-                  color: "#DFC18A", marginBottom: 16, fontWeight: 600,
-                }}>
-                  <span style={{ width: 24, height: 1, background: "currentColor", display: "block" }} />
-                  Wedding Collections · Shaadi Pitara
-                </div>
-
-                <h1 style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "clamp(38px, 4.8vw, 64px)",
-                  fontWeight: 500,
-                  lineHeight: 1.08,
-                  letterSpacing: "-0.025em",
-                  color: "#FAF5EE",
-                  margin: "0 0 18px",
-                }}>
-                  Our <em>Packages</em>
+                <h1
+                  className="c-heading"
+                  style={{
+                    margin: "0 0 16px",
+                  }}
+                >
+                  Our <i>Packages</i>
                 </h1>
 
                 <p style={{
                   fontFamily: "var(--font-body)",
-                  fontSize: "clamp(14px, 1.3vw, 15.5px)",
-                  lineHeight: 1.8,
-                  color: "rgba(250, 242, 232, 0.78)",
-                  maxWidth: 520,
-                  margin: "0 0 28px",
+                  fontSize: "clamp(13.5px, 1.25vw, 15px)",
+                  lineHeight: 1.6,
+                  color: "rgba(250, 242, 232, 0.8)",
+                  maxWidth: 480,
+                  margin: "0 0 24px",
                   fontWeight: 300,
                 }}>
-                  The happy chaos, the quiet glances, the laughter on the dance floor — choose the coverage that feels right for your celebration. From intimate 2-day gatherings to grand multi-day celebrations.
+                  Choose the coverage that feels right for your wedding celebration.
                 </p>
 
-                <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", marginBottom: 28 }}>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
                   <Link
-                    href="/works"
+                    href="/work"
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
@@ -2244,18 +2300,9 @@ export default function PackagesClient() {
                     <Icon.WhatsApp />
                   </a>
                 </div>
-
-                <div style={{ display: "flex", gap: 20, paddingTop: 18, borderTop: "1px solid rgba(212, 184, 150, 0.16)" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "rgba(250, 242, 232, 0.75)", fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.08em" }}>
-                    <Icon.Calendar /> 2–4 days of coverage
-                  </span>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "rgba(250, 242, 232, 0.75)", fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.08em" }}>
-                    <Icon.Drone /> Drone available
-                  </span>
-                </div>
               </div>
 
-              {/* Right Column: Visual Couple Frame */}
+              {/* Right Column: Visual Couple Frame (Clean Arched Presentation) */}
               <div className="pkg-hero-visual" data-anim>
                 <div className="hero-ref-photo-wrap">
                   <img
@@ -2266,34 +2313,28 @@ export default function PackagesClient() {
                     }}
                   />
                 </div>
-
-                {/* Floating 03 collections badge */}
-                <div className="hero-ref-count">
-                  <b>03</b>
-                  <span>collections<br />to choose from</span>
-                </div>
-
-                {/* Floating photo note */}
-                <div className="hero-ref-photo-note">
-                  <span className="note-icon">
-                    <Icon.Camera />
-                  </span>
-                  <div>
-                    <strong>More than a highlight reel</strong>
-                    <small>A story you can feel all over again.</small>
-                  </div>
-                </div>
               </div>
             </div>
 
             {/* Duration Switcher (Sticky through Classic, Luxe & Royal) */}
-            <div style={{ textAlign: "center", marginBottom: 12 }}>
+            <div style={{ textAlign: "center", marginBottom: 18 }}>
               <div style={{
-                fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.22em",
-                textTransform: "uppercase", color: "rgba(212,184,150,0.6)",
+                fontFamily: "var(--font-mono)", fontSize: 9.5, letterSpacing: "0.26em",
+                textTransform: "uppercase", color: "#DFC18A", marginBottom: 6, fontWeight: 600,
               }}>
-                Select Duration of Festivities
+                Wedding Timeline
               </div>
+              <h2 style={{
+                fontFamily: "var(--font-display), Georgia, serif",
+                fontSize: "clamp(22px, 2.6vw, 30px)",
+                fontWeight: 500,
+                color: "#FAF5EE",
+                letterSpacing: "-0.015em",
+                margin: 0,
+                lineHeight: 1.25,
+              }}>
+                How many days are we <i>celebrating?</i>
+              </h2>
             </div>
 
             <div className="sticky-dur-bar">
@@ -2326,28 +2367,62 @@ export default function PackagesClient() {
                     >
                       <span style={{
                         fontFamily: "var(--font-display), Georgia, serif",
-                        fontSize: "clamp(16px, 1.8vw, 19px)",
-                        fontWeight: 700,
+                        fontSize: "clamp(15px, 1.7vw, 18px)",
+                        fontWeight: 600,
                         letterSpacing: "-0.01em",
                         color: isSelected ? "#2E0A0D" : "#FAF5EE",
-                        lineHeight: 1.15,
+                        lineHeight: 1,
                       }}>
                         {opt.label}
-                      </span>
-                      <span style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "clamp(8px, 0.9vw, 9px)",
-                        letterSpacing: "0.14em",
-                        textTransform: "uppercase",
-                        color: isSelected ? "rgba(46,10,13,0.7)" : "rgba(212,184,150,0.55)",
-                        marginTop: 3,
-                        lineHeight: 1.2,
-                      }}>
-                        {opt.sub}
                       </span>
                     </button>
                   );
                 })}
+
+                {/* Custom Days Option (Opens WhatsApp with Wedding Template) */}
+                <a
+                  href={CUSTOM_WA_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="dur-tab-btn"
+                  style={{
+                    background: "rgba(212, 184, 150, 0.08)",
+                    borderColor: "rgba(212, 184, 150, 0.35)",
+                    borderStyle: "dashed",
+                    color: "#DFC18A",
+                    textDecoration: "none",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "#DFC18A";
+                    e.currentTarget.style.color = "#2E0A0D";
+                    e.currentTarget.style.borderColor = "#DFC18A";
+                    e.currentTarget.style.borderStyle = "solid";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(212, 184, 150, 0.08)";
+                    e.currentTarget.style.color = "#DFC18A";
+                    e.currentTarget.style.borderColor = "rgba(212, 184, 150, 0.35)";
+                    e.currentTarget.style.borderStyle = "dashed";
+                  }}
+                  title="Enquire for Custom Days on WhatsApp"
+                >
+                  <span style={{
+                    fontFamily: "var(--font-display), Georgia, serif",
+                    fontSize: "clamp(15px, 1.7vw, 18px)",
+                    fontWeight: 600,
+                    letterSpacing: "-0.01em",
+                    lineHeight: 1,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                  }}>
+                    Custom
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginTop: -1 }}>
+                      <line x1="7" y1="17" x2="17" y2="7" />
+                      <polyline points="7 7 17 7 17 17" />
+                    </svg>
+                  </span>
+                </a>
               </div>
             </div>
 
@@ -2372,12 +2447,7 @@ export default function PackagesClient() {
         ════════════════════════════════ */}
         <AlwaysIncludedSection />
 
-        {/* ════════════════════════════════
-            3. WHAT WE CREATE
-            Background: MAROON (with seamless texture)
-            Cards: BEIGE TONES (All 8 categories)
-        ════════════════════════════════ */}
-        <WhatWeCreateSection />
+
 
         {/* ════════════════════════════════
             4. COMPARISON MATRIX
