@@ -15,9 +15,14 @@ export default function Navbar() {
   const linkRefs = useRef({});
   const [menuReady, setMenuReady] = useState(false);
 
-  const [scrolled, setScrolled] = useState(false);
+  const isStandalone = pathname === "/packages" || pathname?.startsWith("/packages") || pathname === "/works";
+  const [scrolled, setScrolled] = useState(isStandalone);
 
   useEffect(() => {
+    if (isStandalone) {
+      setScrolled(true);
+      return;
+    }
     const onScroll = () => {
       // Stay transparent while in the hero section; transition only when content section covers the hero
       const heroHeight = typeof window !== "undefined" ? window.innerHeight : 800;
@@ -26,10 +31,11 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [pathname]);
 
-  // Entrance animation — capsule slides down from top only on initial first load
+  // Entrance animation — capsule slides down from top only on initial first load (never delay on standalone pages)
   useEffect(() => {
+    if (isStandalone) return;
     if (typeof window !== "undefined" && sessionStorage.getItem("sp_loaded")) {
       return;
     }
@@ -45,6 +51,10 @@ export default function Navbar() {
   // Works correctly in BOTH scroll directions (top→bottom and bottom→top)
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (isStandalone) {
+      setActiveSection("packages");
+      return;
+    }
 
     // Ordered list of sections with their URL path
     // Sections listed in page order (top → bottom)
@@ -63,6 +73,7 @@ export default function Navbar() {
     let urlUpdateTimer = null;
 
     const probe = () => {
+      if (typeof window !== "undefined" && window.location.pathname.startsWith("/packages")) return;
       const scrollY  = window.scrollY || window.pageYOffset;
       const vh       = window.innerHeight;
       const fullH    = document.documentElement.scrollHeight;
@@ -207,6 +218,12 @@ export default function Navbar() {
 
   const go = (path) => {
     setMobileOpen(false);
+    // Standalone pages navigate directly (no section scroll-spy)
+    const standalonePages = ["/packages", "/works"];
+    if (standalonePages.includes(path)) {
+      router.push(path);
+      return;
+    }
     const id = pathToId[path] ?? "hero";
     const el = document.getElementById(id);
     
@@ -223,10 +240,11 @@ export default function Navbar() {
   };
 
   const links = [
-    { l: "Work",     path: "/work",     sectionId: "reels" },
-    { l: "Services", path: "/services", sectionId: "services" },
-    { l: "Our Story",path: "/story",    sectionId: "story" },
-    { l: "Contact",  path: "/contact",  sectionId: "contact" },
+    { l: "Work",      path: "/work",     sectionId: "reels" },
+    { l: "Services",  path: "/services", sectionId: "services" },
+    { l: "Packages",  path: "/packages", sectionId: "packages" },
+    { l: "Our Story", path: "/story",    sectionId: "story" },
+    { l: "Contact",   path: "/contact",  sectionId: "contact" },
   ];
 
   const isHero = pathname === "/" && !scrolled;
@@ -332,7 +350,7 @@ export default function Navbar() {
       <nav
         ref={navRef}
         aria-label="Main navigation"
-        className={`main-navbar ${scrolled ? "nav-scrolled" : ""} ${isHero ? "nav-in-hero" : ""}`}
+        className={`main-navbar ${scrolled || isStandalone ? "nav-scrolled" : ""} ${isHero && !isStandalone ? "nav-in-hero" : ""}`}
       >
         <div style={{
           display: "flex",
@@ -373,7 +391,7 @@ export default function Navbar() {
           {/* Desktop links */}
           <div className="nav-desktop-links items-center gap-1 relative" style={{ display: "flex", alignItems: "center", gap: 2 }}>
             {links.map((l) => {
-              const isActive = activeSection === l.sectionId;
+              const isActive = l.path && pathname === l.path ? true : activeSection === l.sectionId;
               return (
                 <button
                   key={l.l}
@@ -507,7 +525,7 @@ export default function Navbar() {
                   fontFamily: "var(--font-display)",
                   fontSize: "clamp(30px, 7vw, 42px)",
                   fontWeight: 400,
-                  color: activeSection === l.sectionId
+                  color: (l.path && pathname === l.path) || activeSection === l.sectionId
                     ? "#F3E1C4"
                     : "rgba(243, 225, 196, 0.85)",
                   background: "none",

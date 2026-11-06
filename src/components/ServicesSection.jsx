@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useEffect } from "react";
+import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -220,6 +221,36 @@ export default function ServicesSection() {
             }
           }
 
+          /* Explore Packages CTA */
+          .services-packages-cta {
+            margin-top: clamp(28px, 4vw, 44px);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+          }
+          .services-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            border-radius: 100px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-weight: 600;
+            text-decoration: none;
+            background: transparent;
+            color: var(--brand-maroon-dark);
+            border: 1px solid rgba(58, 11, 14, 0.35);
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+          }
+          .services-cta-btn:hover {
+            background: rgba(58, 11, 14, 0.06);
+            border-color: rgba(58, 11, 14, 0.7);
+            transform: translateY(-2px);
+          }
+
           /* WEB SIZE: Maroon background, 3 Columns x 2 Rows & BEIGE Luxury Cards with Contact card 3D hover */
           @media (min-width: 769px) {
             .services-section-wrapper {
@@ -289,6 +320,19 @@ export default function ServicesSection() {
               font-size: 14px !important;
               line-height: 1.72 !important;
             }
+            .services-packages-cta {
+              margin-top: 52px !important;
+            }
+            .services-cta-btn {
+              color: var(--brand-cream) !important;
+              border: 1px solid rgba(212, 184, 150, 0.3) !important;
+            }
+            .services-cta-btn:hover {
+              background: rgba(212, 184, 150, 0.08) !important;
+              border-color: rgba(212, 184, 150, 0.65) !important;
+              color: #FEF5E6 !important;
+              transform: translateY(-2px);
+            }
           }
         `}</style>
 
@@ -341,6 +385,20 @@ export default function ServicesSection() {
               </p>
             </article>
           ))}
+        </div>
+
+        {/* Explore Packages CTA */}
+        <div className="services-packages-cta">
+          <Link
+            href="/packages"
+            className="services-cta-btn"
+          >
+            Explore Packages
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#351c24" />
+<title>Wedding Packages | Shaadi Pitara</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+  :root{
+    --wine:#351c24; --wine-2:#512d36; --wine-3:#704650; --ink:#28201f;
+    --muted:#746965; --paper:#f7f3ee; --paper-2:#eee6dd; --white:#fffdfa;
+    --line:#e6ddd4; --gold:#b99467; --gold-pale:#f1e5d5; --sage:#6c7b67;
+    --shadow:0 18px 50px rgba(49,27,34,.09); --radius:22px; --serif:'Playfair Display',Georgia,serif;
+    --sans:'DM Sans',Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:105px}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit}
+  .icon{width:19px;height:19px;display:inline-block;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .shell{width:min(1160px,calc(100% - 48px));margin-inline:auto}
+  .topbar{height:76px;background:rgba(247,243,238,.94);border-bottom:1px solid rgba(53,28,36,.08);position:sticky;top:0;z-index:50;backdrop-filter:blur(16px)}
+  .topbar-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:190px}
+  .brand-mark{width:39px;height:39px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--wine);font-family:var(--serif);font-size:16px;font-style:italic}
+  .brand-name{font-family:var(--serif);font-size:21px;letter-spacing:-.45px;color:var(--wine);line-height:1}
+  .brand-tag{font-size:8px;letter-spacing:2px;color:var(--muted);margin-top:5px;text-transform:uppercase}
+  .nav{display:flex;align-items:center;gap:30px;font-size:12px;color:#655a56}
+  .nav a{transition:color .2s}.nav a:hover,.nav a.active{color:var(--wine)}
+  .nav-cta,.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:1px solid transparent;border-radius:999px;padding:12px 18px;font-size:12px;font-weight:700;letter-spacing:.1px;transition:transform .22s,background .22s,border-color .22s,box-shadow .22s;cursor:pointer}
+  .nav-cta,.btn-primary{background:var(--wine);color:#fffaf4;box-shadow:0 8px 20px rgba(53,28,36,.12)}
+  .nav-cta:hover,.btn-primary:hover{background:var(--wine-2);transform:translateY(-2px);box-shadow:0 12px 24px rgba(53,28,36,.17)}
+  .btn-outline{background:transparent;border-color:rgba(255,255,255,.48);color:#fffaf4}
+  .btn-outline:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+  .mobile-menu{display:none;background:transparent;border:0;color:var(--wine);padding:8px}
+
+  .hero{background:var(--wine);color:#fffaf4;position:relative;overflow:hidden;isolation:isolate}
+  .hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 28%,rgba(185,148,103,.24),transparent 32%),linear-gradient(110deg,#351c24 0%,#432630 56%,#2c1920 100%);z-index:-2}
+  .hero:after{content:"";position:absolute;width:540px;height:540px;border:1px solid rgba(231,207,177,.14);border-radius:50%;right:-170px;top:-205px;box-shadow:0 0 0 46px rgba(231,207,177,.025),0 0 0 92px rgba(231,207,177,.02);z-index:-1}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:58px;padding:72px 0 70px;min-height:480px}
+  .eyebrow{font-size:10px;letter-spacing:2.4px;text-transform:uppercase;color:#d6b88f;font-weight:700;display:flex;align-items:center;gap:10px}
+  .eyebrow:before{content:"";width:25px;height:1px;background:currentColor}
+  h1,h2,h3,p{margin-top:0}
+  .hero h1{font:500 clamp(42px,5.4vw,68px)/1.08 var(--serif);letter-spacing:-1.7px;margin:20px 0 18px;max-width:630px}
+  .hero h1 em{font-weight:500;color:#d9bd98}
+  .hero-copy{font-size:14px;line-height:1.8;color:rgba(255,250,244,.75);max-width:490px;margin-bottom:26px}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-scroll-note{display:flex;align-items:center;gap:7px;margin-top:19px;color:rgba(255,250,244,.66);font-size:10px;letter-spacing:.2px}
+  .hero-scroll-note .icon{width:14px;height:14px;color:#d9bd98;transform:rotate(180deg)}
+  .work-section{padding:66px 0 60px;background:#f0e8df;border-top:1px solid #e8ddd2;border-bottom:1px solid #e8ddd2}
+  .work-head{text-align:center;margin-bottom:28px}
+  .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .work-tile{padding:20px 19px;background:rgba(255,253,250,.84);border:1px solid rgba(126,103,85,.14);border-radius:16px;transition:transform .22s,box-shadow .22s,border-color .22s}
+  .work-tile:hover{transform:translateY(-4px);box-shadow:0 13px 28px rgba(53,28,36,.08);border-color:#c9ad8e}
+  .work-icon{display:grid;place-items:center;width:38px;height:38px;margin-bottom:13px;border-radius:12px;background:#e9ded2;color:var(--wine)}
+  .work-tile h3{font:600 17px var(--serif);color:var(--wine);margin:0 0 6px}
+  .work-tile p{font-size:10px;line-height:1.6;color:var(--muted);margin:0}
+  .work-foot{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:22px;font-size:11px;color:var(--muted)}
+  .work-foot a{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--wine);border-bottom:1px solid #c6a680;padding-bottom:3px}
+  .work-foot .icon{width:15px;height:15px}
+  .hero-facts{display:flex;gap:25px;margin-top:36px;flex-wrap:wrap}
+  .hero-fact{display:flex;align-items:center;gap:9px;color:rgba(255,250,244,.78);font-size:11px}
+  .hero-fact .icon{color:#d9bd98;width:17px;height:17px}
+  .hero-visual{position:relative;max-width:490px;margin-left:auto;width:100%}
+  .hero-photo{height:352px;width:100%;object-fit:cover;display:block;border-radius:170px 170px 18px 18px;border:1px solid rgba(255,255,255,.25);box-shadow:0 28px 65px rgba(0,0,0,.25);filter:saturate(.88)}
+  .photo-note{position:absolute;bottom:19px;left:-24px;background:var(--white);color:var(--wine);padding:13px 16px;border-radius:12px;box-shadow:var(--shadow);display:flex;align-items:center;gap:11px}
+  .photo-note .icon-wrap{width:34px;height:34px;display:grid;place-items:center;background:var(--gold-pale);border-radius:50%;color:var(--wine)}
+  .photo-note strong{display:block;font:600 15px var(--serif)}.photo-note small{display:block;color:var(--muted);font-size:9px;margin-top:3px;letter-spacing:.3px}
+  .hero-count{position:absolute;right:-19px;top:28px;background:rgba(255,250,244,.94);color:var(--wine);border-radius:50%;width:91px;height:91px;display:grid;place-items:center;text-align:center;box-shadow:var(--shadow);transform:rotate(8deg)}
+  .hero-count b{font:600 24px var(--serif);display:block}.hero-count span{font-size:8px;text-transform:uppercase;letter-spacing:1px;display:block;margin-top:1px}
+
+  .intro{padding:63px 0 25px;text-align:center}
+  .section-kicker{font-size:9px;letter-spacing:2.2px;text-transform:uppercase;color:#9b7956;font-weight:700}
+  .section-title{font:500 clamp(31px,4vw,43px)/1.15 var(--serif);letter-spacing:-.8px;color:var(--wine);margin:12px 0}
+  .section-sub{font-size:13px;line-height:1.75;color:var(--muted);max-width:600px;margin:0 auto}
+  .package-chooser{position:relative}
+  .selection-wrap{padding:14px 0 19px;position:sticky;top:76px;z-index:25;background:rgba(247,243,238,.94);backdrop-filter:blur(14px)}
+  .selector-panel{max-width:760px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:18px;padding:17px 20px;box-shadow:0 12px 35px rgba(53,28,36,.045)}
+  .selector-top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:13px}
+  .selector-title{font-weight:700;color:var(--wine);font-size:13px;display:flex;align-items:center;gap:8px}
+  .selector-hint{font-size:10px;color:var(--muted)}
+  .duration-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:#f2ece5;padding:6px;border-radius:13px}
+  .duration-tab{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 12px;border:1px solid transparent;border-radius:9px;color:#74655e;background:transparent;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+  .duration-tab small{font-weight:500;font-size:10px;opacity:.75}
+  .duration-tab:hover{color:var(--wine);background:#fffaf4}
+  .duration-tab[aria-selected="true"]{background:var(--wine);color:#fffaf4;box-shadow:0 5px 15px rgba(53,28,36,.16)}
+  .duration-tab[aria-selected="true"] small{color:#e7d1b4;opacity:1}
+  .step-note{display:flex;align-items:center;justify-content:center;gap:7px;color:#7e716a;font-size:10px;margin-top:12px}
+  .step-note b{color:var(--wine)}
+  .plans{padding:12px 0 70px}
+  .plans-head{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:20px}
+  .plans-head h2{font:500 30px var(--serif);color:var(--wine);margin:0 0 5px}
+  .plans-head p{font-size:11px;color:var(--muted);margin:0}
+  .selected-duration{font-size:11px;color:#8a7159;background:var(--gold-pale);border-radius:999px;padding:8px 12px;white-space:nowrap}
+  .plan-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+  .plan-card{background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;position:relative;box-shadow:0 9px 28px rgba(53,28,36,.035);transition:transform .25s,box-shadow .25s,border-color .25s;display:flex;flex-direction:column;min-width:0}
+  .plan-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+  .plan-card.luxe{border:1.5px solid var(--gold);box-shadow:0 14px 35px rgba(147,111,72,.12)}
+  .plan-card.royal{background:#38242b;color:#fff8f0;border-color:#38242b}
+  .plan-top{padding:23px 22px 18px}
+  .tier-label{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+  .tier-name{font-size:10px;letter-spacing:1.7px;text-transform:uppercase;font-weight:700;color:#8b6b4c}
+  .royal .tier-name{color:#d4b48a}
+  .popular{font-size:8px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:#795b38;background:#f0e1ca;border-radius:999px;padding:6px 8px;white-space:nowrap}
+  .plan-card h3{font:500 25px var(--serif);color:var(--wine);margin:0 0 5px}
+  .royal h3{color:#fff8f0}
+  .plan-desc{font-size:11px;line-height:1.6;color:var(--muted);min-height:36px;margin:0 0 17px}
+  .royal .plan-desc{color:#d3c3bd}
+  .price-row{display:flex;align-items:baseline;gap:8px;padding-bottom:17px;border-bottom:1px solid var(--line)}
+  .royal .price-row{border-color:rgba(255,255,255,.14)}
+  .price{font:600 34px/1 var(--serif);color:var(--wine);letter-spacing:-.8px;transition:opacity .18s,transform .18s}
+  .royal .price{color:#fff5e8}
+  .price-unit{font-size:10px;color:var(--muted)}
+  .royal .price-unit{color:#d3c3bd}
+  .per-day{font-size:9px;color:#8b775f;margin-top:8px}
+  .royal .per-day{color:#d7c5b4}
+  .features{padding:18px 22px 20px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .features-title{font-size:9px;letter-spacing:1.3px;text-transform:uppercase;color:#9a8b81;font-weight:700;margin-bottom:1px}
+  .feature{display:flex;align-items:flex-start;gap:10px;font-size:11px;line-height:1.5;color:#514743}
+  .royal .feature{color:#eee2d8}
+  .feature .icon{width:16px;height:16px;color:#8a9a7e;margin-top:0;stroke-width:2}
+  .luxe .feature .icon{color:#9b784e}
+  .royal .feature .icon{color:#d1ae7d}
+  .feature strong{font-weight:700;color:#302724}
+  .royal .feature strong{color:#fff8f0}
+  .feature-sub{display:block;color:#887a72;font-size:10px;margin-top:2px}
+  .royal .feature-sub{color:#c8b7ad}
+  .plan-foot{padding:0 22px 22px}
+  .plan-button{width:100%;border-radius:999px;padding:12px 14px;border:1px solid var(--wine);background:var(--wine);color:white;font-size:11px;font-weight:700;display:flex;justify-content:center;align-items:center;gap:9px;cursor:pointer;transition:all .2s}
+  .plan-button:hover{background:var(--wine-2);transform:translateY(-1px)}
+  .luxe .plan-button{background:#a98257;border-color:#a98257;color:white}
+  .luxe .plan-button:hover{background:#906b43}
+  .royal .plan-button{background:#f0e3d2;border-color:#f0e3d2;color:#38242b}
+  .royal .plan-button:hover{background:#fff7ed}
+  .tier-note{font-size:9px;color:#9b8c82;text-align:center;margin-top:10px}
+  .royal .tier-note{color:#bca9a0}
+  .common{padding:56px 0;background:#eee7df;border-top:1px solid #e6ddd4;border-bottom:1px solid #e6ddd4}
+  .common-head{text-align:center;margin-bottom:27px}
+  .common-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .common-item{background:rgba(255,253,250,.72);border:1px solid rgba(126,103,85,.12);border-radius:14px;padding:17px 14px;min-height:116px}
+  .common-icon{width:34px;height:34px;border-radius:10px;background:#e8ded2;color:var(--wine);display:grid;place-items:center;margin-bottom:12px}
+  .common-item strong{display:block;font:600 13px var(--serif);color:var(--wine);margin-bottom:4px}
+  .common-item span{display:block;font-size:9px;line-height:1.5;color:var(--muted)}
+
+  .comparison{padding:69px 0 72px}
+  .comparison-head{text-align:center;margin-bottom:27px}
+  .comparison-box{background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(53,28,36,.04)}
+  .comparison-top{padding:17px 22px;background:#f0e8df;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .comparison-top strong{font:500 19px var(--serif);color:var(--wine)}
+  .comparison-top span{font-size:10px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:16px 18px;text-align:center;border-bottom:1px solid #eee7e0}
+  th{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#8b6b4c;background:#fffaf5}
+  td:first-child,th:first-child{text-align:left;width:27%;font-weight:700;color:var(--wine)}
+  tr:last-child td{border-bottom:0}
+  td{color:#645851}
+  .matrix-price{font:600 17px var(--serif);color:var(--wine)}
+  .luxe-cell{background:#faf3e9}
+  .matrix-popular{font-size:8px;text-transform:uppercase;letter-spacing:.8px;color:#947044;display:block;margin-top:3px}
+  .matrix-select{border:0;background:transparent;color:var(--wine);font:inherit;font-weight:700;cursor:pointer;padding:3px;border-bottom:1px dashed #c5a77f}
+  .matrix-select:hover{color:#9b7147}
+  .table-foot{padding:13px 18px;background:#fbf8f4;color:#83756e;font-size:9px;line-height:1.6;border-top:1px solid #eee7e0}
+
+  .terms{padding:66px 0;background:var(--white)}
+  .terms-layout{display:grid;grid-template-columns:.72fr 1.28fr;gap:48px;align-items:start}
+  .terms-aside{position:sticky;top:115px}
+  .terms-aside .section-title{font-size:38px}
+  .terms-aside p{font-size:12px;line-height:1.8;color:var(--muted)}
+  .terms-list{display:flex;flex-direction:column;gap:10px}
+  details{border:1px solid var(--line);border-radius:13px;background:#fffdfa;overflow:hidden}
+  summary{list-style:none;padding:17px 18px;display:flex;justify-content:space-between;align-items:center;gap:15px;cursor:pointer;color:var(--wine);font-size:12px;font-weight:700}
+  summary::-webkit-details-marker{display:none}
+  .summary-left{display:flex;align-items:center;gap:11px}
+  .summary-left .icon{color:#9b7956}
+  .chevron{width:16px;height:16px;color:#9b7956;transition:transform .2s}
+  details[open] .chevron{transform:rotate(180deg)}
+  .detail-content{padding:0 20px 18px 48px;color:#71645d;font-size:11px;line-height:1.8}
+  .detail-content ul{padding-left:16px;margin:0}.detail-content li{padding:3px 0}
+  .delivery-alert{background:#f7f0e6;border:1px solid #eadac6;color:#765d40;border-radius:10px;padding:11px 12px;margin-top:12px;font-size:10px;line-height:1.65}
+  .custom-cta{padding:48px 0;background:var(--wine);color:#fffaf4;position:relative;overflow:hidden}
+  .custom-inner{display:flex;justify-content:space-between;align-items:center;gap:25px;position:relative}
+  .custom-inner h2{font:500 clamp(27px,3vw,38px) var(--serif);margin:8px 0;color:#fffaf4}
+  .custom-inner p{font-size:11px;color:#d4c4bd;margin:0;line-height:1.7}
+  .custom-inner .eyebrow{font-size:9px}
+  .custom-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .btn-light{background:#f1e4d4;color:var(--wine)}.btn-light:hover{background:white;transform:translateY(-2px)}
+  footer{background:#28171d;color:#c8b9b1;padding:27px 0}
+  .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .footer-brand{font:500 18px var(--serif);color:#fff8f0}.footer-note{font-size:9px;color:#a9978d;margin-top:4px}.footer-links{display:flex;gap:18px;font-size:10px}.footer-links a:hover{color:#e3c49b}
+  .whatsapp-float{position:fixed;right:22px;bottom:22px;z-index:40;background:#fffdfa;border:1px solid var(--line);color:var(--wine);box-shadow:0 12px 35px rgba(35,20,25,.17);border-radius:999px;padding:12px 15px;display:flex;align-items:center;gap:9px;font-size:11px;font-weight:700;transition:transform .2s}
+  .whatsapp-float:hover{transform:translateY(-3px)}.whatsapp-float .icon{color:#537b58}
+  .fade-in{animation:rise .55s ease both}
+  .plan-card:focus-within{outline:2px solid rgba(185,148,103,.48);outline-offset:3px}
+  .duration-tab:focus-visible,.plan-button:focus-visible,.btn:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #bd9a70;outline-offset:3px}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  @media(max-width:900px){.hero-grid{gap:30px}.common-grid{grid-template-columns:repeat(3,1fr)}.terms-layout{gap:28px}.nav{gap:17px}.work-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:700px){
+    .shell{width:min(100% - 32px,540px)}.topbar{height:65px}.nav{display:none}.mobile-menu{display:block}.nav-cta{padding:10px 13px;font-size:10px}
+    .hero-grid{grid-template-columns:1fr;padding:49px 0 42px;gap:28px}.hero h1{font-size:47px}.hero-copy{font-size:13px}.hero-visual{max-width:440px;margin:0 auto}.hero-photo{height:280px;border-radius:130px 130px 16px 16px}.hero-count{right:-5px;top:8px;width:75px;height:75px}.hero-count b{font-size:20px}.photo-note{left:5px;bottom:12px;padding:10px 12px}
+    .intro{padding:48px 0 18px}.selection-wrap{padding:9px 0 12px;top:65px}.selector-panel{padding:12px}.work-section{padding:48px 0}.work-grid{grid-template-columns:1fr 1fr;gap:9px}.work-tile{padding:15px 13px}.work-tile h3{font-size:15px}.work-foot{flex-direction:column;gap:7px;text-align:center}.selector-top{align-items:flex-start;flex-direction:column;gap:5px}.duration-tab{padding:12px 6px;flex-direction:column;gap:3px}.duration-tab small{font-size:9px}.plans{padding-bottom:48px}.plans-head{align-items:flex-start;flex-direction:column;gap:8px}.plans-head h2{font-size:27px}.plan-grid{grid-template-columns:1fr;gap:13px}.plan-card{border-radius:17px}.plan-top{padding:20px 20px 15px}.features{padding:16px 20px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px 10px}.features-title{grid-column:1/-1}.feature{font-size:10px}.feature-sub{font-size:9px}.plan-foot{padding:0 20px 19px}.price{font-size:32px}.common{padding:46px 0}.common-grid{grid-template-columns:repeat(2,1fr)}.comparison{padding:48px 0}.comparison-top{align-items:flex-start;flex-direction:column;gap:4px}.comparison-box{overflow-x:auto}table{min-width:540px}th,td{padding:13px 12px}.terms{padding:48px 0}.terms-layout{grid-template-columns:1fr;gap:22px}.terms-aside{position:static}.terms-aside .section-title{font-size:32px}.detail-content{padding-left:44px}.custom-inner{align-items:flex-start;flex-direction:column}.custom-actions{width:100%}.custom-actions .btn{flex:1}.footer-inner{align-items:flex-start;flex-direction:column}.whatsapp-float{right:12px;bottom:12px;padding:11px 13px}.whatsapp-float span{display:none}
+  }
+  @media(max-width:390px){.hero h1{font-size:41px}.hero-facts{gap:12px}.common-grid{gap:8px}.common-item{padding:13px 11px}.features{grid-template-columns:1fr}.brand-name{font-size:19px}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<!-- Homepage Services section CTA: use the label “Explore Work” and link to the existing work/portfolio section. The hero CTA in this preview scrolls to #work. -->
+<!-- Inline SVG icon set: crisp line icons; no emoji dependencies. -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="m9 6 10 6-10 6z"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 7h3l1.5-2h7L17 7h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M9 9h12"/></symbol>
+  <symbol id="i-drone" viewBox="0 0 24 24"><path d="M12 10v4m-4-2h8M8 12l-3-3m11 3 3-3M8 12l-3 3m11-3 3 3"/><circle cx="5" cy="7" r="2"/><circle cx="19" cy="7" r="2"/><circle cx="5" cy="17" r="2"/><circle cx="19" cy="17" r="2"/><rect x="9" y="9" width="6" height="6" rx="2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></symbol>
+  <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.7 7.4L3 21l2.1-5.3A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8.5 9.5c.7 2 2 3.3 4 4"/></symbol>
+  <symbol id="i-plane" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></symbol>
+  <symbol id="i-credit" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 8.7c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.7 4.7 0 0 1 8.8-2.2 4.7 4.7 0 0 1 8.8 2.2Z"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3ZM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="brand" href="#top" aria-label="Shaadi Pitara home">
+      <span class="brand-mark">SP</span><span><span class="brand-name">Shaadi Pitara</span><span class="brand-tag">Your moments. Your story.</span></span>
+    </a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#top">Home</a><a href="#packages">Collections</a><a href="#work">Our work</a><a href="#included">What's included</a><a href="#terms">Booking details</a>
+    </nav>
+    <a class="nav-cta" href="https://wa.me/919377150889?text=Hello%20Shaadi%20Pitara!%20I%27d%20like%20to%20know%20about%20your%20wedding%20packages.">Talk to us <svg class="icon"><use href="#i-arrow"/></svg></a>
+    <button class="mobile-menu" type="button" aria-label="Jump to collections" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'})"><svg class="icon" style="width:24px;height:24px"><use href="#i-calendar"/></svg></button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div class="fade-in">
+        <div class="eyebrow">Wedding stories, thoughtfully captured</div>
+        <h1>Keep the <em>feeling</em><br>of every moment.</h1>
+        <p class="hero-copy">The happy chaos, the quiet glances, the laughter on the dance floor — these are the moments you will want to return to. Choose the coverage that feels right for your celebration.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#work">Explore Work <svg class="icon"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn-outline" href="https://wa.me/919377150889?text=Hi%20Shaadi%20Pitara!%20I%27d%20love%20some%20help%20choosing%20the%20right%20coverage%20for%20my%20wedding.">Talk through your plans <svg class="icon"><use href="#i-message"/></svg></a>
+        </div>
+        <div class="hero-scroll-note"><svg class="icon"><use href="#i-chevron"/></svg><span>Your three collections are just below</span></div>
+        <div class="hero-facts">
+          <span class="hero-fact"><svg class="icon"><use href="#i-calendar"/></svg> 2–4 days of coverage</span>
+          <span class="hero-fact"><svg class="icon"><use href="#i-heart"/></svg> Classic · Luxe · Royal</span>
+        </div>
+      </div>
+      <div class="hero-visual fade-in">
+        <img class="hero-photo" src="https://images.squarespace-cdn.com/content/v1/6013a32a9fd19e5662185fde/1703154535751-HN0PYYVSA6V97UYQJ7VU/TYD_RADHICA_SARTHAK-335.jpg" alt="A couple sharing a joyful moment during an Indian wedding; replace with Shaadi Pitara portfolio photography" onerror="this.style.background='linear-gradient(135deg,#76525a,#c6a47f)';this.removeAttribute('src')" />
+        <div class="hero-count"><div><b>03</b><span>collections<br>to choose from</span></div></div>
+        <div class="photo-note"><span class="icon-wrap"><svg class="icon"><use href="#i-camera"/></svg></span><span><strong>More than a highlight reel</strong><small>A story you can feel all over again.</small></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="intro" id="packages">
+    <div class="shell">
+      <div class="section-kicker">Choose what feels right</div>
+      <h2 class="section-title">Three collections. One story that is yours.</h2>
+      <p class="section-sub">First choose how many days you would like us by your side. Then compare Classic, Luxe and Royal — three clear ways to capture the moments that matter to you.</p>
+    </div>
+  </section>
+
+  <div class="package-chooser">
+  <section class="selection-wrap shell" aria-label="Choose wedding duration">
+    <div class="selector-panel">
+      <div class="selector-top"><div class="selector-title"><svg class="icon"><use href="#i-calendar"/></svg> Choose your celebration length</div><div class="selector-hint">Change the days anytime. Your three collections and their prices will update instantly.</div></div>
+      <div class="duration-tabs" role="tablist" aria-label="Wedding duration">
+        <button class="duration-tab" type="button" role="tab" id="tab-2" aria-selected="true" aria-controls="package-cards" data-days="2"><span>2 Days</span><small>Two days together</small></button>
+        <button class="duration-tab" type="button" role="tab" id="tab-3" aria-selected="false" aria-controls="package-cards" data-days="3"><span>3 Days</span><small>Three days together</small></button>
+        <button class="duration-tab" type="button" role="tab" id="tab-4" aria-selected="false" aria-controls="package-cards" data-days="4"><span>4 Days</span><small>Four days together</small></button>
+      </div>
+      <div class="step-note"><svg class="icon"><use href="#i-spark"/></svg><b>Next, find the coverage that feels right.</b><span>Compare the same three collections below.</span></div>
+    </div>
+  </section>
+
+  <section class="plans shell" aria-live="polite">
+    <div class="plans-head"><div><h2 id="duration-heading">Your 2-day celebration, your way</h2><p>Three collection styles. Clear inclusions. A choice that feels right for you.</p></div><div class="selected-duration" id="duration-summary">2 days selected · 3 collections to compare</div></div>
+    <div class="plan-grid" id="package-cards" aria-live="polite" aria-label="Classic, Luxe and Royal package details">
+      <!-- Cards are populated by JavaScript for the selected duration. -->
+    </div>
+  </section>
+
+  </div>
+
+  <section class="work-section" id="work">
+    <div class="shell">
+      <div class="work-head">
+        <div class="section-kicker">A glimpse of what we create</div>
+        <h2 class="section-title">Every wedding has a story worth telling.</h2>
+        <p class="section-sub">Every wedding has its own rhythm. From playful transitions to the moments that bring happy tears, we shape your content around the feeling of your celebration.</p>
+      </div>
+      <div class="work-grid">
+        <article class="work-tile"><span class="work-icon"><svg class="icon"><use href="#i-camera"/></svg></span><h3>Editorial reels</h3><p>Elegant frames with a film-like feel.</p></article>
+        <article class="work-tile"><span class="work-icon"><svg class="icon"><use href="#i-spark"/></svg></span><h3>Fun reels</h3><p>The dance-floor energy and happy chaos.</p></article>
+        <article class="work-tile"><span class="work-icon"><svg class="icon"><use href="#i-play"/></svg></span><h3>Transition reels</h3><p>Entrances, outfit reveals and little surprises.</p></article>
+        <article class="work-tile"><span class="work-icon"><svg class="icon"><use href="#i-heart"/></svg></span><h3>Couple reels</h3><p>Your chemistry, your story, your pace.</p></article>
+        <article class="work-tile"><span class="work-icon"><svg class="icon"><use href="#i-video"/></svg></span><h3>Candid reels</h3><p>The beautiful moments you did not even notice.</p></article>
+        <article class="work-tile"><span class="work-icon"><svg class="icon"><use href="#i-users"/></svg></span><h3>Emotional reels</h3><p>The hugs, happy tears and people who make it yours.</p></article>
+      </div>
+      <div class="work-foot"><span>Have a reel idea of your own?</span><a href="https://wa.me/919377150889?text=Hi%20Shaadi%20Pitara!%20I%20have%20a%20content%20idea%20for%20my%20wedding.%20Can%20we%20discuss%20it%3F">Tell us about it <svg class="icon"><use href="#i-arrow"/></svg></a></div>
+    </div>
+  </section>
+
+  <section class="common" id="included">
+    <div class="shell">
+      <div class="common-head"><div class="section-kicker">No matter which one you choose</div><h2 class="section-title">Thoughtful details come standard.</h2><p class="section-sub">Whichever collection feels right, you can count on these essentials being part of your Shaadi Pitara experience.</p></div>
+      <div class="common-grid">
+        <div class="common-item"><div class="common-icon"><svg class="icon"><use href="#i-instagram"/></svg></div><strong>Instagram-first reels</strong><span>Vertical formats, optimized for social sharing.</span></div>
+        <div class="common-item"><div class="common-icon"><svg class="icon"><use href="#i-spark"/></svg></div><strong>Trend-based editing</strong><span>Fresh transitions and editing styles.</span></div>
+        <div class="common-item"><div class="common-icon"><svg class="icon"><use href="#i-camera"/></svg></div><strong>4K capture</strong><span>High-quality video capture for your memories.</span></div>
+        <div class="common-item"><div class="common-icon"><svg class="icon"><use href="#i-clock"/></svg></div><strong>Fast content delivery</strong><span>Content delivered after your celebrations.</span></div>
+        <div class="common-item"><div class="common-icon"><svg class="icon"><use href="#i-message"/></svg></div><strong>WhatsApp support</strong><span>Dedicated support through your journey.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="comparison" id="compare">
+    <div class="shell">
+      <div class="comparison-head"><div class="section-kicker">A clear side-by-side look</div><h2 class="section-title">What changes with each collection?</h2><p class="section-sub">The number of days changes your total price. The coverage style is what makes Classic, Luxe and Royal different.</p></div>
+      <div class="comparison-box">
+        <div class="comparison-top"><strong>Compare the three collections</strong><span>Choose your days above to see the updated price on each card.</span></div>
+        <table aria-label="Feature comparison of Classic, Luxe and Royal collections">
+          <thead><tr><th>What's included</th><th>Classic</th><th class="luxe-cell">Luxe <span class="matrix-popular">Most chosen</span></th><th>Royal</th></tr></thead>
+          <tbody>
+            <tr><td>Edited reels</td><td>Up to 10</td><td class="luxe-cell">Up to 20 premium</td><td>Up to 30 premium</td></tr>
+            <tr><td>Stories</td><td>2–3 per function</td><td class="luxe-cell">5–6 throughout every function</td><td>Unlimited live coverage</td></tr>
+            <tr><td>Posting period</td><td>Post-event delivery</td><td class="luxe-cell">Post-event delivery</td><td>1 month: pre, live &amp; post-event</td></tr>
+            <tr><td>Content creators</td><td>1–2</td><td class="luxe-cell">2</td><td>2–3, based on event scale</td></tr>
+            <tr><td>Page management</td><td>During wedding</td><td class="luxe-cell">During &amp; post-wedding</td><td>Pre, during &amp; post-wedding</td></tr>
+            <tr><td>Drone</td><td>Available as add-on</td><td class="luxe-cell">Available as add-on</td><td>Included</td></tr>
+          </tbody>
+        </table>
+        <div class="table-foot">All three collections include the Shaadi Pitara standard features listed below. Final coverage is subject to the agreed event schedule.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="terms" id="terms">
+    <div class="shell terms-layout">
+      <div class="terms-aside"><div class="section-kicker">Before you book</div><h2 class="section-title">Feel clear before you say yes.</h2><p>Booking your wedding team should feel simple. Here are the practical details, clearly laid out, so you know what to expect.</p><a class="btn btn-primary" href="https://wa.me/919377150889?text=Hi%20Shaadi%20Pitara!%20I%20have%20a%20question%20about%20the%20booking%20details.%20Could%20you%20please%20help%3F">Ask us anything <svg class="icon"><use href="#i-arrow"/></svg></a></div>
+      <div class="terms-list">
+        <details open><summary><span class="summary-left"><svg class="icon"><use href="#i-credit"/></svg> Payment &amp; booking terms</span><svg class="chevron"><use href="#i-chevron"/></svg></summary><div class="detail-content"><ul><li><strong>40%</strong> of the amount is required to confirm the booking.</li><li><strong>40%</strong> is due during the first day of events.</li><li>The remaining <strong>20%</strong> is payable once the deliverables are provided.</li></ul></div></details>
+        <details><summary><span class="summary-left"><svg class="icon"><use href="#i-plane"/></svg> Travel, stay &amp; meals</span><svg class="chevron"><use href="#i-chevron"/></svg></summary><div class="detail-content"><ul><li>The client is responsible for accommodation, travel and meals for the team (2–3 members).</li><li>Accommodation is preferably arranged at the event property so the team can capture moments seamlessly.</li></ul></div></details>
+        <details><summary><span class="summary-left"><svg class="icon"><use href="#i-instagram"/></svg> Content posting &amp; credits</span><svg class="chevron"><use href="#i-chevron"/></svg></summary><div class="detail-content"><ul><li>All reels and stories include the Shaadi Pitara logo and proper credits.</li><li>Some content is posted from the official Shaadi Pitara account and other content from the couple's page.</li><li>Private content requests must be communicated in advance.</li><li>Share tagging preferences — who to tag or avoid — before the event.</li></ul></div></details>
+        <details><summary><span class="summary-left"><svg class="icon"><use href="#i-file"/></svg> Raw footage, delivery &amp; additional notes</span><svg class="chevron"><use href="#i-chevron"/></svg></summary><div class="detail-content"><ul><li>All raw and edited videos are stated as being delivered within <strong>15–20 working days</strong> after the wedding.</li><li>Raw files are shared only after all final deliverables have been provided.</li><li>The client must provide a hard drive or pen drive for raw-footage transfer.</li><li>Add-on reels, extended coverage and date changes are chargeable.</li><li>Client consent is taken before sharing content with external collaborators.</li><li>The reference also states that deliverables are completed within <strong>3–4 weeks</strong> after the event.</li></ul><div class="delivery-alert"><strong>Delivery timeline to confirm:</strong> The source package reference mentions both 15–20 working days and 3–4 weeks. Please confirm one final customer-facing commitment before publishing this page.</div></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="custom-cta">
+    <div class="shell custom-inner"><div><div class="eyebrow">Your celebration, your way</div><h2>We can help you find the right fit.</h2><p>Tell us what your celebration looks like. We will walk you through the coverage, answer your questions and help you feel confident about your choice.</p></div><div class="custom-actions"><a class="btn btn-light" href="https://wa.me/919377150889?text=Hi%20Shaadi%20Pitara!%20I%27d%20like%20help%20choosing%20the%20right%20wedding%20collection.%20Could%20you%20please%20guide%20me%3F">Find my package <svg class="icon"><use href="#i-arrow"/></svg></a><a class="btn btn-outline" href="tel:+919377150889"><svg class="icon"><use href="#i-message"/></svg> Call us</a></div></div>
+  </section>
+</main>
+
+<footer><div class="shell footer-inner"><div><div class="footer-brand">Shaadi Pitara</div><div class="footer-note">Your moments. Your story. Your Pitara.</div></div><div class="footer-links"><a href="#top">Home</a><a href="#packages">Packages</a><a href="#terms">Terms</a><a href="tel:+919377150889">+91 93771 50889</a></div><div class="footer-note">© <span id="year"></span> Shaadi Pitara</div></div></footer>
+<a class="whatsapp-float" href="https://wa.me/919377150889?text=Hello%20Shaadi%20Pitara!%20I%27d%20like%20to%20discuss%20a%20wedding%20package." aria-label="Chat with Shaadi Pitara on WhatsApp"><svg class="icon"><use href="#i-message"/></svg><span>WhatsApp us</span></a>
+
+<script>
+const tierData = {
+  classic: {
+    name:'Classic', label:'A beautiful essential', description:'The highlights, the laughter and the moments you will want to replay.',
+    features:[
+      ['video','Up to 10 edited reels','Edited wedding highlights'],
+      ['instagram','2–3 stories per function','Story coverage for each function'],
+      ['clock','Post-event delivery only','No live posting included'],
+      ['users','1–2 content creators','Team size'],
+      ['layout','Page management during wedding','Wedding-period management'],
+      ['drone','Drone available as an add-on','Can be added separately']
+    ]
+  },
+  luxe: {
+    name:'Luxe', label:'The most-chosen experience', description:'A fuller story, with more room for every little moment.',
+    features:[
+      ['video','Up to 20 premium edited reels','Premium edited highlights'],
+      ['instagram','5–6 stories throughout every function','Broader story coverage'],
+      ['clock','Post-event delivery only','No live posting included'],
+      ['users','Team of 2 content creators','Dedicated creator team'],
+      ['layout','Page management during & post-wedding','Extended page management'],
+      ['drone','Drone available as an add-on','Can be added separately']
+    ]
+  },
+  royal: {
+    name:'Royal', label:'The complete experience', description:'A complete content journey before, during and after the celebrations.',
+    features:[
+      ['video','Up to 30 premium edited reels','Premium edited highlights'],
+      ['instagram','Unlimited live story coverage','Live coverage across functions'],
+      ['calendar','1 month of pre-event, live & post-event posting','Extended posting journey'],
+      ['users','Team of 2–3 creators','Based on event scale'],
+      ['layout','Page management pre, during & post-wedding','Full journey management'],
+      ['drone','Drone included','Included in this collection']
+    ]
+  }
+};
+const basePrices = {classic:60000,luxe:80000,royal:120000};
+const inr = value => '₹' + value.toLocaleString('en-IN');
+const icon = name => `<svg class="icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
+const waNumber = '919377150889';
+function enquireUrl(tier,days,price){
+  const msg = `Hi Shaadi Pitara! I would like to enquire about the ${tier} collection for ${days} days. The package price shown is ${inr(price)}. Please share more details and let me know the availability for my wedding dates.`;
+  return `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
+}
+function cardMarkup(key,days){
+  const data=tierData[key];
+  const price=basePrices[key]+(days-2)*20000;
+  const cls=key==='luxe'?'plan-card luxe':key==='royal'?'plan-card royal':'plan-card';
+  const features=data.features.map(([ic,title,sub])=>`<div class="feature">${icon(ic)}<span><strong>${title}</strong><span class="feature-sub">${sub}</span></span></div>`).join('');
+  return `<article class="${cls} fade-in">
+    <div class="plan-top"><div class="tier-label"><span class="tier-name">${data.name} collection</span>${key==='luxe'?'<span class="popular">Most chosen by couples</span>':''}</div>
+    <h3>${data.name}</h3><p class="plan-desc">${data.description}</p>
+    <div class="price-row"><span class="price">${inr(price)}</span><span class="price-unit">/ ${days} days</span></div>
+    <div class="per-day">Total package price · ${days} days of coverage</div></div>
+    <div class="features"><div class="features-title">What this collection includes</div>${features}</div>
+    <div class="plan-foot"><a class="plan-button" href="${enquireUrl(data.name,days,price)}" target="_blank" rel="noopener" aria-label="Enquire on WhatsApp about ${data.name} for ${days} days at ${inr(price)}">Enquire about ${data.name} ${icon('message')}</a><div class="tier-note">Opens WhatsApp with your selection pre-filled · All 5 essentials included</div></div>
+  </article>`;
+}
+function setDuration(days,scroll=false){
+  document.querySelectorAll('.duration-tab').forEach(btn=>{
+    const active=Number(btn.dataset.days)===days;
+    btn.setAttribute('aria-selected',String(active));
+    btn.tabIndex=active?0:-1;
+  });
+  const heading={2:'Your 2-day celebration, your way',3:'Your 3-day celebration, your way',4:'Your 4-day celebration, your way'};
+  document.getElementById('duration-heading').textContent=heading[days];
+  const extra=days===2?'Base duration':`+${inr((days-2)*20000)} for ${days-2} additional day${days===3?'':'s'}`;
+  document.getElementById('duration-summary').textContent=`${days} days selected · ${extra}`;
+  const cards=document.getElementById('package-cards');
+  cards.innerHTML=['classic','luxe','royal'].map(key=>cardMarkup(key,days)).join('');
+  if(scroll){document.getElementById('packages').scrollIntoView({behavior:'smooth',block:'start'});}
+}
+document.querySelectorAll('.duration-tab').forEach((btn,index,all)=>{
+  btn.addEventListener('click',()=>setDuration(Number(btn.dataset.days)));
+  btn.addEventListener('keydown',event=>{
+    if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+    event.preventDefault();
+    let next=index;
+    if(event.key==='ArrowRight') next=(index+1)%all.length;
+    if(event.key==='ArrowLeft') next=(index-1+all.length)%all.length;
+    if(event.key==='Home') next=0;
+    if(event.key==='End') next=all.length-1;
+    all[next].focus();
+    setDuration(Number(all[next].dataset.days));
+  });
+});
+document.querySelectorAll('[data-jump]').forEach(btn=>btn.addEventListener('click',()=>setDuration(Number(btn.dataset.jump),true)));
+document.getElementById('year').textContent=new Date().getFullYear();
+setDuration(2);
+</script>
+</body>
+</html>

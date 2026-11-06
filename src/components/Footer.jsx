@@ -125,6 +125,7 @@ export default function Footer() {
                 { label: "Work", href: "/work" },
                 { label: "Full Work Showcase", href: "/works" },
                 { label: "Services & Offerings", href: "/#services" },
+                { label: "Packages", href: "/packages" },
                 { label: "Our Story", href: "/#story" },
                 { label: "Client Love", href: "/#testimonials" },
                 { label: "Frequently Asked", href: "/#faq" },
