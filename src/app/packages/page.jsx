@@ -64,9 +64,9 @@ const offersSchema = {
       item: {
         "@type": "Offer",
         name: "Classic — 2 Days Wedding Package",
-        price: "60000",
+        price: "40000",
         priceCurrency: "INR",
-        description: "Up to 10 Edited Reels, 2–3 Stories per function, 1–2 Content Creators, Page management during wedding.",
+        description: "10–12 Edited Reels, 2–3 Stories per event, 1 Content Creator (Founder not included), Page management during wedding only.",
       },
     },
     {
@@ -75,9 +75,9 @@ const offersSchema = {
       item: {
         "@type": "Offer",
         name: "Luxe — 2 Days Wedding Package",
-        price: "80000",
+        price: "70000",
         priceCurrency: "INR",
-        description: "Up to 20 Premium Edited Reels, 5–6 Stories, Team of 2 Content Creators, Page management during & post-wedding.",
+        description: "20 Edited Reels, 6–8 Stories per event + Live coverage, Team of 2 Content Creators (Founder Included), Page management during & post-wedding.",
       },
     },
     {
@@ -86,9 +86,9 @@ const offersSchema = {
       item: {
         "@type": "Offer",
         name: "Royal — 2 Days Wedding Package",
-        price: "120000",
+        price: "100000",
         priceCurrency: "INR",
-        description: "Up to 30 Premium Reels, Unlimited Live Stories, Team of 2–3 Creators, Full page management, Drone included.",
+        description: "30 Edited Reels, Unlimited Stories & Live Stories, Team of 2–3 Creators (Founder Included), Full page management pre/during/post, Drone included.",
       },
     },
   ],

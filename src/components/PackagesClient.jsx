@@ -149,9 +149,9 @@ const Icon = {
    DATA & PRICING
 ══════════════════════════════════════════ */
 const PRICING = {
-  classic: { 2: "₹60,000", 3: "₹80,000", 4: "₹1,00,000" },
-  luxe:    { 2: "₹80,000", 3: "₹1,00,000", 4: "₹1,20,000" },
-  royal:   { 2: "₹1,20,000", 3: "₹1,40,000", 4: "₹1,60,000" },
+  classic: { 2: "₹40,000", 3: "₹60,000", 4: "₹80,000" },
+  luxe:    { 2: "₹70,000", 3: "₹90,000", 4: "₹1,10,000" },
+  royal:   { 2: "₹1,00,000", 3: "₹1,20,000", 4: "₹1,40,000" },
 };
 
 const WA_NUMBER = "919377150889";
@@ -183,11 +183,11 @@ const PACKAGES = [
     tagline: "Beautifully told, thoughtfully captured.",
     description: "Everything you need for a complete and memorable wedding coverage — cinematic reels, story coverage and dedicated page management.",
     inclusions: [
-      { icon: "Video", label: "Up to 10 Edited Reels" },
-      { icon: "Stories", label: "2–3 Stories per function" },
-      { icon: "Users", label: "1–2 Content Creators" },
+      { icon: "Video", label: "10–12 Edited Reels" },
+      { icon: "Stories", label: "2–3 Stories per event" },
+      { icon: "Users", label: "1 Content Creator (Founder not included)" },
+      { icon: "Monitor", label: "Page management during the wedding only" },
       { icon: "Package", label: "Post-event content delivery" },
-      { icon: "Monitor", label: "Page management during the wedding" },
       { icon: "Drone", label: "Drone Coverage available as add-on (+₹10,000)" },
     ],
     highlight: false,
@@ -199,11 +199,11 @@ const PACKAGES = [
     tagline: "The experience most couples choose.",
     description: "More reels, live coverage and extended page management — for couples who want their celebration beautifully documented from every angle.",
     inclusions: [
-      { icon: "Video", label: "Up to 20 Premium Edited Reels" },
-      { icon: "Stories", label: "8–10 Stories + Live Stories coverage" },
-      { icon: "Users", label: "Team of 2 Content Creators" },
+      { icon: "Video", label: "20 Edited Reels" },
+      { icon: "Stories", label: "6–8 Stories per event + Live coverage" },
+      { icon: "Users", label: "Team of 2 Content Creators (Founder Included)" },
+      { icon: "Monitor", label: "Page management during & post-wedding" },
       { icon: "Package", label: "Post-event content delivery" },
-      { icon: "Monitor", label: "Page management: Live Stories & Post" },
       { icon: "Drone", label: "Drone Coverage available as add-on (+₹10,000)" },
     ],
     highlight: true,
@@ -215,11 +215,11 @@ const PACKAGES = [
     tagline: "Complete, immersive, unforgettable.",
     description: "Full-spectrum coverage — from pre-wedding anticipation through live moments to a month of curated post-wedding content, all in one.",
     inclusions: [
-      { icon: "Video", label: "Up to 30 Premium Edited Reels" },
-      { icon: "Live", label: "Unlimited Live Story Coverage" },
+      { icon: "Video", label: "30 Edited Reels" },
+      { icon: "Stories", label: "Unlimited Stories & Live Stories" },
+      { icon: "Users", label: "Team of 2–3 Creators (Founder Included)" },
+      { icon: "Monitor", label: "Page management: Pre, During & Post-wedding" },
       { icon: "Calendar", label: "1 month Pre-event, Live & Post-event Posting" },
-      { icon: "Users", label: "Team of 2–3 Creators (by event scale)" },
-      { icon: "Monitor", label: "Page management pre, during & post-wedding" },
       { icon: "Drone", label: "Drone Coverage Included" },
     ],
     highlight: false,
@@ -231,23 +231,23 @@ const COMPARISON_ROWS = [
   {
     feature: "Edited Reels",
     icon: "Video",
-    classic: "Up to 10",
-    luxe: "Up to 20",
-    royal: "Up to 30",
+    classic: "10–12 Reels",
+    luxe: "20 Reels",
+    royal: "30 Reels",
   },
   {
-    feature: "Stories",
+    feature: "Stories Coverage",
     icon: "Stories",
-    classic: "2–3 per function",
-    luxe: "8–10 + Live Stories",
-    royal: "Unlimited Live",
+    classic: "2–3 per event",
+    luxe: "6–8 per event + Live",
+    royal: "Unlimited + Live",
   },
   {
     feature: "Content Creators",
     icon: "Users",
-    classic: "1–2",
-    luxe: "2",
-    royal: "2–3",
+    classic: "1 (Non-founder)",
+    luxe: "2 (Founder included)",
+    royal: "2–3 (Founder included)",
   },
   {
     feature: "Post-event Delivery",
@@ -259,8 +259,8 @@ const COMPARISON_ROWS = [
   {
     feature: "Page Management",
     icon: "Monitor",
-    classic: "During wedding",
-    luxe: "Live Stories & Post",
+    classic: "During wedding only",
+    luxe: "During & Post-wedding",
     royal: "Pre + During + Post",
   },
   {
@@ -606,8 +606,7 @@ const ALWAYS_INCLUDED_ITEMS = [
   {
     id: "vertical",
     title: "Vertical Reels Optimized for Instagram",
-    tag: "9:16 Native Format",
-    detail: "Shot natively in 9:16 high frame-rate for seamless story and feed presentation with zero awkward cropping.",
+    detail: "Shot natively in 9:16 high frame-rate for seamless story & feed presentation with zero cropping.",
     icon: "VerticalPhone",
     badgeBg: "rgba(94, 24, 28, 0.08)",
     badgeColor: "#5E181C",
@@ -617,8 +616,7 @@ const ALWAYS_INCLUDED_ITEMS = [
   {
     id: "trend",
     title: "Trend-based Editing Style",
-    tag: "Trending Audio & Rhythm",
-    detail: "Contemporary rhythm, seamless cuts, trending tracks, and tailored typography.",
+    detail: "Contemporary rhythm, trending audio tracks & tailored typography.",
     icon: "TrendRhythm",
     badgeBg: "rgba(180, 83, 9, 0.12)",
     badgeColor: "#B45309",
@@ -627,8 +625,7 @@ const ALWAYS_INCLUDED_ITEMS = [
   {
     id: "4k",
     title: "High-Quality 4K Capture",
-    tag: "Pro Cinema Gear",
-    detail: "Pro-grade mirrorless cinematography tuned for vibrant daylight and ambient indoor light.",
+    detail: "Cinematic 4K capture tuned for indoor lighting & vibrant daylight.",
     icon: "Cinema4K",
     badgeBg: "rgba(94, 24, 28, 0.08)",
     badgeColor: "#5E181C",
@@ -637,8 +634,7 @@ const ALWAYS_INCLUDED_ITEMS = [
   {
     id: "delivery",
     title: "Fast Content Delivery",
-    tag: "Express Turnaround",
-    detail: "Priority turnarounds so your circle experiences the celebration while emotions are fresh.",
+    detail: "Priority delivery so you can share while celebration excitement is high.",
     icon: "FastDelivery",
     badgeBg: "rgba(217, 119, 6, 0.12)",
     badgeColor: "#D97706",
@@ -647,8 +643,7 @@ const ALWAYS_INCLUDED_ITEMS = [
   {
     id: "whatsapp",
     title: "Dedicated WhatsApp Support",
-    tag: "Direct Creator Line",
-    detail: "Direct, personal line with your lead creator before, during, and post celebrations.",
+    detail: "Direct line with your lead creator before, during & after the wedding.",
     icon: "WhatsApp",
     badgeBg: "rgba(37, 211, 102, 0.14)",
     badgeColor: "#128C7E",
@@ -737,33 +732,25 @@ function AlwaysIncludedSection() {
                 >
                   <div className="vertical-reel-feature-content">
                     <div className="vertical-reel-left">
-                      <div className="vertical-reel-tag-row">
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                         <span style={{
                           width: 28, height: 28, minWidth: 28,
                           borderRadius: "50%",
                           background: item.badgeBg,
                           color: item.badgeColor,
                           display: "inline-flex", alignItems: "center", justifyContent: "center",
+                          flexShrink: 0,
                         }}>
                           <RenderAlwaysIcon name={item.icon} />
                         </span>
-                        <span className="vertical-pill-tag">9:16 NATIVE FORMAT</span>
-                        <span className="vertical-pill-tag gold">ZERO CROPPING</span>
+                        <h3 className="vertical-reel-title" style={{ margin: 0 }}>
+                          {item.title}
+                        </h3>
                       </div>
 
-                      <h3 className="vertical-reel-title">
-                        {item.title}
-                      </h3>
-
-                      <p className="vertical-reel-detail">
+                      <p className="vertical-reel-detail" style={{ margin: "4px 0 0 38px" }}>
                         {item.detail}
                       </p>
-
-                      <div className="vertical-reel-highlights">
-                        <span className="v-pill">✦ 9:16 Full Screen Immersion</span>
-                        <span className="v-pill">✦ 60fps Ultra-Smooth</span>
-                        <span className="v-pill">✦ Instagram Story & Feed Native</span>
-                      </div>
                     </div>
 
                     {/* Right side: Sleek 9:16 vertical smartphone frame mockup */}
@@ -804,11 +791,11 @@ function AlwaysIncludedSection() {
                   border: "1px solid rgba(212, 184, 150, 0.35)",
                   borderLeft: `4px solid ${item.accentBorder}`,
                   borderRadius: 12,
-                  padding: "22px 22px",
-                  boxShadow: "0 6px 20px rgba(58, 11, 14, 0.04)",
+                  padding: "18px 20px",
+                  boxShadow: "0 4px 16px rgba(58, 11, 14, 0.04)",
                   display: "flex",
                   flexDirection: "column",
-                  gap: 8,
+                  gap: 6,
                   transition: "transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s cubic-bezier(0.23,1,0.32,1)",
                 }}
                 onMouseEnter={(e) => {
@@ -818,7 +805,7 @@ function AlwaysIncludedSection() {
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "none";
-                  e.currentTarget.style.boxShadow = "0 6px 20px rgba(58, 11, 14, 0.04)";
+                  e.currentTarget.style.boxShadow = "0 4px 16px rgba(58, 11, 14, 0.04)";
                   e.currentTarget.style.borderColor = "rgba(212, 184, 150, 0.35)";
                 }}
               >
@@ -835,7 +822,7 @@ function AlwaysIncludedSection() {
                   </span>
                   <h3 style={{
                     fontFamily: "var(--font-display), Georgia, serif",
-                    fontSize: "clamp(15px, 1.6vw, 18.5px)",
+                    fontSize: "clamp(15px, 1.6vw, 18px)",
                     fontWeight: 600,
                     color: "#2E0A0D",
                     lineHeight: 1.25,
@@ -846,25 +833,12 @@ function AlwaysIncludedSection() {
                   </h3>
                 </div>
 
-                <div className="inc-card-tag" style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 8.5,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: item.badgeColor,
-                  fontWeight: 700,
-                  marginTop: 2,
-                  marginLeft: 38,
-                }}>
-                  {item.tag}
-                </div>
-
                 <p style={{
                   fontFamily: "var(--font-body)",
                   fontSize: "clamp(12px, 1.05vw, 13px)",
-                  color: "rgba(46, 10, 13, 0.68)",
+                  color: "rgba(46, 10, 13, 0.72)",
                   lineHeight: 1.5,
-                  margin: "4px 0 0 38px",
+                  margin: "2px 0 0 38px",
                 }}>
                   {item.detail}
                 </p>
