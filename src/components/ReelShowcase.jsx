@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
@@ -425,10 +426,12 @@ export default function ReelShowcase() {
   const [activeReel, setActiveReel] = useState(null);
   const [activeReelIndex, setActiveReelIndex] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const allReels = FEATURED_REELS;
   const iframeRef = useRef(null);
 
   useEffect(() => {
+    setMounted(true);
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
     window.addEventListener("resize", check);
@@ -981,16 +984,16 @@ export default function ReelShowcase() {
         </div>
       )}
 
-      {/* ── Modal (same as /work) ── */}
-      {modalOpen && activeReel && (
+      {/* ── Modal (Portaled directly to document.body to ensure it renders above all page sections) ── */}
+      {modalOpen && activeReel && mounted && typeof document !== "undefined" && createPortal(
         <div
           onClick={closeModal}
           style={{
-            position: "fixed", inset: 0, zIndex: 99999,
+            position: "fixed", inset: 0, zIndex: 999999,
             background: isMobile
-              ? "rgba(20, 4, 6, 0.3)"
-              : "rgba(20, 4, 6, 0.3)",
-            backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)",
+              ? "rgba(15, 3, 5, 0.78)"
+              : "rgba(15, 3, 5, 0.78)",
+            backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
             display: "flex", alignItems: "center", justifyContent: "center",
             padding: isMobile ? "8px 12px" : "clamp(20px, 4vw, 48px)",
             touchAction: "none",
@@ -1264,7 +1267,8 @@ export default function ReelShowcase() {
               </a>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );

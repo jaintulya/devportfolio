@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
@@ -1008,18 +1009,18 @@ export default function WorkPage() {
       </div>
 
       {/* ─── MODAL ─── */}
-      {modalOpen && activeReel && (
+      {modalOpen && activeReel && mounted && typeof document !== "undefined" && createPortal(
         <div
           onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
           role="dialog"
           aria-modal="true"
           aria-label={`${activeReel.title} — ${activeReel.category}`}
           style={{
-            position: "fixed", inset: 0, zIndex: 99999,
+            position: "fixed", inset: 0, zIndex: 999999,
             background: isMobile
-              ? "rgba(20, 4, 6, 0.3)"
-              : "rgba(20, 4, 6, 0.3)",
-            backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)",
+              ? "rgba(15, 3, 5, 0.78)"
+              : "rgba(15, 3, 5, 0.78)",
+            backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
             display: "flex", alignItems: "center", justifyContent: "center",
             padding: isMobile ? "8px 12px" : "clamp(20px, 4vw, 48px)",
             touchAction: "none",
@@ -1290,7 +1291,8 @@ export default function WorkPage() {
               </a>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
