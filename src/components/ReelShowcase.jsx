@@ -227,6 +227,8 @@ function ReelCoverflow({ reels, onOpen, getCatLabel }) {
                 src={reel.poster}
                 alt={`${reel.title} — ${reel.couple || 'Wedding'} reel by Shaadi Pitara`}
                 draggable={false}
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: "100%",
                   height: "100%",

@@ -53,9 +53,9 @@ function noise3D(x, y, z) {
 }
 
 // ── 1. Hero Depth-Displacement Parallax Plane ──
-function HeroDepthPlane({ isMobile }) {
+function HeroDepthPlane() {
   const meshRef = useRef(null);
-  const texture = useTexture("/herobg.png");
+  const texture = useTexture("/herobg.webp");
 
   useMemo(() => {
     if (texture) {
@@ -423,7 +423,7 @@ export default function R3FScene({ isMobile }) {
   return (
     <group>
       <DynamicAtmosphere />
-      <HeroDepthPlane isMobile={isMobile} />
+      {!isMobile && <HeroDepthPlane />}
       <DustMotes count={isMobile ? 100 : 350} isMobile={isMobile} />
       <JourneySplineFlight isMobile={isMobile} />
       <FinaleBokeh isMobile={isMobile} />

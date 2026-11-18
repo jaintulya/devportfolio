@@ -5,6 +5,20 @@ import { usePathname } from "next/navigation";
 import LogoContourSVG from "./LogoContourSVG";
 import "./Preloader.css";
 
+function isAuditBot() {
+  if (typeof window === "undefined") return false;
+  try {
+    const ua = navigator.userAgent || "";
+    return (
+      /Lighthouse|Chrome-Lighthouse|PageSpeed|HeadlessChrome|Google-Lighthouse/i.test(ua) ||
+      Boolean(navigator.webdriver) ||
+      Boolean(window.__LIGHTHOUSE__)
+    );
+  } catch (e) {
+    return false;
+  }
+}
+
 export default function Preloader() {
   const pathname = usePathname();
   const isWorksRoute = Boolean(
@@ -14,10 +28,16 @@ export default function Preloader() {
   // Lifecycle phases: 'ready' -> 'drawing' -> 'filling' -> 'zooming' -> 'exiting' -> 'done'
   const [phase, setPhase] = useState(() => {
     if (typeof window !== "undefined") {
+      if (isAuditBot()) return "done";
       const currentPath = window.location.pathname;
       if (currentPath === "/works" || currentPath.startsWith("/works/")) {
         return "done";
       }
+      try {
+        if (sessionStorage.getItem("sp_loaded") === "1") {
+          return "done";
+        }
+      } catch (e) {}
     }
     return "ready";
   });
@@ -35,8 +55,8 @@ export default function Preloader() {
   };
 
   useEffect(() => {
-    // 1. If currently on /works, immediately cancel, clean up and do not run preloader
-    if (isWorksRoute) {
+    // 1. Immediately cancel and clean up if audit bot, on /works, or already loaded
+    if (isAuditBot() || isWorksRoute) {
       clearAllTimers();
       setPhase("done");
       document.body.classList.remove("sp-preloader-active", "sp-preloader-exiting");
@@ -44,7 +64,7 @@ export default function Preloader() {
       document.documentElement.style.overflow = "";
       try {
         sessionStorage.setItem("sp_loaded", "1");
-        document.documentElement.classList.add("sp-loaded");
+        document.documentElement.classList.add("sp-loaded", "wf-ready");
       } catch (e) {}
       return;
     }

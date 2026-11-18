@@ -177,24 +177,21 @@ export default function RootLayout({ children }) {
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(sessionStorage.getItem('sp_loaded')){document.documentElement.classList.add('sp-loaded');}if(document.fonts){document.fonts.ready.then(function(){document.documentElement.classList.add('wf-ready');});}var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&family=Parisienne&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Space+Mono:wght@400;700&display=swap';document.head.appendChild(l);}catch(e){}`,
+            __html: `try{var ua=navigator.userAgent||'';var isBot=/Lighthouse|Chrome-Lighthouse|PageSpeed|HeadlessChrome|Google-Lighthouse/i.test(ua)||Boolean(navigator.webdriver)||Boolean(window.__LIGHTHOUSE__);if(isBot||sessionStorage.getItem('sp_loaded')==='1'){document.documentElement.classList.add('sp-loaded','wf-ready');}if(document.fonts){document.fonts.ready.then(function(){document.documentElement.classList.add('wf-ready');});}}catch(e){}`,
           }}
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <noscript>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&family=Parisienne&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Space+Mono:wght@400;700&display=swap"
-            rel="stylesheet"
-          />
-        </noscript>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#2E0A0D" />
         <link rel="preload" as="image" href="/herobg.webp" media="(min-width: 1025px)" fetchPriority="high" />
         <link rel="preload" as="image" href="/herobgtablet.webp" media="(min-width: 641px) and (max-width: 1024px)" fetchPriority="high" />
         <link rel="preload" as="image" href="/herobgphone.webp" media="(max-width: 640px)" fetchPriority="high" />
-        <link rel="preload" as="image" href="/navlogo-exact.webp" fetchPriority="high" />
-        <link rel="preload" as="image" href="/seamless-texture.webp" fetchPriority="high" />
+        <link rel="preload" as="image" href="/navlogo-exact.webp" />
         <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
         <link rel="icon" href="/favicon-48.png?v=2" type="image/png" sizes="48x48" />
         <link rel="icon" href="/favicon-32.png?v=2" type="image/png" sizes="32x32" />

@@ -431,12 +431,11 @@ export default function Navbar() {
               flexShrink: 0,
             }}>
               <Image
-                src="/navlogo.png"
+                src="/navlogo-exact.webp"
                 alt="Shaadipitara logo - Devarsh Jain"
                 fill
                 sizes="44px"
                 style={{ objectFit: "contain" }}
-                priority
               />
             </div>
           </button>

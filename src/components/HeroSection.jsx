@@ -227,6 +227,8 @@ export default function HeroSection() {
         <img
           src="/herobg.webp"
           alt="Shaadi Pitara Luxury Wedding Film Hero Background"
+          width={1920}
+          height={1080}
           className="w-full h-full object-cover object-center"
           style={{ filter: "brightness(0.85) contrast(1.06)" }}
           loading="eager"

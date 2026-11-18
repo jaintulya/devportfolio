@@ -608,18 +608,7 @@ html.lenis, html.lenis body { height: auto; }
   }
 }
 
-/* Prevent FOUT (Flash of Unstyled Fallback Text) on hard reload:
-   ALL hero elements stay invisible until fonts ready — eliminates glitch */
-html:not(.wf-ready):not(.sp-loaded) .hero-anim-eyebrow,
-html:not(.wf-ready):not(.sp-loaded) .hero-anim-headline,
-html:not(.wf-ready):not(.sp-loaded) .hero-anim-script,
-html:not(.wf-ready):not(.sp-loaded) .hero-anim-subtext,
-html:not(.wf-ready):not(.sp-loaded) .hero-anim-buttons,
-html:not(.wf-ready):not(.sp-loaded) .hero-headline,
-html:not(.wf-ready):not(.sp-loaded) .hero-accent-text {
-  visibility: hidden;
-}
-
+/* Prevent FOUT / FOIT: allow instant rendering with system fallback and display=swap */
 html.wf-ready .hero-headline,
 html.wf-ready .hero-accent-text,
 html.sp-loaded .hero-headline,
