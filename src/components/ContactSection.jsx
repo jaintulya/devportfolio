@@ -391,6 +391,239 @@ export default function ContactSection() {
             text-align: center !important;
           }
         }
+
+        /* Full-Width Studio Location & Interactive Map */
+        .c-location-section {
+          max-width: 1160px;
+          margin: 75px auto 40px;
+          position: relative;
+          z-index: 5;
+        }
+        .c-location-head {
+          text-align: center;
+          margin-bottom: 26px;
+        }
+        .c-location-kicker {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 14px;
+          color: var(--brand-gold);
+          font-family: var(--font-mono);
+          font-size: 10px;
+          letter-spacing: 0.35em;
+          text-transform: uppercase;
+          margin-bottom: 12px;
+        }
+        .c-location-kicker::before, .c-location-kicker::after {
+          content: "";
+          width: 38px;
+          height: 1px;
+          background: rgba(214, 180, 119, 0.4);
+        }
+        .c-location-quote {
+          margin: 0 0 10px;
+          font-family: var(--font-display);
+          font-size: clamp(28px, 4.4vw, 52px);
+          font-weight: 500;
+          line-height: 1.14;
+          color: var(--brand-cream);
+          letter-spacing: -0.03em;
+        }
+        .c-location-quote i {
+          font-style: italic;
+          color: var(--brand-gold);
+          font-weight: 400;
+        }
+        .c-location-desc {
+          max-width: 620px;
+          margin: 0 auto;
+          color: rgba(245, 230, 204, 0.65);
+          font-size: 13.5px;
+          line-height: 1.75;
+        }
+        .c-location-card {
+          margin-top: 28px;
+          border-radius: 12px;
+          border: 1px solid rgba(214, 180, 119, 0.28);
+          background: rgba(20, 3, 5, 0.62);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          overflow: hidden;
+          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .c-location-details-bar {
+          padding: 24px 30px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 24px;
+          border-bottom: 1px solid rgba(122, 78, 23, 0.22);
+          background: linear-gradient(145deg, #f7e8ca, #ead4ac);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+          flex-wrap: wrap;
+        }
+        .c-location-address-wrap {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          max-width: 660px;
+        }
+        .c-location-pin {
+          width: 44px;
+          height: 44px;
+          min-width: 44px;
+          border-radius: 50%;
+          display: grid;
+          place-items: center;
+          background: rgba(122, 78, 23, 0.1);
+          border: 1px solid rgba(122, 78, 23, 0.22);
+          color: #7A4E17;
+          margin-top: 2px;
+        }
+        .c-location-tag {
+          display: block;
+          font-family: var(--font-mono);
+          font-size: 9.5px;
+          font-weight: 700;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: #7A4E17;
+          margin-bottom: 6px;
+        }
+        .c-location-address {
+          font-style: normal;
+          font-family: var(--font-body);
+          font-size: 14.5px;
+          font-weight: 500;
+          line-height: 1.62;
+          color: #381216;
+        }
+        .c-location-cta-group {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+        .c-map-open-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          padding: 12px 24px;
+          border-radius: 100px;
+          background: #3A0B0E;
+          color: #f7e8ca;
+          border: 1px solid #4a1317;
+          font-family: var(--font-mono);
+          font-size: 10.5px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          text-decoration: none;
+          transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+          box-shadow: 0 4px 14px rgba(58, 11, 14, 0.28);
+        }
+        .c-map-open-btn:hover {
+          background: #541318;
+          color: #ffffff;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 22px rgba(58, 11, 14, 0.42);
+        }
+        .c-map-chat-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 11px 20px;
+          border-radius: 100px;
+          background: rgba(122, 78, 23, 0.08);
+          border: 1.5px solid rgba(122, 78, 23, 0.32);
+          color: #4A1A1E;
+          font-family: var(--font-mono);
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+        .c-map-chat-btn:hover {
+          background: rgba(122, 78, 23, 0.16);
+          border-color: #7A4E17;
+          color: #220508;
+          transform: translateY(-2px);
+        }
+        .c-map-interactive-container {
+          position: relative;
+          width: 100%;
+          height: 420px;
+          background: #1e0407;
+        }
+        .c-map-iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+          display: block;
+          filter: contrast(1.04) saturate(1.08);
+        }
+        .c-map-floating-pill {
+          position: absolute;
+          bottom: 20px;
+          left: 20px;
+          background: rgba(24, 4, 7, 0.94);
+          border: 1px solid rgba(214, 180, 119, 0.38);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          padding: 9px 18px;
+          border-radius: 100px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+          pointer-events: auto;
+          text-decoration: none;
+          transition: all 0.25s ease;
+          z-index: 2;
+        }
+        .c-map-floating-pill:hover {
+          border-color: var(--brand-gold);
+          background: rgba(36, 6, 11, 0.98);
+          transform: translateY(-2px);
+        }
+        .c-map-pill-pulse {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #22c55e;
+          box-shadow: 0 0 10px #22c55e;
+          animation: mapPulse 2s infinite ease-in-out;
+        }
+        @keyframes mapPulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.35; transform: scale(1.35); }
+        }
+        .c-map-pill-text {
+          font-family: var(--font-mono);
+          font-size: 10px;
+          letter-spacing: 0.12em;
+          color: var(--brand-cream);
+          text-transform: uppercase;
+        }
+        .c-map-pill-arrow {
+          color: var(--brand-gold);
+          font-size: 11px;
+        }
+
+        @media (max-width: 780px) {
+          .c-location-section { margin-top: 48px; }
+          .c-location-details-bar { padding: 18px 16px; flex-direction: column; align-items: stretch; text-align: left; gap: 18px; }
+          .c-location-address-wrap { gap: 12px; }
+          .c-location-address { font-size: 12.5px; }
+          .c-location-cta-group { width: 100%; justify-content: stretch; }
+          .c-map-open-btn, .c-map-chat-btn { flex: 1; justify-content: center; text-align: center; padding: 11px 12px; font-size: 9px; }
+          .c-map-interactive-container { height: 320px; }
+          .c-map-floating-pill { bottom: 14px; left: 14px; padding: 7px 14px; }
+          .c-map-pill-text { font-size: 9px; }
+        }
         @media (prefers-reduced-motion: reduce) {
           .card-3d, .card-wall, .c-spark { transition: none !important; animation: none !important; transform: none !important; }
         }
@@ -449,6 +682,82 @@ export default function ContactSection() {
               </a>
             );
           })}
+        </div>
+      </div>
+
+      {/* Studio Location & Full-Width Interactive Map */}
+      <div className="c-location-section">
+        <div className="c-location-head">
+          <div className="c-location-kicker">STUDIO LOCATION</div>
+          <h3 className="c-location-quote">Where moments turn into <i>forever memories.</i></h3>
+          <p className="c-location-desc">
+            Visit us at our Ahmedabad studio or explore our exact location on the map below.
+          </p>
+        </div>
+
+        <div className="c-location-card">
+          <div className="c-location-details-bar">
+            <div className="c-location-address-wrap">
+              <div className="c-location-pin" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <div>
+                <span className="c-location-tag">OFFICE ADDRESS · AHMEDABAD</span>
+                <address className="c-location-address">
+                  32, Angel Arcade, Sarvodaya Nagar, Opp. Kalupur Co-op. Bank,<br />
+                  Ghatlodiya, Ahmedabad, Gujarat – 380061
+                </address>
+              </div>
+            </div>
+
+            <div className="c-location-cta-group">
+              <a
+                href="https://maps.app.goo.gl/HmCFJ2qixYtyx34T7?g_st=iw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="c-map-open-btn"
+                aria-label="Open Shaadi Pitara Office in Google Maps"
+              >
+                <span>OPEN IN GOOGLE MAPS</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </a>
+              <a
+                href="https://wa.me/919377150889?text=Hi%20Shaadi%20Pitara%2C%20I%20would%20like%20to%20visit%20your%20office%20for%20a%20wedding%20consultation."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="c-map-chat-btn"
+              >
+                PLAN A VISIT ↗
+              </a>
+            </div>
+          </div>
+
+          <div className="c-map-interactive-container">
+            <iframe
+              title="Shaadi Pitara Studio Office Interactive Map"
+              className="c-map-iframe"
+              src="https://maps.google.com/maps?q=32%2C%20Angel%20Arcade%2C%20Sarvodaya%20Nagar%2C%20Opp.%20Kalupur%20Co-op.%20Bank%2C%20Ghatlodiya%2C%20Ahmedabad%2C%20Gujarat%20380061&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              loading="lazy"
+              allowFullScreen=""
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <a
+              href="https://maps.app.goo.gl/HmCFJ2qixYtyx34T7?g_st=iw"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="c-map-floating-pill"
+              aria-label="Open location directly in Google Maps application"
+            >
+              <span className="c-map-pill-pulse" aria-hidden="true" />
+              <span className="c-map-pill-text">Shaadi Pitara Studio · Ahmedabad</span>
+              <span className="c-map-pill-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
         </div>
       </div>
 

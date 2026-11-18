@@ -102,10 +102,13 @@ const jsonLd = {
   priceRange: '₹₹ - ₹₹₹',
   address: {
     '@type': 'PostalAddress',
+    streetAddress: '32, Angel Arcade, Sarvodaya Nagar, Opp. Kalupur Co-op. Bank, Ghatlodiya',
     addressLocality: 'Ahmedabad',
     addressRegion: 'Gujarat',
+    postalCode: '380061',
     addressCountry: 'IN',
   },
+  hasMap: 'https://maps.app.goo.gl/HmCFJ2qixYtyx34T7?g_st=iw',
   geo: {
     '@type': 'GeoCoordinates',
     latitude: 23.0225,

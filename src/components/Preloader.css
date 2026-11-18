@@ -124,12 +124,11 @@
 }
 
 /* ==========================================================================
-   PHASE TIMELINE ANIMATIONS (Continuous fluid motion, zero pauses)
-   - Drawing: 0s - 3.70s (First 2.0s slow canopy + 1.70s letters & jhumkas)
-   - Inside-to-Outside Bloom: 3.70s - 5.70s (Seamless liquid gold radial expansion)
-   - Contour Fade: 5.30s - 5.70s (Contour lines blend away into solid logo)
-   - Immediate Luxury Zoom: 5.70s - 6.05s (Zero-pause instant 1.05x magnification)
-   - Curtain Lift: 6.05s - 6.80s (Zero-pause seamless upward reveal to homepage)
+   PHASE TIMELINE ANIMATIONS (Snappy, continuous fluid motion, zero pauses)
+   - Drawing: 0s - 2.05s (First 1.10s canopy + 0.95s letters & jhumkas)
+   - Inside-to-Outside Bloom + Zoom: 2.05s - 2.95s (Seamless liquid gold radial expansion)
+   - Contour Fade: 2.63s - 2.95s (Contour lines blend away into solid logo)
+   - Curtain Lift: 2.95s - 3.55s (Zero-pause seamless upward reveal to homepage)
    ========================================================================== */
 
 /* Phase: Ready (Initial SSR & Mounting State - Zero residue or ghost strokes) */
@@ -153,18 +152,18 @@
   animation: spDrawGlow var(--dur) linear var(--delay) forwards;
 }
 
-/* Inside-to-Outside Color Fill: Starts at 3.70s as sketch completes */
+/* Inside-to-Outside Color Fill: Starts at 2.05s as sketch completes */
 .sp-gold-overlay:not(.sp-phase-ready) .sp-gold-original-logo {
-  animation: spInOutColorFill 1.70s cubic-bezier(0.25, 0.46, 0.45, 0.94) 3.70s both;
+  animation: spInOutColorFill 0.90s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.05s both;
 }
 
 .sp-gold-overlay:not(.sp-phase-ready) .contour-svg {
-  animation: spContourBecomeLogo 0.50s ease 4.90s both;
+  animation: spContourBecomeLogo 0.32s ease 2.63s both;
 }
 
-/* Simultaneous Smooth Slow Zoom-In: Starts at 3.70s AS color fills, logo blooms forward */
+/* Simultaneous Smooth Zoom-In: Starts at 2.05s AS color fills, logo blooms forward */
 .sp-gold-overlay:not(.sp-phase-ready) .sp-gold-stage {
-  animation: spStageZoomIn 1.70s cubic-bezier(0.25, 0.1, 0.25, 1) 3.70s both;
+  animation: spStageZoomIn 0.90s cubic-bezier(0.25, 0.1, 0.25, 1) 2.05s both;
 }
 
 /* Fallback for manual debug freeze or after zoom/exit */
@@ -184,16 +183,16 @@
   transform: scale(1.08) !important;
 }
 
-/* Phase 5: Smooth curtain reveal -> Preloader curtain slides upward (5.40s - 6.20s) */
+/* Phase 5: Smooth curtain reveal -> Preloader curtain slides upward (2.95s - 3.55s) */
 .sp-gold-overlay.sp-phase-exiting {
   transform: translateY(-100%);
-  transition: transform 0.80s cubic-bezier(0.77, 0, 0.175, 1);
+  transition: transform 0.60s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 /* Synchronized rise of the homepage hero section */
 body.sp-preloader-active #hero-fixed-container {
   transform: translateY(40px);
-  transition: transform 0.80s cubic-bezier(0.77, 0, 0.175, 1);
+  transition: transform 0.60s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 body.sp-preloader-exiting #hero-fixed-container {

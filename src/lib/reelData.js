@@ -77,4 +77,6 @@ export const contactDetails = {
   instagram: "https://www.instagram.com/shaadi.pitara",
   youtube: "https://youtube.com/@shaadi.pitara",
   pinterest: "https://pin.it/5GKckms5T",
+  address: "32, Angel Arcade, Sarvodaya Nagar, Opp. Kalupur Co-op. Bank, Ghatlodiya, Ahmedabad, Gujarat – 380061",
+  mapUrl: "https://maps.app.goo.gl/HmCFJ2qixYtyx34T7?g_st=iw",
 };

@@ -84,21 +84,21 @@ export default function Preloader() {
     // 4. Start drawing cleanly on client mount (prevents SSR-hydration desync or restart)
     setPhase("drawing");
 
-    // 5. Sequence Timing (Continuous fluid motion, zero pauses):
-    // 0ms - 2000ms: Deliberate slow start (artistic contour draws top canopy)
-    // 2000ms - 3700ms: Fast completion of all details & typography (full sketch completes)
-    // 3700ms - 5400ms: Simultaneous inside-out color conversion + logo smoothly emerging forward (zoom-in)
+    // 5. Sequence Timing (Snappy, continuous fluid motion, zero pauses):
+    // 0ms - 1100ms: Deliberate artistic start (contour draws top canopy)
+    // 1100ms - 2050ms: Crisp completion of all details & typography (full sketch completes)
+    // 2050ms - 2950ms: Simultaneous inside-out color conversion + logo smoothly emerging forward (zoom-in)
     addTimer(() => {
       setPhase("filling");
-    }, 3700);
+    }, 2050);
 
-    // 5400ms: Color conversion and forward emergence complete -> Curtain upward lift (5400ms - 6200ms)
+    // 2950ms: Color conversion and forward emergence complete -> Curtain upward lift (2950ms - 3550ms)
     addTimer(() => {
       setPhase("exiting");
       document.body.classList.add("sp-preloader-exiting");
-    }, 5400);
+    }, 2950);
 
-    // 6200ms: Complete and unmount cleanly
+    // 3550ms: Complete and unmount cleanly
     addTimer(() => {
       setPhase("done");
       try {
@@ -108,7 +108,7 @@ export default function Preloader() {
       document.body.style.overflow = origBodyOverflow;
       document.documentElement.style.overflow = origHtmlOverflow;
       document.body.classList.remove("sp-preloader-active", "sp-preloader-exiting");
-    }, 6200);
+    }, 3550);
 
     return () => {
       clearAllTimers();

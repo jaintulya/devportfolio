@@ -206,12 +206,39 @@ export default function Footer() {
                   Call +91 93771 50889
                 </a>
               </li>
-              <li style={{
-                fontFamily: "var(--font-body)", fontSize: 14,
-                color: "rgba(212,184,150,0.5)", display: "flex", alignItems: "center", gap: 10,
-              }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
-                Ahmedabad, Gujarat, India
+              <li>
+                <a
+                  href="https://maps.app.goo.gl/HmCFJ2qixYtyx34T7?g_st=iw"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open Shaadi Pitara Office Location in Google Maps"
+                  style={{
+                    fontFamily: "var(--font-body)", fontSize: 13.5, lineHeight: 1.65,
+                    color: "var(--brand-cream)", textDecoration: "none",
+                    opacity: 0.8, transition: "all 0.25s ease",
+                    display: "inline-flex", alignItems: "flex-start", gap: 10,
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--brand-gold)"; e.currentTarget.style.opacity = "1"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--brand-cream)"; e.currentTarget.style.opacity = "0.8"; }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ flexShrink: 0, marginTop: 4 }}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                  <span>
+                    32, Angel Arcade, Sarvodaya Nagar,<br />
+                    Opp. Kalupur Co-op. Bank,<br />
+                    Ghatlodiya, Ahmedabad, Gujarat – 380061
+                    <span style={{
+                      display: "block",
+                      marginTop: 6,
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 10,
+                      letterSpacing: "0.14em",
+                      textTransform: "uppercase",
+                      color: "var(--brand-gold)",
+                    }}>
+                      View on Google Maps ↗
+                    </span>
+                  </span>
+                </a>
               </li>
             </ul>
           </div>
