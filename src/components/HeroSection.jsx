@@ -222,10 +222,10 @@ export default function HeroSection() {
 
       {/* Responsive Cinematic Background Imagery with Subdued Exposure */}
       <picture className="absolute inset-0 w-full h-full pointer-events-none z-0">
-        <source media="(max-width: 640px)" srcSet="/herobgphone.png" />
-        <source media="(max-width: 1024px)" srcSet="/herobgtablet.png" />
+        <source media="(max-width: 640px)" srcSet="/herobgphone.webp" />
+        <source media="(max-width: 1024px)" srcSet="/herobgtablet.webp" />
         <img
-          src="/herobg.png"
+          src="/herobg.webp"
           alt="Shaadi Pitara Luxury Wedding Film Hero Background"
           className="w-full h-full object-cover object-center"
           style={{ filter: "brightness(0.85) contrast(1.06)" }}

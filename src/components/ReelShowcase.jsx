@@ -578,7 +578,7 @@ export default function ReelShowcase() {
         display: flex; align-items: center; gap: 44px;
         width: 100%; max-width: 880px; max-height: 90vh;
         flex-direction: row; overflow: hidden;
-        background: linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.png') center / cover no-repeat, #2A080A;
+        background: linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.webp') center / cover no-repeat, #2A080A;
         border-radius: 24px;
         border: 1.5px solid rgba(212,184,150,0.26);
         box-shadow: 0 35px 90px rgba(0,0,0,0.92), 0 0 0 1px rgba(212,184,150,0.12);
@@ -978,6 +978,7 @@ export default function ReelShowcase() {
             }}
             onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(212,184,150,0.55)"; e.currentTarget.style.background = "rgba(212,184,150,0.06)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,184,150,0.25)"; e.currentTarget.style.background = "transparent"; }}
+            aria-label="Explore all wedding reels and films"
           >
             SEE MORE &rarr;
           </Link>
@@ -1014,8 +1015,8 @@ export default function ReelShowcase() {
               flexDirection: isMobile ? "column" : "row",
               overflow: "hidden",
               background: isMobile
-                ? "linear-gradient(180deg, rgba(20, 4, 6, 0.35) 0%, rgba(20, 4, 6, 0.55) 100%), url('/workbg.png') center / cover no-repeat, #2A080A"
-                : "linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.png') center / cover no-repeat, #2A080A",
+                ? "linear-gradient(180deg, rgba(20, 4, 6, 0.35) 0%, rgba(20, 4, 6, 0.55) 100%), url('/workbg.webp') center / cover no-repeat, #2A080A"
+                : "linear-gradient(160deg, rgba(26, 5, 7, 0.45) 0%, rgba(26, 5, 7, 0.65) 100%), url('/workbg.webp') center / cover no-repeat, #2A080A",
               backdropFilter: "blur(15px)", WebkitBackdropFilter: "blur(15px)",
               borderRadius: isMobile ? 18 : 24,
               border: "1.5px solid rgba(212,184,150,0.15)",

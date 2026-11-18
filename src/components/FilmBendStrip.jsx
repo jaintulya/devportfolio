@@ -845,6 +845,7 @@ export default function FilmBendStrip({ reels, onOpen, isMobile, onSeeMore }) {
       {onSeeMore && (
         <a
           href={typeof onSeeMore === "string" ? onSeeMore : "/works"}
+          aria-label="See more wedding works and films"
           target={typeof onSeeMore === "string" && onSeeMore.startsWith("http") ? "_blank" : undefined}
           rel={typeof onSeeMore === "string" && onSeeMore.startsWith("http") ? "noopener noreferrer" : undefined}
           onTouchStart={(e) => e.stopPropagation()}

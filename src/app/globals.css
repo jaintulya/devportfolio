@@ -518,7 +518,7 @@ html.lenis, html.lenis body { height: auto; }
   overflow: hidden;
 
   background-color: #3A0B0E;
-  background-image: url("/seamless-texture.jpg");
+  background-image: url("/seamless-texture.webp");
   background-repeat: repeat;
   background-size: 600px 600px;
   background-position: 0 0;
@@ -558,7 +558,7 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 768px) {
   .work-section {
     background-color: #3A0B0E;
-    background-image: url("/seamless-texture.jpg") !important;
+    background-image: url("/seamless-texture.webp") !important;
     background-repeat: repeat !important;
     background-size: 600px 600px !important;
     background-position: 0 0 !important;

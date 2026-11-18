@@ -289,7 +289,7 @@ export default function MobileMemoryStack() {
       style={{
         position: "relative",
         backgroundColor: "#3A0B0E",
-        backgroundImage: "url('/seamless-texture.jpg')",
+        backgroundImage: "url(/seamless-texture.webp)",
         backgroundRepeat: "repeat",
         backgroundSize: "600px 600px",
         overflow: "hidden",
@@ -386,7 +386,7 @@ export default function MobileMemoryStack() {
               {/* Founder photo */}
               {c.isDevarsh && (
                 <div style={{ position: "relative", width: "100%", height: "300px", flexShrink: 0, overflow: "hidden" }}>
-                  <img src="/devimg.jpeg" alt="Devarsh Jain" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }} />
+                  <img src="/devimg.webp" alt="Devarsh Jain" loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }} />
                   <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "50%", background: "linear-gradient(to bottom, transparent, #EFE1CA)" }} />
                   {/* Tags at bottom of image */}
                   <div style={{ position: "absolute", bottom: "12px", left: "14px", right: "14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>

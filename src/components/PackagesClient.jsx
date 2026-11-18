@@ -984,7 +984,7 @@ function WhatWeCreateSection() {
       style={{
         padding: "clamp(72px, 8vw, 110px) clamp(16px, 4vw, 48px)",
         backgroundColor: "#3A0B0E",
-        backgroundImage: "url('/seamless-texture.jpg')",
+        backgroundImage: "url(/seamless-texture.webp)",
         backgroundRepeat: "repeat",
         backgroundSize: "600px 600px",
         backgroundPosition: "0 0",
@@ -1313,7 +1313,7 @@ function PoliciesSection() {
     <section style={{
       padding: "clamp(72px,8vw,110px) clamp(16px,4vw,48px)",
       backgroundColor: "#3A0B0E",
-      backgroundImage: "url('/seamless-texture.jpg')",
+      backgroundImage: "url(/seamless-texture.webp)",
       backgroundRepeat: "repeat",
       backgroundSize: "600px 600px",
       backgroundPosition: "0 0",
@@ -2169,7 +2169,7 @@ export default function PackagesClient() {
           style={{
             padding: "clamp(100px, 12vw, 136px) clamp(16px, 4vw, 48px) clamp(72px, 8vw, 100px)",
             backgroundColor: "#3A0B0E",
-            backgroundImage: "url('/seamless-texture.jpg')",
+            backgroundImage: "url(/seamless-texture.webp)",
             backgroundRepeat: "repeat",
             backgroundSize: "600px 600px",
             backgroundPosition: "0 0",
@@ -2283,7 +2283,7 @@ export default function PackagesClient() {
                     src="https://images.squarespace-cdn.com/content/v1/6013a32a9fd19e5662185fde/1703154535751-HN0PYYVSA6V97UYQJ7VU/TYD_RADHICA_SARTHAK-335.jpg"
                     alt="Shaadi Pitara wedding couple celebration"
                     onError={(e) => {
-                      e.currentTarget.src = "/thumbnails/styled_together.jpg";
+                      e.currentTarget.src = "/thumbnails/styled_together.webp";
                     }}
                   />
                 </div>

@@ -328,7 +328,7 @@ export default function StorySection() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#3A0B0E";
-                e.currentTarget.style.backgroundImage = "url('/seamless-texture.jpg')";
+                e.currentTarget.style.backgroundImage = "url(/seamless-texture.webp)";
                 e.currentTarget.style.backgroundRepeat = "repeat";
                 e.currentTarget.style.backgroundSize = "360px 360px";
                 e.currentTarget.style.color = "#F6E5CB";
@@ -359,11 +359,11 @@ export default function StorySection() {
             }}
           >
             <img
-              src="/only-red-and-shaadi-pitara-text-logo.png"
+              src="/only-red-and-shaadi-pitara-text-logo.webp"
               alt="Shaadipitara logo - Devarsh Jain"
               width={1254}
               height={1254}
-              loading="eager"
+              loading="lazy"
               decoding="async"
               style={{
                 position: "relative",
@@ -388,7 +388,7 @@ export default function StorySection() {
         style={{
           position: "relative",
           backgroundColor: "#3A0B0E",
-          backgroundImage: "url('/seamless-texture.jpg')",
+          backgroundImage: "url(/seamless-texture.webp)",
           backgroundRepeat: "repeat",
           backgroundSize: "600px 600px",
           backgroundPosition: "0 0",
@@ -465,11 +465,11 @@ export default function StorySection() {
             justifyContent: "center",
           }}>
             <img
-              src="/storylastright.png"
+              src="/storylastright.webp"
               alt="Cinematic wedding storytelling frame — Shaadi Pitara"
               width={1371}
               height={1148}
-              loading="eager"
+              loading="lazy"
               decoding="async"
               style={{
                 width: "100%",
@@ -704,7 +704,7 @@ export default function StorySection() {
                         minHeight:120,
                         border:"1px solid rgba(91,23,27,0.18)",
                         backgroundColor: isActive ? "#3A0B0E" : "#F4E2C5",
-                        backgroundImage: isActive ? "url('/seamless-texture.jpg')" : "none",
+                        backgroundImage: isActive ? "url(/seamless-texture.webp)" : "none",
                         backgroundRepeat: "repeat",
                         backgroundSize: "360px 360px",
                         backgroundPosition: "0 0",
@@ -892,7 +892,7 @@ export default function StorySection() {
            ═══════════════════════════════════ */}
         <div style={{
           backgroundColor: "#3A0B0E",
-          backgroundImage: "url('/seamless-texture.jpg')",
+          backgroundImage: "url(/seamless-texture.webp)",
           backgroundRepeat: "repeat",
           backgroundSize: "600px 600px",
           backgroundPosition: "0 0",
@@ -953,11 +953,11 @@ export default function StorySection() {
                 }}
               >
                 <img
-                  src="/devimg.jpeg"
+                  src="/devimg.webp"
                   alt="Devarsh Jain - Jain wedding content creator"
                   width={540}
                   height={700}
-                  loading="eager"
+                  loading="lazy"
                   decoding="async"
                   style={{
                     position: "absolute",

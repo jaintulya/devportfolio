@@ -255,7 +255,7 @@ export default function ServicesSection() {
           @media (min-width: 769px) {
             .services-section-wrapper {
               background-color: #3A0B0E !important;
-              background-image: url('/seamless-texture.jpg') !important;
+              background-image: url('/seamless-texture.webp') !important;
               background-repeat: repeat !important;
               background-size: 600px 600px !important;
               background-position: 0 0 !important;

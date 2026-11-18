@@ -75,7 +75,7 @@ export default function Preloader() {
     document.body.classList.add("sp-preloader-active");
 
     // 3. Preload assets
-    const assetsToPreload = ["/navlogo-exact.png", "/seamless-texture.jpg"];
+    const assetsToPreload = ["/navlogo-exact.webp", "/seamless-texture.webp"];
     assetsToPreload.forEach((src) => {
       const img = new Image();
       img.src = src;
@@ -139,7 +139,7 @@ export default function Preloader() {
           className="sp-gold-original-logo"
           id="originalLogo"
           alt="Shaadipitara Original Gold Artwork"
-          src="/navlogo-exact.png"
+          src="/navlogo-exact.webp"
         />
         <LogoContourSVG />
       </div>

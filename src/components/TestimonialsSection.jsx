@@ -113,7 +113,7 @@ export default function TestimonialsSection() {
       style={{
         padding: "clamp(80px, 10vw, 140px) clamp(16px, 4vw, 48px)",
         backgroundColor: "#3A0B0E",
-        backgroundImage: "url('/seamless-texture.jpg')",
+        backgroundImage: "url(/seamless-texture.webp)",
         backgroundRepeat: "repeat",
         backgroundSize: "600px 600px",
         backgroundPosition: "0 0",

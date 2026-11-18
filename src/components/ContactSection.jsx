@@ -202,7 +202,7 @@ export default function ContactSection() {
           width: 100%;
           min-height: 100vh;
           background-color: #3A0B0E;
-          background-image: url("/seamless-texture.jpg");
+          background-image: url("/seamless-texture.webp");
           background-repeat: repeat;
           background-size: 600px 600px;
           background-position: 0 0;

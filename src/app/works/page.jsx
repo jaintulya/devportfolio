@@ -815,7 +815,7 @@ export default function WorkPage() {
       style={{
         minHeight: "100vh",
         backgroundColor: "#3A0B0E",
-        backgroundImage: "url('/seamless-texture.jpg')",
+        backgroundImage: "url(/seamless-texture.webp)",
         backgroundRepeat: "repeat",
         backgroundSize: "600px 600px",
         backgroundPosition: "0 0",
