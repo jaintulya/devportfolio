@@ -201,7 +201,7 @@ const PACKAGES = [
     inclusions: [
       { icon: "Video", label: "20 Edited Reels" },
       { icon: "Stories", label: "6–8 Stories per event + Live coverage" },
-      { icon: "Users", label: "Team of 2 Content Creators (Founder Included)" },
+      { icon: "Users", label: "Team of 2 Content Creators (No Founder)" },
       { icon: "Monitor", label: "Page management during & post-wedding" },
       { icon: "Package", label: "Post-event content delivery" },
       { icon: "Drone", label: "Drone Coverage available as add-on (+₹10,000)" },
@@ -246,7 +246,7 @@ const COMPARISON_ROWS = [
     feature: "Content Creators",
     icon: "Users",
     classic: "1 (No-founder)",
-    luxe: "2 (Founder included)",
+    luxe: "2 (No-Founder)",
     royal: "2–3 (Founder included)",
   },
   {
